@@ -1,0 +1,86 @@
+package pt.tecnico.bubbledocs.domain;
+
+class BubbleDocs {
+    int _id_global;
+}
+
+class Users {
+    int _id;
+    String _username;
+    String _name;
+    String _password;
+}
+
+class Spreadsheet {
+    int _id;
+    String _name;
+    DateTime _date;
+    int _nrows;
+    int _ncols;
+}
+
+class Permission {
+    boolean _rw;
+}
+
+class Cell {
+    int _row;
+    int _cell;
+    boolean protected;
+}
+
+class Content;
+
+class Range;
+
+relation BubbleDocsContainsUsers {
+    BubbleDocs playsRole app;
+    User playsRole users {
+        multiplicity *;
+    }
+}
+
+relation BubbleDocsContainsDocs {
+    BubbleDocs playsRole app;
+    Spreadsheet playsRole docs {
+        multiplicity *;
+    }
+}
+
+relation UserHasPermission {
+    User playsRole user;
+    Permission playsRole permission;
+}
+
+relation DocHasPermission {
+    Spreadsheet playsRole doc;
+    Permission playsRole permission;
+}
+
+relation SpreadsheetHasCells {
+    Spreadsheet playsRole doc;
+    Cell playsRole cells {
+        multiplicity *;
+    }
+}
+
+relation CellHasContent {
+    Cell playsRole cell;
+    Content playsRole content;
+}
+
+relation RangeBetweenCells {
+    Range playsRole range;
+    Cell playsRole cells {
+        multiplicity 0..2;
+    }
+}
+
+relation BubbleDocsContainsSpreadsheets {
+    BubbleDocs playsRole bbdocs {
+        multiplicity 0..1;
+    }
+    pt.ist.fenixframework.DomainRoot playsRole root {
+        multiplicity  0..1;
+    }
+}
