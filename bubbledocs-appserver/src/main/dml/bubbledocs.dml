@@ -124,17 +124,4 @@ relation UnaryHasRange {
   Range playsRole range;
   Unary playsRole unary;
 }
-
-relation BinaryHasContent1 {
-  Binary playsRole binary1 {
-  	multiplicity *;
-  }
-  Content playsRole content1;
-}
-  
-relation BinaryHasContent2 {
-  Binary playsRole binary2 {
-  	multiplicity *;
-  }
-  Content playsRole content2;
-}
+ 
