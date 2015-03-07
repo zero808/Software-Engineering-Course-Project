@@ -1,9 +1,13 @@
 package pt.tecnico.bubbledocs.domain;
 
-public class Unary extends Unary_Base {
-    
-    public Unary() {
-        super();
-    }
-    
+public abstract class Unary extends Unary_Base {
+
+	public Unary() {
+		super();
+	}
+
+	public Unary(Range range) {
+		super();
+		super.setRange(range);
+	}
 }
