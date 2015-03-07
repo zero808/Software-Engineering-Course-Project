@@ -41,9 +41,7 @@ class Literal extends Content {
   int val;
 }
 
-class Function extends Content {
-  int result;
-}
+class Function extends Content;
 
 class Unary extends Function;
 
@@ -115,10 +113,10 @@ relation CellHasContent {
   Content playsRole content;
 }
 
-relation CellHasRange {
+relation RangeHasCells{
   Range playsRole range;
   Cell playsRole cells {
-    multiplicity 0..2;
+    multiplicity *;
   }
 }
 
@@ -127,16 +125,16 @@ relation UnaryHasRange {
   Unary playsRole unary;
 }
 
-relation BinaryHasReferences {
-  Binary playsRole binary;
-  Reference playsRole references {
-    multiplicity 0..2;
+relation BinaryHasContent1 {
+  Binary playsRole binary1 {
+  	multiplicity *;
   }
+  Content playsRole content1;
 }
-
-relation BinaryHasLiterals {
-  Binary playsRole binary;
-  Literal playsRole literals {
-    multiplicity 0..2;
+  
+relation BinaryHasContent2 {
+  Binary playsRole binary2 {
+  	multiplicity *;
   }
+  Content playsRole content2;
 }
