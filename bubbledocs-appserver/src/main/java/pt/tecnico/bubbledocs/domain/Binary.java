@@ -31,7 +31,6 @@ public abstract class Binary extends Binary_Base {
 		this.arg2 = arg2;
 	}
 
-	@Override
 	public void delete() {
 		this.arg1 = null;
 		this.arg2 = null;
