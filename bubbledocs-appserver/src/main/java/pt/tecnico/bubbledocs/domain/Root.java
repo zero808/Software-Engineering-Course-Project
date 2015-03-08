@@ -25,6 +25,7 @@ public class Root extends Root_Base {
 		   return null;
 	   }
 	   
+	   @Override
 	   public User addUser(String username, String name, String pass){
 		   return new User(username, name, pass);
 	   }
