@@ -16,7 +16,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 
     private BubbleDocs() {
     	FenixFramework.getDomainRoot().setBubbledocs(this);
-    	setIdGlobal(0);
+    	setIdGlobal(1); //pd: tem de começar a 1 porque 0 == root
     }
     
     private User getUserByName(String name) {

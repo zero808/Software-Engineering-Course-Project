@@ -19,7 +19,7 @@ public class User extends User_Base {
 		
 		BubbleDocs bd = getBubbledocs();
 		_idnext = bd.getIdGlobal();
-		_idnext++;
+		bd.setIdGlobal(_idnext++); //pd: nao estava a incrementar o idglobal
 		
 	    setId(_idnext);
 	    setUsername(username);
@@ -35,6 +35,10 @@ public class User extends User_Base {
 		}
 		return null;
 	}
+	
+	public User addUser(String username, String name, String pass) throws InvalidPermissionException{
+		throw new InvalidPermissionException(getUsername());
+	} //pd: if ur not root it will break automaticaly because root inherits user
 	
 	@Override
 	 public void addSpreadsheets(Spreadsheet spreadsheetToBeAdded) {
