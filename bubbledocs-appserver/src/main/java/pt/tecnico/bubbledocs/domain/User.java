@@ -37,7 +37,7 @@ public class User extends User_Base {
 		return null;
 	}
 	
-	public User addUser(String username, String name, String pass) throws InvalidPermissionException{
+	public void addUser(String username, String name, String pass) throws InvalidPermissionException{
 		throw new InvalidPermissionException(getUsername());
 	}
 	
