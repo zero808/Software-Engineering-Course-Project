@@ -10,7 +10,6 @@ public class BubbleDocs extends BubbleDocs_Base {
     	BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
     	if (bd == null)
     		bd = new BubbleDocs();
-
     	return bd;
     }
 

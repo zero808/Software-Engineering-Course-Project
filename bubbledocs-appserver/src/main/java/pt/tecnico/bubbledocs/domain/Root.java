@@ -2,6 +2,7 @@ package pt.tecnico.bubbledocs.domain;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
+import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
 import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
 
 public class Root extends Root_Base {
@@ -47,8 +48,15 @@ public class Root extends Root_Base {
 	   }
 	   
 	   @Override
-	   public User addUser(String username, String name, String pass){
-		   return new User(username, name, pass);
+	   public void addUser(String username, String name, String pass) throws UserAlreadyExistsException {
+		   BubbleDocs bd = getBubbledocs();
+
+		   User usr = getUserByName(username);
+		   if (usr != null)
+			   throw new UserAlreadyExistsException(username);
+
+		   bd.addUsers(new User(username, name, pass));
+		   
 	   }
 	   
 	   @Override
