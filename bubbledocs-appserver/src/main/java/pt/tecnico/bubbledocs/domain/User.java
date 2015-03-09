@@ -78,5 +78,9 @@ public class User extends User_Base {
 
 	    	return matchingSpreadsheets;
 	    }
+	 
+	    public void delete() {
+	    	//TODO saber se e preciso remover as spreadsheets deste user
+	    }
     
 }//End User Class
