@@ -16,7 +16,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 
     private BubbleDocs() {
     	FenixFramework.getDomainRoot().setBubbledocs(this);
-    	setIdGlobal(1); //pd: tem de começar a 1 porque 0 == root
+    	setIdGlobal(1); //root id = 0
     }
     
     private User getUserByName(String name) {
@@ -40,6 +40,20 @@ public class BubbleDocs extends BubbleDocs_Base {
     	if(pass.equals(null) || !(pass.equals(password))) {
     		throw new InvalidPasswordException();
     	}
+    }
+    
+    public void printUsers() {
+    	for (User user : getUsersSet()) {
+	    	user.toString();
+	    }
+    }
+    
+    public void printSpreadsheets() {
+    	for (User user : getUsersSet()) {
+	    	for(Spreadsheet spreadsheet : user.getSpreadsheetsSet()) {
+	    		spreadsheet.toString();
+	    	}
+	    }
     }
     
 }//End BubbleDocs Class

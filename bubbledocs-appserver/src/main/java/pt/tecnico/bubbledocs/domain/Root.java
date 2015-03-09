@@ -44,8 +44,6 @@ public class Root extends Root_Base {
 		   
 		   bd.removeUsers(toRemove);
 		   toRemove.delete();
-		   //TODO saber se e preciso remover as spreadsheets do usr
-
 	   }
 	   
 	   @Override

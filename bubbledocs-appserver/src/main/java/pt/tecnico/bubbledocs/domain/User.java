@@ -8,8 +8,8 @@ import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 
 public class User extends User_Base {
 	
-	public User() {
-		super(); //TODO Nao pode ser chamado para criar utilizador comum
+	protected User() {
+		super(); //Protected so that only Root can use it
 	}
     
 	public User(String username, String name, String pass) {
@@ -19,7 +19,7 @@ public class User extends User_Base {
 		
 		BubbleDocs bd = getBubbledocs();
 		_idnext = bd.getIdGlobal();
-		bd.setIdGlobal(_idnext++); //pd: nao estava a incrementar o idglobal
+		bd.setIdGlobal(_idnext++);
 		
 	    setId(_idnext);
 	    setUsername(username);
@@ -38,7 +38,7 @@ public class User extends User_Base {
 	
 	public User addUser(String username, String name, String pass) throws InvalidPermissionException{
 		throw new InvalidPermissionException(getUsername());
-	} //pd: if ur not root it will break automaticaly because root inherits user
+	}
 	
 	@Override
 	 public void addSpreadsheets(Spreadsheet spreadsheetToBeAdded) {
@@ -80,7 +80,36 @@ public class User extends User_Base {
 	    }
 	 
 	    public void delete() {
-	    	//TODO saber se e preciso remover as spreadsheets deste user
+	    	for(Spreadsheet s : getSpreadsheetsSet()) {
+				s.delete();
+			}
+
+			setBubbledocs(null);
+			deleteDomainObject();
+	    }
+	    
+	    public String toString() {
+	    	return "Id:" + getId() + "Nome:" + getName() + "Username:" + getUsername();
+	    }
+	    
+	    public void addLiteraltoCell(Literal l, Spreadsheet s) {
+	    	//TODO
+	    }
+	    
+	    public void addReferencetoCell(Literal l, Spreadsheet s) {
+	    	//TODO
+	    }
+	    
+	    public void addFunctiontoCell(Literal l, Spreadsheet s) {
+	    	//TODO
+	    }
+	    
+	    public void givePermissionto(Spreadsheet s, User u) {
+	    	//TODO
+	    }
+	    
+	    public void removePermissionfrom(Spreadsheet s, User u) {
+	    	
 	    }
     
 }//End User Class
