@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
+import pt.tecnico.bubbledocs.exception.OutofBondsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 
 public class User extends User_Base {
@@ -92,8 +93,19 @@ public class User extends User_Base {
 	    	return "Id:" + getId() + "Nome:" + getName() + "Username:" + getUsername();
 	    }
 	    
-	    public void addLiteraltoCell(Literal l, Spreadsheet s) {
-	    	//TODO
+	    public void addLiteraltoCell(Literal l, Spreadsheet s, int row, int collumn) throws OutofBondsException {
+	    	
+	    	if(row > s.getNRows() || collumn > s.getNCols())
+	    		throw new OutofBondsException(s.getName());
+	    	
+	    	if(!hasPermission(s))
+	    		throw new InvalidPermissionException(getUsername());
+	    	
+	    	for(Cell cell : s.getCellsSet()) {
+	    		if(cell.getRow() == row && cell.getCollumn() == collumn) {
+	    				cell.setContent(l);
+	    			}
+	    	}
 	    }
 	    
 	    public void addReferencetoCell(Literal l, Spreadsheet s) {
@@ -106,10 +118,16 @@ public class User extends User_Base {
 	    
 	    public void givePermissionto(Spreadsheet s, User u) {
 	    	//TODO
+	    	
 	    }
 	    
 	    public void removePermissionfrom(Spreadsheet s, User u) {
-	    	
+	    	//TODO
+	    }
+	    
+	    public boolean hasPermission(Spreadsheet s) {
+	    	//TODO
+			return false;
 	    }
     
 }//End User Class
