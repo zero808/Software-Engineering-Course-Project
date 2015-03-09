@@ -3,8 +3,6 @@ package pt.tecnico.bubbledocs.domain;
 import org.joda.time.DateTime;
 
 public class Spreadsheet extends Spreadsheet_Base {
-    
-	Cell _cells[][];
 	
     public Spreadsheet(String name, DateTime date, int nRows, int nCollumns) {
         super();
@@ -20,7 +18,6 @@ public class Spreadsheet extends Spreadsheet_Base {
 	    setDate(date);
 	    setNRows(nRows);
 	    setNCols(nCollumns);
-	    _cells = new Cell[nRows][nCollumns];
     }
     
     public void delete() {
@@ -28,19 +25,12 @@ public class Spreadsheet extends Spreadsheet_Base {
 		setUser(null);
 		deleteDomainObject();
     }
-    
+
     public void printCells() {
-    	
-    	int _rows = getNRows();
-    	int _c;
-    	int _d;
-    	int _collumns = getNCols();
-    	
-    	for ( _c = 0 ; _c < _rows ; _c++ ) {
-           for ( _d = 0 ; _d < _collumns ; _d++ )
-              System.out.print(_cells[_c][_d].toString() + "\t"); //O metodo toString() precisa de ser feito (para os varios conteudos)
-           System.out.println();
-        }
+    	 
+		for (Cell cell : getCellsSet()) {
+	    	cell.toString(); //toString precisa de ser feito para cada tipo de conteudo
+			}
     }
     
     public String toString() {
