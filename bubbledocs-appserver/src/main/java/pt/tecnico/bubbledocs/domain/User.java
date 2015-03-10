@@ -6,6 +6,7 @@ import java.util.List;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.OutofBondsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
+import pt.tecnico.bubbledocs.exception.InvalidReferenceException;
 
 public class User extends User_Base {
 	
@@ -93,7 +94,7 @@ public class User extends User_Base {
 	    	return "Id:" + getId() + "Nome:" + getName() + "Username:" + getUsername();
 	    }
 	    
-	    public void addLiteraltoCell(Literal l, Spreadsheet s, int row, int collumn) throws OutofBondsException {
+	    public void addLiteraltoCell(Literal l, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidPermissionException {
 	    	
 	    	if(row > s.getNRows() || collumn > s.getNCols())
 	    		throw new OutofBondsException(s.getName());
@@ -104,21 +105,46 @@ public class User extends User_Base {
 	    	for(Cell cell : s.getCellsSet()) {
 	    		if(cell.getRow() == row && cell.getCollumn() == collumn) {
 	    				cell.setContent(l);
-	    			}
+	    		}
 	    	}
+	    	//TODO | Check if its protected?
 	    }
 	    
-	    public void addReferencetoCell(Literal l, Spreadsheet s) {
-	    	//TODO
+	    public void addReferencetoCell(Reference r, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidReferenceException, InvalidPermissionException {
+	    	if(row > s.getNRows() || collumn > s.getNCols())
+	    		throw new OutofBondsException(s.getName());
+	    	
+	    	if(r.getCell().getRow() > s.getNRows() || r.getCell().getCollumn() > s.getNCols() || r.getCell().getContent() == null)
+	    		throw new InvalidReferenceException(s.getName());
+	    		
+	    	if(!hasPermission(s))
+	    		throw new InvalidPermissionException(getUsername());
+	    	
+	    	for(Cell cell : s.getCellsSet()) {
+	    		if(cell.getRow() == row && cell.getCollumn() == collumn) {
+	    				cell.setContent(r);
+	    		}
+	    	}
+	    	//TODO | To Check | Check if its protected?
 	    }
 	    
-	    public void addFunctiontoCell(Literal l, Spreadsheet s) {
-	    	//TODO
+	    public void addFunctiontoCell(Function f, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidPermissionException {
+	    	if(row > s.getNRows() || collumn > s.getNCols())
+	    		throw new OutofBondsException(s.getName());
+	    	
+	    	if(!hasPermission(s))
+	    		throw new InvalidPermissionException(getUsername());
+	    	
+	    	for(Cell cell : s.getCellsSet()) {
+	    		if(cell.getRow() == row && cell.getCollumn() == collumn) {
+	    				cell.setContent(f);
+	    		}
+	    	}
+	    	//TODO | To Check | Check if its protected?
 	    }
 	    
 	    public void givePermissionto(Spreadsheet s, User u) {
 	    	//TODO
-	    	
 	    }
 	    
 	    public void removePermissionfrom(Spreadsheet s, User u) {
