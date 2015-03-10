@@ -143,17 +143,25 @@ public class User extends User_Base {
 	    	//TODO | To Check | Check if its protected?
 	    }
 	    
-	    public void givePermissionto(Spreadsheet s, User u) {
-	    	//TODO
+	    public void givePermissionto(Spreadsheet s, User u, boolean b) {
+	    	if(hasOwnerPermission(s) || getId() == 1){
+	    		new Permission(s,u,b);
+	    	}
 	    }
 	    
 	    public void removePermissionfrom(Spreadsheet s, User u) {
-	    	//TODO
+	    	if(hasOwnerPermission(s) || getId() == 1){
+	    		//TODO
+	    	}
+	    }
+	    public boolean hasOwnerPermission(Spreadsheet s){
+	    	if(s.getUser().getName().equals(getName()))
+	    		return true;
+			return false;
 	    }
 	    
-	    public boolean hasPermission(Spreadsheet s) {
-	    	//TODO
-			return false;
+	    public boolean hasPermission(Spreadsheet s){
+	    	return false;//we need to create has write and has read permission
 	    }
     
 }//End User Class
