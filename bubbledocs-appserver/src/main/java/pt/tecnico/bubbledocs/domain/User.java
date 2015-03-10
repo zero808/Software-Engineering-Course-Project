@@ -96,7 +96,7 @@ public class User extends User_Base {
 	    
 	    public void addLiteraltoCell(Literal l, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidPermissionException {
 	    	
-	    	if(row > s.getNRows() || collumn > s.getNCols())
+	    	if(row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
 	    		throw new OutofBondsException(s.getName());
 	    	
 	    	if(!hasPermission(s))
