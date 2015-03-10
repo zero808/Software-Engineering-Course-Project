@@ -18,26 +18,35 @@ public class BubbleDocs extends BubbleDocs_Base {
     	setIdGlobal(1); //root id = 0
     }
     
-    private User getUserByName(String name) {
+    private User getUserByName(String name) throws UsernameDoesNotExistException {
     	for(User user : getUsersSet()) {
     		if(user.getName().equals(name)) {
     			return user;
     		}
     	}
-    	return null;
+    	// return null;
+    	throw new UsernameDoesNotExistException(name);
     }
     
-    public void login(String username, String password) throws UsernameDoesNotExistException, InvalidPasswordException {
-    	
-    	User u = getUserByName(username);
-     	String pass = u.getPassword();
-    	
-    	if(u.equals(null)) {
-    		throw new UsernameDoesNotExistException(username);
-    	}
-    	
-    	if(pass.equals(null) || !(pass.equals(password))) {
-    		throw new InvalidPasswordException();
+    public void login(String username, String password) throws InvalidPasswordException {
+    	try {
+	    	User u = getUserByName(username);
+	    	String pass = u.getPassword();
+	    	
+	     	/* Unnecessary because:
+	     	 * (User u = getUserByName(username)) can throw NullPointerException
+	     	 * 
+	    	// if(u.equals(null)) throws NullPointerException if u is null
+	     	if(u == null) {
+	    		throw new UsernameDoesNotExistException(username);
+	    	}*/
+	    	
+	    	// if(pass.equals(null) || !(pass.equals(password))) {
+	     	if(pass == null || !(pass.equals(password))) {
+	    		throw new InvalidPasswordException();
+	    	}
+    	} catch (NullPointerException ex) {
+    		// To Do
     	}
     }
     
