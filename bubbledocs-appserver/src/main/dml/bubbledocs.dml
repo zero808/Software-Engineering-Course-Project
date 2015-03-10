@@ -124,4 +124,18 @@ relation UnaryHasRange {
   Range playsRole range;
   Unary playsRole unary;
 }
+
+relation BinaryHasReferences {
+  Binary playsRole binary;
+  Reference playsRole references {
+    multiplicity 0..2;
+  }
+}
+
+relation BinaryHasLiterals {
+  Binary playsRole binary;
+  Literal playsRole literals {
+    multiplicity 0..2;
+  }
+}
  
