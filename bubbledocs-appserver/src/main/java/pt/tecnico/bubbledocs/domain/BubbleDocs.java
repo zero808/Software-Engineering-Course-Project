@@ -46,8 +46,9 @@ public class BubbleDocs extends BubbleDocs_Base {
 	    		throw new InvalidPasswordException();
 	    	}
     	} catch (NullPointerException ex) {
-    		// To Do
+    		// TODO
     	}
+    	// TODO | To Check
     }
     
     public void printUsers() {
