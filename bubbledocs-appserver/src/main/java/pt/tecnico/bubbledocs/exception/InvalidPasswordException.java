@@ -9,7 +9,7 @@ public class InvalidPasswordException extends BubbleDocsException {
 	private static final long serialVersionUID = 1L;
 
 	public InvalidPasswordException() {
-		//Just needs to exist
+		//Just needs to exist.
 	}
 	
 }
