@@ -70,7 +70,7 @@ public class User extends User_Base {
 		toRemove.deleteSpreadsheetContent();
 	}
 
-	public List<Spreadsheet> listarfolhas(String str) {
+	public List<Spreadsheet> listarfolhas(String str) { //TODO (Nome do metodo: Português? Inglês?)
 		List<Spreadsheet> _matchingSpreadsheets = new ArrayList<Spreadsheet>();
 
 		for (Spreadsheet spreadsheet : getSpreadsheetsSet()) {
@@ -100,7 +100,6 @@ public class User extends User_Base {
 	}
 
 	public void addLiteraltoCell(Literal l, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidPermissionException, CellIsProtectedException {
-
 		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
 			throw new OutofBondsException(s.getName());
 
@@ -110,7 +109,8 @@ public class User extends User_Base {
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
 				if(!(cell.getWProtected())) {
-					cell.setContent(l);	
+					cell.setContent(l);
+					return;
 				} else {
 					throw new CellIsProtectedException(s.getName());
 				}
@@ -119,7 +119,7 @@ public class User extends User_Base {
 	}
 
 	public void addReferencetoCell(Reference r, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidReferenceException, InvalidPermissionException, CellIsProtectedException {
-		if (row > s.getNRows() || collumn > s.getNCols())
+		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
 			throw new OutofBondsException(s.getName());
 
 		if (r.getCell().getRow() > s.getNRows() || r.getCell().getCollumn() > s.getNCols() || r.getCell().getContent() == null)
@@ -131,7 +131,8 @@ public class User extends User_Base {
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
 				if(!(cell.getWProtected())) {
-					cell.setContent(r);	
+					cell.setContent(r);
+					return;
 				} else {
 					throw new CellIsProtectedException(s.getName());
 				}
@@ -140,7 +141,7 @@ public class User extends User_Base {
 	}
 
 	public void addFunctiontoCell(Function f, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidPermissionException, CellIsProtectedException {
-		if (row > s.getNRows() || collumn > s.getNCols())
+		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
 			throw new OutofBondsException(s.getName());
 
 		if (!hasPermission(s))
@@ -149,7 +150,8 @@ public class User extends User_Base {
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
 				if(!(cell.getWProtected())) {
-					cell.setContent(f);	
+					cell.setContent(f);
+					return;
 				} else {
 					throw new CellIsProtectedException(s.getName());
 				}
