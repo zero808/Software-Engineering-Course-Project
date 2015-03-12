@@ -5,9 +5,11 @@ import java.util.List;
 
 import pt.tecnico.bubbledocs.exception.CellIsProtectedException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
+import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exception.OutofBondsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.InvalidReferenceException;
+import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
 import pt.tecnico.bubbledocs.exception.UserDoesNotHavePermissionException;
 
 public class User extends User_Base {
@@ -29,6 +31,29 @@ public class User extends User_Base {
 		setUsername(username);
 		setName(name);
 		setPassword(pass);
+	}
+	
+	@Override
+	public void setName(String name) {
+		if(name == null) {
+			throw new InvalidUsernameException("Null passed as username");
+		}
+			
+		if(name.equals("")) {
+			throw new InvalidUsernameException("Username cannot be empty");
+		}
+			
+		if(!(name.equals(getName()))) { //If its a new name, we need to check it doesn't already belong to another user.
+			BubbleDocs bd = getBubbledocs();
+			for(User u : bd.getUsersSet()) {
+				if(u.getUsername().equals(name)) {
+					throw new UserAlreadyExistsException(name);
+				}
+			}
+			super.setName(name);
+		} 
+		
+		super.setName(name); //If its exactly the same, its allowed.	
 	}
 
 	private Spreadsheet getSpreadsheetByName(String name) {
@@ -70,7 +95,7 @@ public class User extends User_Base {
 		toRemove.deleteSpreadsheetContent();
 	}
 
-	public List<Spreadsheet> listarfolhas(String str) { //TODO (Nome do metodo: Português? Inglês?)
+	public List<Spreadsheet> listSpreadsheetsContains(String str) {
 		List<Spreadsheet> _matchingSpreadsheets = new ArrayList<Spreadsheet>();
 
 		for (Spreadsheet spreadsheet : getSpreadsheetsSet()) {
@@ -159,9 +184,9 @@ public class User extends User_Base {
 		}
 	}
 
-	public void givePermissionto(Spreadsheet s, User u) {
+	public void givePermissionto(Spreadsheet s, User u, boolean b) {
 		if (hasOwnerPermission(s)) {
-			new Permission(s, u, true);
+			new Permission(s, u, b);
 		}
 	}
 
