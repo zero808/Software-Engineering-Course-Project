@@ -1,5 +1,6 @@
 package pt.tecnico.bubbledocs;
 
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
@@ -7,6 +8,9 @@ import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.SetupDomain;
 
 import javax.transaction.*;
+
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 public class BubbleDocsApplication {
 
@@ -40,6 +44,10 @@ public class BubbleDocsApplication {
 			    System.err.println("Error in roll back of transaction: " + ex);
 				}
 	    	}
+	   	
+	   	//org.jdom2.Document doc = convertToXML();
+
+		//printDomainInXML(doc);
     }
 
     // setup the initial state if bubbledocs is empty
@@ -47,4 +55,22 @@ public class BubbleDocsApplication {
     	if (bd.getUsersSet().isEmpty())
     		SetupDomain.populateDomain();
     }
+
+	@Atomic
+	public static org.jdom2.Document convertToXML() {
+		BubbleDocs bd = BubbleDocs.getInstance();
+	
+		org.jdom2.Document jdomDoc = new org.jdom2.Document();
+	
+		jdomDoc.setRootElement(bd.exportToXML());
+	
+		return jdomDoc;
+	}
+    
+	@Atomic
+	public static void printDomainInXML(org.jdom2.Document jdomDoc) {
+		XMLOutputter xml = new XMLOutputter();
+		xml.setFormat(Format.getPrettyFormat());
+		System.out.println(xml.outputString(jdomDoc));
+	}
 }
