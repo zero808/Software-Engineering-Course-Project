@@ -3,6 +3,8 @@ package pt.tecnico.bubbledocs.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jdom2.Element;
+
 import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exception.CellIsProtectedException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
@@ -61,6 +63,39 @@ public class User extends User_Base {
 		} 
 		
 		super.setUsername(username); //If its exactly the same, its allowed.	
+	}
+	
+	public Element exportToXML() {
+		Element element = new Element("user");
+
+		element.setAttribute("username", getUsername());
+		element.setAttribute("name", getName());
+		element.setAttribute("pass", getPassword());
+
+		Element spreadsheetsElement = new Element("spreadsheets");
+		element.addContent(spreadsheetsElement);
+		
+		//Maybe missing permissions on this side too.
+		for (Spreadsheet s : getSpreadsheetsSet()) {
+			spreadsheetsElement.addContent(s.exportToXML());
+		}
+
+		return element;
+	}
+	
+	public void importFromXML(Element userElement) {
+		setUsername(userElement.getAttribute("username").getValue());
+		setName(userElement.getAttribute("name").getValue());
+		setPassword(userElement.getAttribute("pass").getValue());
+		Element spreadsheets = userElement.getChild("spreadsheets");
+
+		//Maybe missing permissions on this side too.
+		for (Element spreadsheetElement : spreadsheets.getChildren("spreadsheet")) {
+			Spreadsheet s = new Spreadsheet();
+			s.importFromXML(spreadsheetElement);
+			addSpreadsheets(s);
+		}
+
 	}
 
 	private Spreadsheet getSpreadsheetByName(String name) {

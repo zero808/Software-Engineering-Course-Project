@@ -1,14 +1,25 @@
 package pt.tecnico.bubbledocs.domain;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.jdom2.DataConversionException;
+import org.jdom2.Element;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import pt.tecnico.bubbledocs.exception.CellAlreadyExistsException;
+import pt.tecnico.bubbledocs.exception.ImportDocumentException;
 import pt.tecnico.bubbledocs.exception.OutofBondsException;
 
 public class Spreadsheet extends Spreadsheet_Base {
+	
+	public Spreadsheet() {
+		super();
+	}
 
 	public Spreadsheet(String name, DateTime date, int nRows, int nCollumns) {
 		super();
@@ -46,6 +57,66 @@ public class Spreadsheet extends Spreadsheet_Base {
 		
 		super.addCells(c);
 	}
+	
+	public Element exportToXML() {
+		Element element = new Element("spreadsheet");
+		element.setAttribute("name", getName());
+		element.setAttribute("date-millisecond", Integer.toString(getDate().getMillisOfSecond()));
+		element.setAttribute("date-second", Integer.toString(getDate().getSecondOfMinute()));
+		element.setAttribute("date-minute", Integer.toString(getDate().getMinuteOfDay()));
+		element.setAttribute("date-hour", Integer.toString(getDate().getHourOfDay()));
+		element.setAttribute("date-day", Integer.toString(getDate().getDayOfMonth()));
+		element.setAttribute("date-month", Integer.toString(getDate().getMonthOfYear()));
+		element.setAttribute("date-year", Integer.toString(getDate().getYear()));
+		element.setAttribute("rows", Integer.toString(getNRows()));
+		element.setAttribute("collumns", Integer.toString(getNCols()));
+		
+		Element cellsElement = new Element("cells");
+		element.addContent(cellsElement);
+		
+		for (Cell c : getCellsSet()) {
+			//cellsElement.addContent(c.exportToXML()); TODO (Leo, Duarte e Marco)
+		}
+		
+		Element permissionsElement = new Element("permissions");
+		element.addContent(permissionsElement);
+		
+		for (Permission p : getPermissionsSet()) {
+			permissionsElement.addContent(p.exportToXML());
+		}
+		
+		return element;
+	}
+	
+	public void importFromXML(Element spreadsheetElement) {
+		setName(spreadsheetElement.getAttribute("name").getValue());
+		DateTime date;
+		
+		try {
+			date = new DateTime(spreadsheetElement.getAttribute("date-year").getIntValue(), spreadsheetElement.getAttribute("date-month").getIntValue(), spreadsheetElement.getAttribute("date-day").getIntValue(), spreadsheetElement.getAttribute("date-hour").getIntValue(), spreadsheetElement.getAttribute("date-minute").getIntValue(), spreadsheetElement.getAttribute("date-second").getIntValue(), spreadsheetElement.getAttribute("date-millisecond").getIntValue());
+			setDate(date);
+			setNRows(spreadsheetElement.getAttribute("rows").getIntValue());
+			setNCols(spreadsheetElement.getAttribute("collumns").getIntValue());
+		} catch (DataConversionException e) {
+			throw new ImportDocumentException();
+		}
+		
+		Element cells = spreadsheetElement.getChild("cells");
+		
+		for (Element cellElement : cells.getChildren("cell")) {
+			Cell c = new Cell();
+			//c.importFromXML(cellElement); //TODO (Leo, Duarte e Marco)
+			addCell(c);
+		}
+		
+		Element permissions = spreadsheetElement.getChild("permissions");
+		
+		for (Element permissionElement : permissions.getChildren("permission")) {
+			Permission p = new Permission();
+			p.importFromXML(permissionElement);
+			addPermissions(p);
+		}
+	}
 
 	public void delete() { //Used to remove connection to user that is being removed.
 
@@ -62,10 +133,9 @@ public class Spreadsheet extends Spreadsheet_Base {
 			}
 		}
 		//for(Cell c : getCellsSet()) {
-			//c.delete(); Cell needs to implement this all the way down to remove spreadsheet.
+			//c.delete(); Cell needs to implement this all the way down to remove spreadsheet. TODO (Leo, Marco, Duarte)
 		//}
 		deleteDomainObject();
-		//TODO (Leo, Marco, Duarte)
 	}
 	
 	public Cell getCellByCoords(int row, int collumn) throws OutofBondsException {
@@ -142,7 +212,7 @@ public class Spreadsheet extends Spreadsheet_Base {
 	}
 
 	public String toString() {
-		return "Nome:" + getName() + "Data Criacao:" + getDate() + "N-Linhas:" + getNRows() + "N-Colunas:" + getNCols();
+		return "Nome:" + getName() + "Data Criacao:" + getDate().toString() + "N-Linhas:" + getNRows() + "N-Colunas:" + getNCols();
 	}
 
 }// End Spreadsheet Class
