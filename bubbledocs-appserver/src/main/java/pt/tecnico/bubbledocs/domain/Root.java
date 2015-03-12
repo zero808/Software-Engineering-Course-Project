@@ -93,8 +93,8 @@ public class Root extends Root_Base {
 	}
 	
 	@Override
-	public void givePermissionto(Spreadsheet s, User u) {
-		new Permission(s, u, true);
+	public void givePermissionto(Spreadsheet s, User u, boolean b) {
+		new Permission(s, u, b);
 	}
 	
 	@Override
