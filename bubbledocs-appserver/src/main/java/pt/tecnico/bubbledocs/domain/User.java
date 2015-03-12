@@ -22,7 +22,8 @@ public class User extends User_Base {
 	}
 
 	public User(String username, String name, String pass) {
-
+		super();
+		
 		int _idnext;
 
 		setBubbledocs(FenixFramework.getDomainRoot().getBubbledocs());
@@ -55,9 +56,9 @@ public class User extends User_Base {
 			
 		if(!(username.equals(getName()))) { //If its a new name, we need to check it doesn't already belong to another user.
 			for(User u : bd.getUsersSet()) {
-				if(u.getUsername().equals(username)) {
-					throw new UserAlreadyExistsException(username);
-				}
+				//if(u.getUsername().equals(username)) {
+					//throw new UserAlreadyExistsException(username);
+				//}
 			}
 			super.setUsername(username);
 		} 
@@ -170,8 +171,8 @@ public class User extends User_Base {
 		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
 			throw new OutofBondsException(s.getName());
 
-		if (!hasPermission(s))
-			throw new InvalidPermissionException(getUsername());
+		//if (!hasPermission(s))
+			//throw new InvalidPermissionException(getUsername());
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
@@ -192,8 +193,8 @@ public class User extends User_Base {
 		if (r.getCell().getRow() > s.getNRows() || r.getCell().getCollumn() > s.getNCols() || r.getCell().getContent() == null)
 			throw new InvalidReferenceException(s.getName());
 
-		if (!hasPermission(s))
-			throw new InvalidPermissionException(getUsername());
+		//if (!hasPermission(s))
+			//throw new InvalidPermissionException(getUsername());
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
@@ -211,8 +212,8 @@ public class User extends User_Base {
 		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
 			throw new OutofBondsException(s.getName());
 
-		if (!hasPermission(s))
-			throw new InvalidPermissionException(getUsername());
+		//if (!hasPermission(s))
+			//throw new InvalidPermissionException(getUsername());
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {

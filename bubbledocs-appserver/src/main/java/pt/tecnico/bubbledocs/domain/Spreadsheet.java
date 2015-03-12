@@ -1,16 +1,12 @@
 package pt.tecnico.bubbledocs.domain;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
-
 import org.jdom2.DataConversionException;
 import org.jdom2.Element;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
+import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exception.CellAlreadyExistsException;
 import pt.tecnico.bubbledocs.exception.ImportDocumentException;
 import pt.tecnico.bubbledocs.exception.OutofBondsException;
@@ -28,9 +24,10 @@ public class Spreadsheet extends Spreadsheet_Base {
 		int _rowIterator = 1;
 		int _collumnIterator = 1;
 
+		setBubbledocs(FenixFramework.getDomainRoot().getBubbledocs());
 		BubbleDocs bd = getBubbledocs();
 		_idnext = bd.getIdGlobal();
-		_idnext++;
+		bd.setIdGlobal(_idnext++);
 
 		setId(_idnext);
 		setName(name);
@@ -38,17 +35,27 @@ public class Spreadsheet extends Spreadsheet_Base {
 		setNRows(nRows);
 		setNCols(nCollumns);
 		
-		while(_rowIterator <= nRows) {
-			while(_collumnIterator <= nCollumns) {
-				addCell(new Cell(_rowIterator, _collumnIterator, false));
-				_collumnIterator++;
+		if(!(getCellsSet().isEmpty())) {
+			while(_rowIterator <= nRows) {
+				while(_collumnIterator <= nCollumns) {
+					Cell c = new Cell(_rowIterator, _collumnIterator, false);
+					addCell(c);
+					c.setSpreadsheet(this);
+					
+					_collumnIterator++;
+				}
+				_collumnIterator = 1; //Reset of column iterator.
+				_rowIterator++;
 			}
-			_collumnIterator = 1; //Reset of column iterator.
-			_rowIterator++;
+		} else {
+			Cell c = new Cell(_rowIterator, _collumnIterator, false);
+			addCells(c);
+			c.setSpreadsheet(this);
 		}
 	}
 	
 	public void addCell(Cell c) throws CellAlreadyExistsException {
+		
 		Cell _c = getCellByCoords(c.getRow(), c.getCollumn());
 		
 		if (_c != null) {
