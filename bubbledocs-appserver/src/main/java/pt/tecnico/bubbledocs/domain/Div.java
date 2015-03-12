@@ -2,6 +2,8 @@ package pt.tecnico.bubbledocs.domain;
 
 import java.util.ArrayList;
 
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
+
 public class Div extends Div_Base {
 
 	public Div() {
@@ -36,7 +38,7 @@ public class Div extends Div_Base {
 	public int getValue() {
 		ArrayList<Integer> values = new ArrayList<Integer>();
 		if (super.getReferencesSet().size() + super.getLiteralsSet().size() != 2) {
-			// TODO throw exception, number of args invalid
+			throw new InvalidArgumentsException();
 		}
 		for (Reference r : super.getReferencesSet())
 			values.add(r.getValue());

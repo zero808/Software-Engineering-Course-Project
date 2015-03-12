@@ -11,6 +11,8 @@ public class Cell extends Cell_Base {
 		super.setRow(_row);
 		super.setCollumn(_col);
 		super.setWProtected(_wProtected);
+		
+		//TODO throw an exception when cell is out of bonds
 	}
 
 	@Override
