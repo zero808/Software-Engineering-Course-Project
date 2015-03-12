@@ -18,7 +18,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 		setIdGlobal(1); // root id = 0
 	}
 
-	private User getUserByName(String name) throws UsernameDoesNotExistException {
+	public User getUserByName(String name) throws UsernameDoesNotExistException {
 		for (User user : getUsersSet()) {
 			if (user.getName().equals(name)) {
 				return user;

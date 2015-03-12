@@ -3,6 +3,7 @@ package pt.tecnico.bubbledocs.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exception.CellIsProtectedException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
@@ -19,10 +20,10 @@ public class User extends User_Base {
 	}
 
 	public User(String username, String name, String pass) {
-		super();
 
 		int _idnext;
 
+		setBubbledocs(FenixFramework.getDomainRoot().getBubbledocs());
 		BubbleDocs bd = getBubbledocs();
 		_idnext = bd.getIdGlobal();
 		bd.setIdGlobal(_idnext++);
@@ -34,26 +35,32 @@ public class User extends User_Base {
 	}
 	
 	@Override
-	public void setName(String name) {
-		if(name == null) {
+	public void setUsername(String username) throws InvalidUsernameException, UserAlreadyExistsException {
+		BubbleDocs bd = getBubbledocs();
+		
+		if(username == null) {
 			throw new InvalidUsernameException("Null passed as username");
 		}
+		
+		if(username.equals("root")) {
+			super.setUsername("root");
+			return;
+		}
 			
-		if(name.equals("")) {
+		if(username.equals("")) {
 			throw new InvalidUsernameException("Username cannot be empty");
 		}
 			
-		if(!(name.equals(getName()))) { //If its a new name, we need to check it doesn't already belong to another user.
-			BubbleDocs bd = getBubbledocs();
+		if(!(username.equals(getName()))) { //If its a new name, we need to check it doesn't already belong to another user.
 			for(User u : bd.getUsersSet()) {
-				if(u.getUsername().equals(name)) {
-					throw new UserAlreadyExistsException(name);
+				if(u.getUsername().equals(username)) {
+					throw new UserAlreadyExistsException(username);
 				}
 			}
-			super.setName(name);
+			super.setUsername(username);
 		} 
 		
-		super.setName(name); //If its exactly the same, its allowed.	
+		super.setUsername(username); //If its exactly the same, its allowed.	
 	}
 
 	private Spreadsheet getSpreadsheetByName(String name) {

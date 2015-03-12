@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.joda.time.DateTime;
 
+import pt.tecnico.bubbledocs.exception.CellAlreadyExistsException;
 import pt.tecnico.bubbledocs.exception.OutofBondsException;
 
 public class Spreadsheet extends Spreadsheet_Base {
@@ -13,6 +14,8 @@ public class Spreadsheet extends Spreadsheet_Base {
 		super();
 
 		int _idnext;
+		int _rowIterator = 1;
+		int _collumnIterator = 1;
 
 		BubbleDocs bd = getBubbledocs();
 		_idnext = bd.getIdGlobal();
@@ -23,6 +26,25 @@ public class Spreadsheet extends Spreadsheet_Base {
 		setDate(date);
 		setNRows(nRows);
 		setNCols(nCollumns);
+		
+		while(_rowIterator <= nRows) {
+			while(_collumnIterator <= nCollumns) {
+				addCell(new Cell(_rowIterator, _collumnIterator, false));
+				_collumnIterator++;
+			}
+			_collumnIterator = 1; //Reset of column iterator.
+			_rowIterator++;
+		}
+	}
+	
+	public void addCell(Cell c) throws CellAlreadyExistsException {
+		Cell _c = getCellByCoords(c.getRow(), c.getCollumn());
+		
+		if (_c != null) {
+			throw new CellAlreadyExistsException(c.getRow(), c.getCollumn());
+		}
+		
+		super.addCells(c);
 	}
 
 	public void delete() { //Used to remove connection to user that is being removed.

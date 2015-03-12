@@ -3,11 +3,10 @@ package pt.tecnico.bubbledocs;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.SetupDomain;
 
 import javax.transaction.*;
-
-//import java.util.Set;
 
 public class BubbleDocsApplication {
 
@@ -21,10 +20,11 @@ public class BubbleDocsApplication {
 		    tm.begin();
 	
 		    BubbleDocs bd = BubbleDocs.getInstance();
-		    setupIfNeed(bd);
+		    Root root = Root.getInstance();
+		    setupIfNeed(bd, root);
 		    
-		    bd.setIdGlobal(bd.getIdGlobal() + 1);
-		    System.out.println("ID:" + bd.getIdGlobal());
+		    //bd.setIdGlobal(bd.getIdGlobal() + 1);
+		    //System.out.println("ID:" + bd.getIdGlobal());
 		    
 		    //Do stuff here later
 		    
@@ -43,7 +43,7 @@ public class BubbleDocsApplication {
     }
 
     // setup the initial state if bubbledocs is empty
-    private static void setupIfNeed(BubbleDocs bd) {
+    private static void setupIfNeed(BubbleDocs bd, Root root) {
     	if (bd.getUsersSet().isEmpty())
     		SetupDomain.populateDomain();
     }
