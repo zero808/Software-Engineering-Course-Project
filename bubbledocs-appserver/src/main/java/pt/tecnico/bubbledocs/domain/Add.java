@@ -1,5 +1,7 @@
 package pt.tecnico.bubbledocs.domain;
 
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
+
 public class Add extends Add_Base {
 
 	public Add() {
@@ -34,7 +36,7 @@ public class Add extends Add_Base {
 	public int getValue() {
 		int value = 0;
 		if (super.getReferencesSet().size() + super.getLiteralsSet().size() != 2) {
-			// TODO throw exception, number of args invalid
+			throw new InvalidArgumentsException();
 		}
 		for (Reference r : super.getReferencesSet())
 			value += r.getValue();
