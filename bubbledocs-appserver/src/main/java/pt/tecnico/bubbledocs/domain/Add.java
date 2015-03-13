@@ -1,5 +1,7 @@
 package pt.tecnico.bubbledocs.domain;
 
+import org.jdom2.Element;
+
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
 public class Add extends Add_Base {
@@ -44,6 +46,19 @@ public class Add extends Add_Base {
 			value += l.getValue();
 		return value;
 		// TODO Throw exception
+	}
+
+	@Override
+	public Element exportToXML() {
+		Element element = new Element ("add");
+		
+		return element;
+	}
+
+	@Override
+	public void importFromXML(Element cellElement) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

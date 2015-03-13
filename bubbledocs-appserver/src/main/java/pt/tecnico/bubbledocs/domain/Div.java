@@ -2,6 +2,8 @@ package pt.tecnico.bubbledocs.domain;
 
 import java.util.ArrayList;
 
+import org.jdom2.Element;
+
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
 public class Div extends Div_Base {
@@ -46,6 +48,19 @@ public class Div extends Div_Base {
 			values.add(l.getValue());
 		return values.get(0) / values.get(1);
 		// TODO Throw exception
+	}
+
+	@Override
+	public Element exportToXML() {
+		Element element = new Element ("div");
+		
+		return element;
+	}
+
+	@Override
+	public void importFromXML(Element cellElement) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
