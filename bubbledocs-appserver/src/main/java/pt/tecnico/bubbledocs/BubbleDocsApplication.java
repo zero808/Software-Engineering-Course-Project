@@ -5,7 +5,15 @@ import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Root;
-import pt.tecnico.bubbledocs.SetupDomain;
+import pt.tecnico.bubbledocs.domain.Spreadsheet;
+import pt.tecnico.bubbledocs.domain.User;
+//import pt.tecnico.bubbledocs.domain.Add;
+//import pt.tecnico.bubbledocs.domain.Cell;
+//import pt.tecnico.bubbledocs.domain.Div;
+//import pt.tecnico.bubbledocs.domain.Literal;
+//import pt.tecnico.bubbledocs.domain.Reference;
+
+import org.joda.time.DateTime;
 
 import javax.transaction.*;
 
@@ -25,10 +33,7 @@ public class BubbleDocsApplication {
 	
 		    BubbleDocs bd = BubbleDocs.getInstance();
 		    Root root = Root.getInstance();
-		    setupIfNeed(bd, root);
-		    
-		    //bd.setIdGlobal(bd.getIdGlobal() + 1);
-		    //System.out.println("ID:" + bd.getIdGlobal());
+		    populateDomain(bd, root);
 		    
 		    //Do stuff here later
 		    
@@ -45,15 +50,43 @@ public class BubbleDocsApplication {
 				}
 	    	}
 	   	
-	   	//org.jdom2.Document doc = convertToXML();
+	   	org.jdom2.Document doc = convertToXML();
 
-		//printDomainInXML(doc);
+	   	printDomainInXML(doc);
     }
-
-    // setup the initial state if bubbledocs is empty
-    private static void setupIfNeed(BubbleDocs bd, Root root) {
-    	if (bd.getUsersSet().isEmpty())
-    		SetupDomain.populateDomain();
+    
+    static void populateDomain(BubbleDocs bd, Root root) {
+    	
+    	User pf = new User("pf", "Paul Door", "sub");
+     	User ra = new User("ra", "Step Rabbit", "cor");
+     	
+    	root.addUser(pf);
+    	root.addUser(ra);
+    	
+    	Spreadsheet notas = new Spreadsheet("Notas ES", new DateTime(), 300, 20); //new DateTime() gives the current one.
+    	pf.addSpreadsheets(notas);
+    	
+    	/*Literal l = new Literal(5);
+    	pf.addLiteraltoCell(l, notas, 3, 4);
+    	
+    	Cell c1 = notas.getCellByCoords(5, 6);
+    	Reference r = new Reference(c1);
+    	pf.addReferencetoCell(r, notas, 1, 1);
+    	
+    	Literal l2 = new Literal(2);
+    	Cell c2 = notas.getCellByCoords(3, 4);
+    	Reference r2 = new Reference(c2);
+    	
+    	Add add = new Add(l2, r2);
+    	pf.addFunctiontoCell(add, notas, 5, 6);
+    	
+    	Cell c3 = notas.getCellByCoords(1, 1);
+    	Cell c4 = notas.getCellByCoords(3, 4);
+    	Reference r3 = new Reference(c3);
+    	Reference r4 = new Reference(c4);
+    	
+    	Div div = new Div(r3, r4);
+    	pf.addFunctiontoCell(div, notas, 2, 2);*/
     }
 
 	@Atomic

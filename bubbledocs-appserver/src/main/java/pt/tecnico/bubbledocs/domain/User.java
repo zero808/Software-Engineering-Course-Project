@@ -23,23 +23,24 @@ public class User extends User_Base {
 
 	public User(String username, String name, String pass) {
 		super();
-		
 		int _idnext;
-
-		setBubbledocs(FenixFramework.getDomainRoot().getBubbledocs());
-		BubbleDocs bd = getBubbledocs();
+		
+		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		setBubbledocs(bd);
 		_idnext = bd.getIdGlobal();
 		bd.setIdGlobal(_idnext++);
 
 		setId(_idnext);
-		setUsername(username);
+		super.setUsername(username);
 		setName(name);
 		setPassword(pass);
+		
+		bd.addUsers(this);
 	}
 	
 	@Override
 	public void setUsername(String username) throws InvalidUsernameException, UserAlreadyExistsException {
-		BubbleDocs bd = getBubbledocs();
+		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
 		
 		if(username == null) {
 			throw new InvalidUsernameException("Null passed as username");
@@ -53,14 +54,16 @@ public class User extends User_Base {
 		if(username.equals("")) {
 			throw new InvalidUsernameException("Username cannot be empty");
 		}
-			
+		
 		if(!(username.equals(getName()))) { //If its a new name, we need to check it doesn't already belong to another user.
-			for(User u : bd.getUsersSet()) {
-				//if(u.getUsername().equals(username)) {
-					//throw new UserAlreadyExistsException(username);
-				//}
+			if(!(bd.getUsersSet().isEmpty())) {
+				for(User u : bd.getUsersSet()) {
+					if(u.getUsername().equals(username)) {
+						throw new UserAlreadyExistsException(username);
+					}
+				}
+				super.setUsername(username);
 			}
-			super.setUsername(username);
 		} 
 		
 		super.setUsername(username); //If its exactly the same, its allowed.	
@@ -107,14 +110,15 @@ public class User extends User_Base {
 		}
 		return null;
 	}
-
-	public void addUser(String username, String name, String pass) throws InvalidPermissionException {
-		throw new InvalidPermissionException(getUsername());
+	
+	@Override
+	public void addSpreadsheets(Spreadsheet s) {
+		s.setUser(this);
+		super.addSpreadsheets(s);
 	}
 
-	@Override
-	public void addSpreadsheets(Spreadsheet spreadsheetToBeAdded) {
-		super.addSpreadsheets(spreadsheetToBeAdded);
+	public void addUser(User u) throws InvalidPermissionException {
+		throw new InvalidPermissionException(getUsername());
 	}
 
 	@Override
@@ -161,10 +165,6 @@ public class User extends User_Base {
 
 		setBubbledocs(null);
 		deleteDomainObject();
-	}
-
-	public String toString() {
-		return "Id:" + getId() + "Nome:" + getName() + "Username:" + getUsername() + "Password:" + getPassword();
 	}
 
 	public void addLiteraltoCell(Literal l, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidPermissionException, CellIsProtectedException {
@@ -254,6 +254,11 @@ public class User extends User_Base {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return "Id: " + getId() + " " + "Nome: " + getName() + " " + "Username: " + getUsername() + " " + "Password: " + getPassword() + "\n";
 	}
 
 }// End User Class

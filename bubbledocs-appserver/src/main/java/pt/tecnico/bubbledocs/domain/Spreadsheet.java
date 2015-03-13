@@ -25,7 +25,7 @@ public class Spreadsheet extends Spreadsheet_Base {
 		int _collumnIterator = 1;
 
 		setBubbledocs(FenixFramework.getDomainRoot().getBubbledocs());
-		BubbleDocs bd = getBubbledocs();
+		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
 		_idnext = bd.getIdGlobal();
 		bd.setIdGlobal(_idnext++);
 
@@ -52,6 +52,8 @@ public class Spreadsheet extends Spreadsheet_Base {
 			addCells(c);
 			c.setSpreadsheet(this);
 		}
+		
+		bd.addSpreadsheets(this);
 	}
 	
 	public void addCell(Cell c) throws CellAlreadyExistsException {
@@ -81,9 +83,9 @@ public class Spreadsheet extends Spreadsheet_Base {
 		Element cellsElement = new Element("cells");
 		element.addContent(cellsElement);
 		
-		for (Cell c : getCellsSet()) {
+		//for (Cell c : getCellsSet()) {
 			//cellsElement.addContent(c.exportToXML()); TODO (Leo, Duarte e Marco)
-		}
+		//}
 		
 		Element permissionsElement = new Element("permissions");
 		element.addContent(permissionsElement);
@@ -108,13 +110,13 @@ public class Spreadsheet extends Spreadsheet_Base {
 			throw new ImportDocumentException();
 		}
 		
-		Element cells = spreadsheetElement.getChild("cells");
+		//Element cells = spreadsheetElement.getChild("cells");
 		
-		for (Element cellElement : cells.getChildren("cell")) {
-			Cell c = new Cell();
+		//for (Element cellElement : cells.getChildren("cell")) {
+			//Cell c = new Cell();
 			//c.importFromXML(cellElement); //TODO (Leo, Duarte e Marco)
-			addCell(c);
-		}
+			//addCell(c);
+		//}
 		
 		Element permissions = spreadsheetElement.getChild("permissions");
 		
@@ -211,15 +213,8 @@ public class Spreadsheet extends Spreadsheet_Base {
 		return null;
 	}
 	
-	public void printCells() {
-
-		for (Cell cell : getCellsSet()) {
-			cell.toString();
-		}
-	}
-
 	public String toString() {
-		return "Nome:" + getName() + "Data Criacao:" + getDate().toString() + "N-Linhas:" + getNRows() + "N-Colunas:" + getNCols();
+		return "Nome: " + getName() + " " + "Data Criacao: " + getDate().toString() + " " + "N-Linhas: " + getNRows() + " " + "N-Colunas: " + getNCols() + "\n";
 	}
 
 }// End Spreadsheet Class
