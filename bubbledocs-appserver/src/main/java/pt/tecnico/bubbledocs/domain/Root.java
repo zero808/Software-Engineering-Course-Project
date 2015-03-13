@@ -63,6 +63,10 @@ public class Root extends Root_Base {
 			bd.addUsers(u);
 		} else {
 			
+			if(bd.getUserByUsername(u.getUsername()) != null) {
+				throw new UserAlreadyExistsException(u.getUsername());
+			}
+			
 			if(u.getName() != null && u.getPassword() != null && u.getUsername() != null) {
 				bd.addUsers(u);
 			} else {

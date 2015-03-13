@@ -26,7 +26,6 @@ public class User extends User_Base {
 		int _idnext;
 		
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
-		setBubbledocs(bd);
 		_idnext = bd.getIdGlobal();
 		bd.setIdGlobal(_idnext++);
 
@@ -34,8 +33,6 @@ public class User extends User_Base {
 		super.setUsername(username);
 		setName(name);
 		setPassword(pass);
-		
-		bd.addUsers(this);
 	}
 	
 	@Override
@@ -190,7 +187,7 @@ public class User extends User_Base {
 		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
 			throw new OutofBondsException(s.getName());
 
-		if (r.getCell().getRow() > s.getNRows() || r.getCell().getCollumn() > s.getNCols() || r.getCell().getContent() == null)
+		if (r.getReferencedCell().getRow() > s.getNRows() || r.getReferencedCell().getCollumn() > s.getNCols())
 			throw new InvalidReferenceException(s.getName());
 
 		//if (!hasPermission(s))
@@ -199,6 +196,9 @@ public class User extends User_Base {
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
 				if(!(cell.getWProtected())) {
+					if(r.getReferencedCell().getContent() == null) {
+						cell.setContent(null);
+					}
 					cell.setContent(r);
 					return;
 				} else {

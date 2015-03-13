@@ -22,13 +22,14 @@ public class Cell extends Cell_Base {
 	@Override
 	public String toString() {
 		String _cont;
-		if (this.getContent() == null)
+		if (this.getContent() == null) {
 			_cont = null;
-		else
+			return "row: " + this.getRow() + "\ncol: " + this.getCollumn() + "\n#VALUE\n";
+		}
+		else {
 			_cont = this.getContent().toString();
-		return "row: " + super.getRow() + "\ncol: " + super.getCollumn()
-				+ "\ncont: " + _cont;
-
+			return "row: " + super.getRow() + "\ncol: " + super.getCollumn() + "\n" + _cont; //OCD beware.
+		}
 	}
     
 }
