@@ -2,6 +2,7 @@ package pt.tecnico.bubbledocs.domain;
 
 import java.util.List;
 import java.util.ArrayList;
+
 import org.jdom2.DataConversionException;
 import org.jdom2.Element;
 import org.joda.time.DateTime;
@@ -9,7 +10,6 @@ import org.joda.time.DateTime;
 import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exception.CellAlreadyExistsException;
 import pt.tecnico.bubbledocs.exception.ImportDocumentException;
-import pt.tecnico.bubbledocs.exception.OutofBondsException;
 
 public class Spreadsheet extends Spreadsheet_Base {
 	
@@ -24,8 +24,9 @@ public class Spreadsheet extends Spreadsheet_Base {
 		int _rowIterator = 1;
 		int _collumnIterator = 1;
 
-		setBubbledocs(FenixFramework.getDomainRoot().getBubbledocs());
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		setBubbledocs(FenixFramework.getDomainRoot().getBubbledocs());
+
 		_idnext = bd.getIdGlobal();
 		bd.setIdGlobal(_idnext++);
 
@@ -35,28 +36,20 @@ public class Spreadsheet extends Spreadsheet_Base {
 		setNRows(nRows);
 		setNCols(nCollumns);
 		
-		if(!(getCellsSet().isEmpty())) {
 			while(_rowIterator <= nRows) {
 				while(_collumnIterator <= nCollumns) {
 					Cell c = new Cell(_rowIterator, _collumnIterator, false);
-					addCell(c);
-					c.setSpreadsheet(this);
+					addCells(c);
 					
 					_collumnIterator++;
 				}
 				_collumnIterator = 1; //Reset of column iterator.
 				_rowIterator++;
 			}
-		} else {
-			Cell c = new Cell(_rowIterator, _collumnIterator, false);
-			addCells(c);
-			c.setSpreadsheet(this);
-		}
-		
-		bd.addSpreadsheets(this);
 	}
 	
-	public void addCell(Cell c) throws CellAlreadyExistsException {
+	@Override
+	public void addCells(Cell c) throws CellAlreadyExistsException {
 		
 		Cell _c = getCellByCoords(c.getRow(), c.getCollumn());
 		
@@ -65,6 +58,7 @@ public class Spreadsheet extends Spreadsheet_Base {
 		}
 		
 		super.addCells(c);
+		c.setSpreadsheet(this);
 	}
 	
 	public Element exportToXML() {
@@ -147,20 +141,14 @@ public class Spreadsheet extends Spreadsheet_Base {
 		deleteDomainObject();
 	}
 	
-	public Cell getCellByCoords(int row, int collumn) throws OutofBondsException {
-		Cell _requestedCell = null;
-		
-		for(Cell c : getCellsSet()) {
-			if(c.getRow() == row && c.getCollumn() == collumn) {
-				_requestedCell = c;
+	public Cell getCellByCoords(int row, int collumn) {
+			for(Cell c : getCellsSet()) {
+				if(c.getRow() == row && c.getCollumn() == collumn) {
+					return c;
+				}
 			}
+			return null;
 		}
-		
-		if(_requestedCell == null) { //Should never happen, just to be safe.
-			throw new OutofBondsException(getName());
-		}
-		return _requestedCell;
-	}
 	
 	public List<Cell> getCellsInRange(Range r) {
 		List<Cell> _requestedCells = new ArrayList<Cell>();
@@ -211,6 +199,12 @@ public class Spreadsheet extends Spreadsheet_Base {
 			}
 		}
 		return null;
+	}
+	
+	public void printCells() {
+		for (Cell cell : getCellsSet()) {
+			cell.toString();
+		}
 	}
 	
 	public String toString() {

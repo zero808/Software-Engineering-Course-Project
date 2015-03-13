@@ -141,6 +141,6 @@ relation BinaryHasLiterals {
   
 relation ReferenceHasCell {
 	Reference playsRole reference;
-	Cell playsRole cell;  
+	Cell playsRole referencedCell;  
 }
  
