@@ -1,5 +1,7 @@
 package pt.tecnico.bubbledocs.domain;
 
+import org.jdom2.Element;
+
 public class Reference extends Reference_Base {
 
 	
@@ -31,5 +33,18 @@ public class Reference extends Reference_Base {
 		//and deletes the connection between this reference and the cell
 		super.setCell(null);
 		deleteDomainObject();
+	}
+
+	@Override
+	public Element exportToXML() {
+ 		Element element = new Element ("ref");
+		
+		return element;
+	}
+
+	@Override
+	public void importFromXML(Element cellElement) {
+		// TODO Auto-generated method stub
+		
 	}
 }

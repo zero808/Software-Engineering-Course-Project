@@ -1,5 +1,7 @@
 package pt.tecnico.bubbledocs.domain;
 
+import org.jdom2.Element;
+
 public class Literal extends Literal_Base {
     
     public Literal() {
@@ -24,6 +26,18 @@ public class Literal extends Literal_Base {
 	@Override
 	public void delete() {
 		deleteDomainObject();
+	}
+
+	@Override
+	public Element exportToXML() {
+		Element element = new Element ("literal");
+		
+		return element;	}
+
+	@Override
+	public void importFromXML(Element cellElement) {
+		// TODO Auto-generated method stub
+		
 	}
     
 }
