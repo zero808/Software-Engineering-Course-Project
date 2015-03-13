@@ -20,4 +20,10 @@ public class Avg extends Avg_Base {
 		return total / super.getRange().getCellsSet().size();
 	}
 
+	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

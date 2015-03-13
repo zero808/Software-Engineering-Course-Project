@@ -20,5 +20,10 @@ public class Literal extends Literal_Base {
 	public int getValue() {
 		return super.getVal();
 	}
+
+	@Override
+	public void delete() {
+		deleteDomainObject();
+	}
     
 }
