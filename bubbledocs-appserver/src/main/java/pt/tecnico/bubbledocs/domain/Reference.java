@@ -2,7 +2,6 @@ package pt.tecnico.bubbledocs.domain;
 
 public class Reference extends Reference_Base {
 
-	private Cell cell;
 	
 	public Reference() {
 		super();
@@ -10,23 +9,24 @@ public class Reference extends Reference_Base {
 
 	public Reference(Cell c) {
 		super();
-		this.cell = c;
+		super.setCell(c);
+		c.setReference(this);
 	}
 
 	public String toString() {
-		return this.cell.toString();
-	}
-
-	public Cell getCell() {
-		return cell;
-	}
-
-	public void setCell(Cell cell) {
-		this.cell = cell;
+		return super.getCell().toString();
 	}
 	
 	@Override
 	public int getValue() {
-		return cell.getContent().getValue();
+		return super.getCell().getContent().getValue();
+	}
+	
+	public void delete() {
+		//deletes the connection from the cell to this reference
+		super.getCell().setReference(null);
+		//and deletes the connection between this reference and the cell
+		super.setCell(null);
+		deleteDomainObject();
 	}
 }

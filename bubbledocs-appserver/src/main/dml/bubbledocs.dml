@@ -138,4 +138,9 @@ relation BinaryHasLiterals {
     multiplicity 0..2;
   }
 }
+  
+relation ReferenceHasCell {
+	Reference playsRole reference;
+	Cell playsRole cell;  
+}
  
