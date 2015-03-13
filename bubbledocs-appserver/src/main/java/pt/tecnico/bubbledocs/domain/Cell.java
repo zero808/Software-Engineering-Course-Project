@@ -1,18 +1,22 @@
 package pt.tecnico.bubbledocs.domain;
 
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
+
 public class Cell extends Cell_Base {
     
 	public Cell() {
 		super();
 	}
 
-	public Cell(int _row, int _col, boolean _wProtected) {
+	public Cell(int _row, int _col, boolean _wProtected) throws InvalidArgumentsException {
 		super();
-		super.setRow(_row);
-		super.setCollumn(_col);
+		if(_row > 0 && _col > 0) {
+			super.setRow(_row);
+			super.setCollumn(_col);
+		}
+		else
+			throw new InvalidArgumentsException();
 		super.setWProtected(_wProtected);
-		
-		//TODO throw an exception when cell is out of bonds
 	}
 
 	@Override
