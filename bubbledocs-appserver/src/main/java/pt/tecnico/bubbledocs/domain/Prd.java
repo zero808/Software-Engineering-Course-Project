@@ -20,4 +20,10 @@ public class Prd extends Prd_Base {
 		return total;
 	}
 
+	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

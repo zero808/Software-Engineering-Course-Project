@@ -31,5 +31,10 @@ public class Cell extends Cell_Base {
 			return "row: " + super.getRow() + "\ncol: " + super.getCollumn() + "\n" + _cont; //OCD beware.
 		}
 	}
+	
+	public void delete() {
+		super.getContent().delete();
+		deleteDomainObject();
+	}
     
 }
