@@ -1,32 +1,37 @@
 package pt.tecnico.bubbledocs.domain;
 
 import pt.ist.fenixframework.FenixFramework;
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
 import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserDoesNotHavePermissionException;
 
 public class Root extends Root_Base {
-
-	private static Root instance = null;
-
-	private Root() {
-		setBubbledocs(FenixFramework.getDomainRoot().getBubbledocs());
-		setId(0);
-		setUsername("root");
-		setName("Super User");
-		setPassword("rootroot"); // So that it doesn't have null.
-	}
-
+	
 	public static Root getInstance() {
+		Root instance = null;
 		if (instance == null) {
 			instance = new Root();
 		}
 		return instance;
 	}
 
+	private Root() {
+		super();
+		
+		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		setBubbledocs(bd);
+		setId(0);
+		setUsername("root");
+		setName("Super User");
+		setPassword("rootroot"); // So that it doesn't have null.
+		
+		bd.addUsers(this);
+	}
+
 	private Spreadsheet getSpreadsheetByName(String spreadsheetName) {
-		for(Spreadsheet s :getBubbledocs().getSpreadsheetsSet()) {
+		for(Spreadsheet s :FenixFramework.getDomainRoot().getBubbledocs().getSpreadsheetsSet()) {
 			if(s.getName().equals(spreadsheetName)) {
 				return s;
 			}
@@ -34,19 +39,9 @@ public class Root extends Root_Base {
 		return null;
 	}
 
-	private User getUserByName(String name) {
-		BubbleDocs bd = getBubbledocs();
-		for (User usr : bd.getUsersSet()) {
-			if (usr.getName().equals(name)) {
-				return usr;
-			}
-		}
-		return null;
-	}
-
 	public void removeUser(String username) throws UserDoesNotExistException {
-		BubbleDocs bd = getBubbledocs();
-		User toRemove = getUserByName(username);
+		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		User toRemove = bd.getUserByUsername(username);
 
 		if (toRemove == null)
 			throw new UserDoesNotExistException(username);
@@ -61,14 +56,19 @@ public class Root extends Root_Base {
 	}
 
 	@Override
-	public void addUser(String username, String name, String pass) throws UserAlreadyExistsException {
-		BubbleDocs bd = getBubbledocs();
-
-		User usr = getUserByName(username);
-		if (usr != null)
-			throw new UserAlreadyExistsException(username);
-
-		bd.addUsers(new User(username, name, pass));
+	public void addUser(User u) throws UserAlreadyExistsException, InvalidArgumentsException {
+		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		
+		if(bd.getUsersSet().isEmpty()) {
+			bd.addUsers(u);
+		} else {
+			
+			if(u.getName() != null && u.getPassword() != null && u.getUsername() != null) {
+				bd.addUsers(u);
+			} else {
+				throw new InvalidArgumentsException();
+			}	
+		}	
 	}
 
 	@Override

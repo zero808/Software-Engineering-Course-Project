@@ -55,18 +55,18 @@ public class BubbleDocs extends BubbleDocs_Base {
 			if(!(user.getName().equals("root"))) { //Not sure if its getName()
 				User u = new User();
 			    u.importFromXML(user);
-			    r.addUser(u.getUsername(), u.getName(), u.getPassword());
+			    r.addUser(u);
 			}
 		}
 	}
-
-	public User getUserByName(String name) throws UsernameDoesNotExistException {
-		for (User user : getUsersSet()) {
-			if (user.getName().equals(name)) {
+	
+	public User getUserByUsername(String username) {
+		for(User user : getUsersSet()) {
+			if(user.getUsername().equals(username)) {
 				return user;
 			}
 		}
-		throw new UsernameDoesNotExistException(name);
+		return null;
 	}
 	
 	public Spreadsheet getSpreadsheetByName(String name) throws SpreadsheetDoesNotExistException {
@@ -78,16 +78,20 @@ public class BubbleDocs extends BubbleDocs_Base {
 		throw new SpreadsheetDoesNotExistException(name);
 	}
 
-	public void login(String username, String password) throws InvalidPasswordException {
-
-		User u = getUserByName(username); // If user doesn't exist the exception is thrown by getUserByName.
+	public void login(String username, String password) throws InvalidPasswordException, UsernameDoesNotExistException {
+		
+		if(getUserByUsername(username) == null) {
+			throw new UsernameDoesNotExistException(username);
+		}
+		
+		User u = getUserByUsername(username);
 		String pass = u.getPassword();
-
+		
 		if (pass == null || !(pass.equals(password))) {
 			throw new InvalidPasswordException();
 		}
 	}
-
+	
 	public void printUsers() {
 		for (User user : getUsersSet()) {
 			if (!(user.isRoot())) { // Only print the actual users without root.
@@ -95,7 +99,6 @@ public class BubbleDocs extends BubbleDocs_Base {
 			}
 		}
 	}
-
 	public void printSpreadsheets() {
 		for (User user : getUsersSet()) {
 			for (Spreadsheet spreadsheet : user.getSpreadsheetsSet()) {

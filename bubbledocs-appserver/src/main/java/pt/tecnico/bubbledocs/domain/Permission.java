@@ -44,7 +44,7 @@ public class Permission extends Permission_Base {
 		Element element = new Element("permission");
 
 		element.setAttribute("spreadsheet", getSpreadsheet().getName());
-		element.setAttribute("user", getUser().getName());
+		element.setAttribute("user", getUser().getUsername());
 		element.setAttribute("type", Boolean.toString(getRw()));
 
 		Element spreadsheetsElement = new Element("spreadsheets");
@@ -57,7 +57,7 @@ public class Permission extends Permission_Base {
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
 		Spreadsheet s = bd.getSpreadsheetByName(permissionElement.getAttribute("spreadsheet").getValue());
 		setSpreadsheet(s);
-		User u = bd.getUserByName(permissionElement.getAttribute("user").getValue());
+		User u = bd.getUserByUsername(permissionElement.getAttribute("user").getValue());
 		setUser(u);
 		try {
 			setRw(permissionElement.getAttribute("type").getBooleanValue());
