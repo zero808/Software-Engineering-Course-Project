@@ -77,9 +77,9 @@ public class Spreadsheet extends Spreadsheet_Base {
 		Element cellsElement = new Element("cells");
 		element.addContent(cellsElement);
 		
-		//for (Cell c : getCellsSet()) {
-			//cellsElement.addContent(c.exportToXML()); TODO (Leo, Duarte e Marco)
-		//}
+		for (Cell c : getCellsSet()) {
+			cellsElement.addContent(c.exportToXML());
+		}
 		
 		Element permissionsElement = new Element("permissions");
 		element.addContent(permissionsElement);

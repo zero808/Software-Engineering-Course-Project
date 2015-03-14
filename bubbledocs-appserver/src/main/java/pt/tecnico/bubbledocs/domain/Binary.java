@@ -1,5 +1,9 @@
 package pt.tecnico.bubbledocs.domain;
 
+import org.jdom2.Element;
+
+//import org.jdom2.Element;
+
 public abstract class Binary extends Binary_Base {
 
 	public Binary() {
@@ -39,14 +43,37 @@ public abstract class Binary extends Binary_Base {
 	}
 
 	public void delete() {
-		for(Literal l : super.getLiteralsSet()) {
+		for (Literal l : super.getLiteralsSet()) {
 			l.setBinary(null);
 			super.removeLiterals(l);
+			l.delete();
 		}
-		for(Reference r : super.getReferencesSet()) {
+		for (Reference r : super.getReferencesSet()) {
 			r.setBinary(null);
 			super.removeReferences(r);
+			r.delete();
+
 		}
+		setCell(null);
 		deleteDomainObject();
 	}
+
+	public void importFromXML(Element AddElement) {
+		for (Element argElement : AddElement.getChildren("literal")) {
+			Literal l = new Literal();
+			l.importFromXML(argElement);
+			addLiterals(l);
+			l.setBinary(this);
+		}
+
+		for (Element argElement : AddElement.getChildren("reference")) {
+			Reference r = new Reference();
+			r.importFromXML(argElement);
+			addReferences(r);
+			r.setBinary(this);
+		}
+
+	}
+
+	// public abstract Element exportToXML();
 }
