@@ -14,24 +14,32 @@ public class Div extends Div_Base {
 
 	public Div(Literal arg1, Literal arg2) {
 		super();
+		arg1.setBinary(this);
+		arg2.setBinary(this);
 		super.addLiterals(arg1);
 		super.addLiterals(arg2);
 	}
 
 	public Div(Reference arg1, Literal arg2) {
 		super();
+		arg1.setBinary(this);
+		arg2.setBinary(this);
 		super.addReferences(arg1);
 		super.addLiterals(arg2);
 	}
 
 	public Div(Literal arg1, Reference arg2) {
 		super();
+		arg1.setBinary(this);
+		arg2.setBinary(this);
 		super.addReferences(arg2);
 		super.addLiterals(arg1);
 	}
 
 	public Div(Reference arg1, Reference arg2) {
 		super();
+		arg1.setBinary(this);
+		arg2.setBinary(this);
 		super.addReferences(arg1);
 		super.addReferences(arg2);
 	}
@@ -52,9 +60,18 @@ public class Div extends Div_Base {
 
 	@Override
 	public Element exportToXML() {
-		Element element = new Element ("div");
+		Element f = new Element ("function");
+		Element bf = new Element ("binary_function");
+		Element div = new Element ("div");
+		//element.setAttribute("wprotected", Boolean.toString(super.getWProtected()));
+		for (Reference r : super.getReferencesSet())
+			div.addContent(r.exportToXML());
+		for (Literal l : super.getLiteralsSet())
+			div.addContent(l.exportToXML());
+		bf.addContent(div);
+		f.addContent(bf);
 		
-		return element;
+		return f;
 	}
 
 	@Override

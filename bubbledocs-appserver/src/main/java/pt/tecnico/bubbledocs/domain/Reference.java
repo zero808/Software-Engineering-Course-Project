@@ -37,14 +37,19 @@ public class Reference extends Reference_Base {
 
 	@Override
 	public Element exportToXML() {
- 		Element element = new Element ("ref");
-		
+ 		Element element = new Element ("reference");
+ 		element.setAttribute("row", Integer.toString(super.getReferencedCell().getRow()));
+ 		element.setAttribute("collumn", Integer.toString(super.getReferencedCell().getCollumn()));
 		return element;
 	}
 
 	@Override
-	public void importFromXML(Element cellElement) {
-		// TODO Auto-generated method stub
+	public void importFromXML(Element element) {
+		int row = Integer.parseInt(element.getAttribute("row").getValue());
+		int collumn = Integer.parseInt(element.getAttribute("collumn").getValue());
+		
+		Spreadsheet ss = getCell().getSpreadsheet();
+		setReferencedCell(ss.getCellByCoords(row, collumn));
 		
 	}
 }
