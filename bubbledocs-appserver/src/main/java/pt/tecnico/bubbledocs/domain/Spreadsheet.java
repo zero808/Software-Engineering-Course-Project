@@ -104,13 +104,12 @@ public class Spreadsheet extends Spreadsheet_Base {
 			throw new ImportDocumentException();
 		}
 		
-		//Element cells = spreadsheetElement.getChild("cells");
+		Element cells = spreadsheetElement.getChild("cells");
 		
-		//for (Element cellElement : cells.getChildren("cell")) {
-			//Cell c = new Cell();
-			//c.importFromXML(cellElement); //TODO (Leo, Duarte e Marco)
-			//addCell(c);
-		//}
+		for (Element cellElement : cells.getChildren("cell")) {
+			Cell c = new Cell();
+			c.importFromXML(cellElement); 
+		}
 		
 		Element permissions = spreadsheetElement.getChild("permissions");
 		
@@ -128,16 +127,28 @@ public class Spreadsheet extends Spreadsheet_Base {
 	
 	public void deleteSpreadsheetContent() { //Used to remove a spreadsheet.
 		
+		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		
+		for(User u : bd.getUsersSet()) {
+			for(Spreadsheet s : u.getSpreadsheetsSet()) {
+				if(s.getId() == getId()) { //Check for all users if any has this spreadsheet to be removed.
+					s.setUser(null);
+				}
+			}
+		}
+		
 		setBubbledocs(null);
-		setUser(null);
+		
 		for(Permission p : getPermissionsSet()) {
 			if(p.getSpreadsheet().getName().equals(getName())) {
 				p.delete();
 			}
 		}
-		//for(Cell c : getCellsSet()) {
-			//c.delete(); Cell needs to implement this all the way down to remove spreadsheet. TODO (Leo, Marco, Duarte)
-		//}
+		
+		for(Cell c : getCellsSet()) {
+			c.delete();
+		}
+		
 		deleteDomainObject();
 	}
 	

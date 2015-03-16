@@ -14,7 +14,8 @@ public class Reference extends Reference_Base {
 		super.setReferencedCell(c);
 		c.setReference(this);
 	}
-
+	
+	@Override
 	public String toString() {
 		if(super.getReferencedCell().getContent() == null) 
 			return "\n#VALUE";
@@ -27,6 +28,7 @@ public class Reference extends Reference_Base {
 		return super.getReferencedCell().getContent().getValue();
 	}
 	
+	@Override
 	public void delete() {
 		//deletes the connection from the cell to this reference
 		super.getReferencedCell().setReference(null);
@@ -37,9 +39,24 @@ public class Reference extends Reference_Base {
 
 	@Override
 	public Element exportToXML() {
- 		Element element = new Element ("reference");
- 		element.setAttribute("row", Integer.toString(super.getReferencedCell().getRow()));
- 		element.setAttribute("collumn", Integer.toString(super.getReferencedCell().getCollumn()));
+ 		Element element = new Element("reference");
+ 		
+ 		if(getReferencedCell() != null) {
+ 			if(getCell() != null) {
+ 				element.setAttribute("row", Integer.toString(super.getCell().getRow()));
+ 	 	 		element.setAttribute("collumn", Integer.toString(super.getCell().getCollumn()));
+ 			} else {
+ 				element.setAttribute("desc", "Reference not saved in any cell of spreadsheet");
+ 			}
+
+ 	 		Element referenceTo = new Element("referenceTo");
+ 			element.addContent(referenceTo);
+ 	 		
+ 	 		referenceTo.addContent(getReferencedCell().exportToXML());
+ 		} else {
+ 			element.setAttribute("cont", "#VALUE");
+ 		}
+ 	
 		return element;
 	}
 
@@ -49,7 +66,6 @@ public class Reference extends Reference_Base {
 		int collumn = Integer.parseInt(element.getAttribute("collumn").getValue());
 		
 		Spreadsheet ss = getCell().getSpreadsheet();
-		setReferencedCell(ss.getCellByCoords(row, collumn));
-		
+		setReferencedCell(ss.getCellByCoords(row, collumn));	
 	}
 }

@@ -96,7 +96,6 @@ public class User extends User_Base {
 			s.importFromXML(spreadsheetElement);
 			addSpreadsheets(s);
 		}
-
 	}
 
 	private Spreadsheet getSpreadsheetByName(String name) {
@@ -169,7 +168,7 @@ public class User extends User_Base {
 			throw new OutofBondsException(s.getName());
 
 		//if (!hasPermission(s))
-			//throw new InvalidPermissionException(getUsername());
+			//throw new InvalidPermissionException(getUsername()); //TODO Second Delivery.
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
@@ -191,7 +190,7 @@ public class User extends User_Base {
 			throw new InvalidReferenceException(s.getName());
 
 		//if (!hasPermission(s))
-			//throw new InvalidPermissionException(getUsername());
+			//throw new InvalidPermissionException(getUsername()); //TODO Second Delivery.
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
@@ -213,7 +212,7 @@ public class User extends User_Base {
 			throw new OutofBondsException(s.getName());
 
 		//if (!hasPermission(s))
-			//throw new InvalidPermissionException(getUsername());
+			//throw new InvalidPermissionException(getUsername()); //TODO Second Delivery.
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {

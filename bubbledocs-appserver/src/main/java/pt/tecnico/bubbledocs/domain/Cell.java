@@ -1,10 +1,6 @@
 package pt.tecnico.bubbledocs.domain;
 
-import org.jdom2.DataConversionException;
 import org.jdom2.Element;
-import org.joda.time.DateTime;
-
-import pt.tecnico.bubbledocs.exception.ImportDocumentException;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
 public class Cell extends Cell_Base {
@@ -13,14 +9,14 @@ public class Cell extends Cell_Base {
 		super();
 	}
 
-	public Cell(int _row, int _col, boolean _wProtected)
-			throws InvalidArgumentsException {
+	public Cell(int _row, int _col, boolean _wProtected) throws InvalidArgumentsException {
 		super();
 		if (_row > 0 && _col > 0) {
 			super.setRow(_row);
 			super.setCollumn(_col);
 		} else
 			throw new InvalidArgumentsException();
+		
 		super.setWProtected(_wProtected);
 	}
 
@@ -29,8 +25,7 @@ public class Cell extends Cell_Base {
 
 		element.setAttribute("row", Integer.toString(super.getRow()));
 		element.setAttribute("collumn", Integer.toString(super.getCollumn()));
-		element.setAttribute("wprotected",
-				Boolean.toString(super.getWProtected()));
+		element.setAttribute("wprotected", Boolean.toString(super.getWProtected()));
 
 		Element cont = new Element("content");
 		element.addContent(cont);
@@ -43,10 +38,8 @@ public class Cell extends Cell_Base {
 
 	public void importFromXML(Element cellElement) {
 		setRow(Integer.parseInt(cellElement.getAttribute("row").getValue()));
-		setCollumn(Integer.parseInt(cellElement.getAttribute("collumn")
-				.getValue()));
-		setWProtected(Boolean.parseBoolean(cellElement.getAttribute(
-				"wprotected").getValue()));
+		setCollumn(Integer.parseInt(cellElement.getAttribute("collumn").getValue()));
+		setWProtected(Boolean.parseBoolean(cellElement.getAttribute("wprotected").getValue()));
 
 		Element content = cellElement.getChild("content");
 
@@ -65,28 +58,24 @@ public class Cell extends Cell_Base {
 				} else {
 					if ((subcontent = content.getChild("function")) != null) {
 						Element functionType;
-						if ((functionType = subcontent
-								.getChild("binary_function")) != null) {
+						if ((functionType = subcontent.getChild("binary_function")) != null) {
 							Element functionName;
 							if ((functionName = functionType.getChild("add")) != null) {
 								Add add = new Add();
 								add.importFromXML(functionName);
 								add.setCell(this);
 							} else {
-								if ((functionName = functionType
-										.getChild("sub")) != null) {
+								if ((functionName = functionType.getChild("sub")) != null) {
 									Sub sub = new Sub();
 									sub.importFromXML(functionName);
 									sub.setCell(this);
 								} else {
-									if ((functionName = functionType
-											.getChild("div")) != null) {
+									if ((functionName = functionType.getChild("div")) != null) {
 										Div div = new Div();
 										div.importFromXML(functionName);
 										div.setCell(this);
 									} else {
-										if ((functionName = functionType
-												.getChild("mul")) != null) {
+										if ((functionName = functionType.getChild("mul")) != null) {
 											Mul mul = new Mul();
 											mul.importFromXML(functionName);
 											mul.setCell(this);
@@ -96,9 +85,8 @@ public class Cell extends Cell_Base {
 							}
 
 						} else {
-							if ((functionType = subcontent
-									.getChild("unary_function")) != null) {
-								// TODO
+							if ((functionType = subcontent.getChild("unary_function")) != null) {
+								// TODO Second Delivery
 							}
 						}
 					}
@@ -112,12 +100,10 @@ public class Cell extends Cell_Base {
 		String _cont;
 		if (this.getContent() == null) {
 			_cont = null;
-			return "row: " + this.getRow() + "\ncol: " + this.getCollumn()
-					+ "\n#VALUE\n";
+			return "row: " + this.getRow() + "\ncol: " + this.getCollumn() + "\n#VALUE\n";
 		} else {
 			_cont = this.getContent().toString();
-			return "row: " + super.getRow() + "\ncol: " + super.getCollumn()
-					+ "\n" + _cont; // OCD beware.
+			return "row: " + super.getRow() + "\ncol: " + super.getCollumn() + "\n" + _cont; // OCD beware.
 		}
 	}
 

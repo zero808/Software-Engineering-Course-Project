@@ -2,8 +2,6 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
 
-//import org.jdom2.Element;
-
 public abstract class Binary extends Binary_Base {
 
 	public Binary() {
@@ -42,38 +40,11 @@ public abstract class Binary extends Binary_Base {
 		super.addReferences(arg2);
 	}
 
-	public void delete() {
-		for (Literal l : super.getLiteralsSet()) {
-			l.setBinary(null);
-			super.removeLiterals(l);
-			l.delete();
-		}
-		for (Reference r : super.getReferencesSet()) {
-			r.setBinary(null);
-			super.removeReferences(r);
-			r.delete();
+	public abstract int getValue();
 
-		}
-		setCell(null);
-		deleteDomainObject();
-	}
+	public abstract void delete();
 
-	public void importFromXML(Element AddElement) {
-		for (Element argElement : AddElement.getChildren("literal")) {
-			Literal l = new Literal();
-			l.importFromXML(argElement);
-			addLiterals(l);
-			l.setBinary(this);
-		}
+	public abstract Element exportToXML();
 
-		for (Element argElement : AddElement.getChildren("reference")) {
-			Reference r = new Reference();
-			r.importFromXML(argElement);
-			addReferences(r);
-			r.setBinary(this);
-		}
-
-	}
-
-	// public abstract Element exportToXML();
+	public abstract void importFromXML(Element cellElement);
 }

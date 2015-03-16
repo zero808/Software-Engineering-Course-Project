@@ -55,28 +55,61 @@ public class Sub extends Sub_Base {
 		for (Literal l : super.getLiteralsSet())
 			values.add(l.getValue());
 		return values.get(0) - values.get(1);
-		// TODO Throw exception
+		// TODO Needs to check for #VALUES and the order of the arguments.
 	}
 
 	@Override
 	public Element exportToXML() {
 		Element f = new Element ("function");
 		Element bf = new Element ("binary_function");
-		Element div = new Element ("sub");
+		Element sub = new Element ("sub");
 		for (Reference r : super.getReferencesSet())
-			div.addContent(r.exportToXML());
+			sub.addContent(r.exportToXML());
 		for (Literal l : super.getLiteralsSet())
-			div.addContent(l.exportToXML());
-		bf.addContent(div);
+			sub.addContent(l.exportToXML());
+		bf.addContent(sub);
 		f.addContent(bf);
 		
 		return f;
 	}
 
 	@Override
-	public void importFromXML(Element cellElement) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void importFromXML(Element SubElement) {
+		for (Element argElement : SubElement.getChildren("literal")) {
+			Literal l = new Literal();
+			l.importFromXML(argElement);
+			addLiterals(l);
+			l.setBinary(this);
+		}
 
+		for (Element argElement : SubElement.getChildren("reference")) {
+			Reference r = new Reference();
+			r.importFromXML(argElement);
+			addReferences(r);
+			r.setBinary(this);
+		}
+	}
+	
+	@Override
+	public void delete() {
+		for (Literal l : super.getLiteralsSet()) {
+			l.setBinary(null);
+			super.removeLiterals(l);
+			l.delete();
+		}
+		for (Reference r : super.getReferencesSet()) {
+			r.setBinary(null);
+			super.removeReferences(r);
+			r.delete();
+
+		}
+		setCell(null);
+		deleteDomainObject();
+	}
+	
+	@Override
+	public String toString() {
+		return "Funcao Sub";
+		//TODO Make it print the arguments and the value also.
+	}
 }

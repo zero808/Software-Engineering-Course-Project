@@ -1,5 +1,7 @@
 package pt.tecnico.bubbledocs.domain;
 
+import org.jdom2.Element;
+
 public abstract class Prd extends Prd_Base {
 
 	public Prd() {
@@ -18,12 +20,22 @@ public abstract class Prd extends Prd_Base {
 			total *= cell.getContent().getValue();
 		}
 		return total;
+		//TODO Needs to check for #VALUES.
+	}
+
+	@Override
+	public Element exportToXML() {
+		Element f = new Element("function");
+		//TODO Second Delivery.
+		return f;
+	}
+	
+	public void importFromXML(Element cellElement) {
+		//TODO Second Delivery.
 	}
 
 	@Override
 	public void delete() {
-		// TODO Auto-generated method stub
-		
+		// TODO Second Delivery.	
 	}
-
 }

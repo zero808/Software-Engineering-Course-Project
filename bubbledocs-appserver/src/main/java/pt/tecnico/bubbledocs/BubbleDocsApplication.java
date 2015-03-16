@@ -6,6 +6,7 @@ import java.io.IOException;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
+import pt.tecnico.bubbledocs.domain.Add;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Div;
@@ -61,29 +62,8 @@ public class BubbleDocsApplication {
 		org.jdom2.Document doc = convertToXML();
 
 		printDomainInXML(doc);
-		
-		
 
 	}
-
-//	private static void recoverFromBackup(byte[] doc, BubbleDocs bd) {
-//		try {
-//			org.jdom2.Document jdomDoc;
-//			SAXBuilder builder = new SAXBuilder();
-//			builder.setIgnoringElementContentWhitespace(true);
-//			try {
-//				jdomDoc = builder.build(new ByteArrayInputStream(doc));
-//			} catch (JDOMException | IOException e) {
-//				e.printStackTrace();
-//				throw new ImportDocumentException();
-//			}
-//			Element rootElement = jdomDoc.getRootElement();
-//			bd.importFromXML(rootElement);
-//
-//		} catch (ImportDocumentException ide) {
-//			System.err.println("Error importing document");
-//		}
-//	}
 
 	static void populateDomain(BubbleDocs bd, Root root) {
 
@@ -93,37 +73,33 @@ public class BubbleDocsApplication {
 		root.addUser(pf);
 		root.addUser(ra);
 
-		Spreadsheet notas = new Spreadsheet("Notas ES", new DateTime(), 5, 5); // new
-																				// DateTime()
-																				// gives
-																				// the
-																				// current
-																				// one.
-
+		Spreadsheet notas = new Spreadsheet("Notas ES", new DateTime(), 10, 10); //new DateTime() gives the current one.
 		pf.addSpreadsheets(notas);
-
+		
+		//Literal 5 on position (3,4).
 		Literal l = new Literal(5);
 		pf.addLiteraltoCell(l, notas, 3, 4);
 
-		Cell c1 = notas.getCellByCoords(4, 4);
+		//Reference to (5, 6) on (1, 1).
+		Cell c1 = notas.getCellByCoords(5, 6);
 		Reference r = new Reference(c1);
 		pf.addReferencetoCell(r, notas, 1, 1);
 
-		/*
-		 * Literal l2 = new Literal(2); Cell c2 = notas.getCellByCoords(3, 4);
-		 * Reference r2 = new Reference(c2);
-		 * 
-		 * Add add = new Add(l2, r2); pf.addFunctiontoCell(add, notas, 5, 6);
-		 */
-		Cell c3 = notas.getCellByCoords(1, 1);
-		Cell c4 = notas.getCellByCoords(3, 4);
-		Reference r3 = new Reference(c3);
-		Reference r4 = new Reference(c4);
+		//Function Add with arguments Literal 2 and Reference (3, 4) on (5, 6).
+		Literal l2 = new Literal(2); 
+		Cell c2 = notas.getCellByCoords(3, 4);
+		Reference r2 = new Reference(c2);
+		Add add = new Add(l2, r2); 
+		pf.addFunctiontoCell(add, notas, 5, 6);
+		
 
+		Cell c3 = notas.getCellByCoords(1, 1);
+		Cell copy = notas.getCellByCoords(3, 4);
+		Cell c4 = new Cell(copy.getRow(), copy.getCollumn(), copy.getWProtected()); //Terrible Hax.
+		Reference r3 = new Reference(c3);	
+		Reference r4 = new Reference(c4);
 		Div div = new Div(r3, r4);
 		pf.addFunctiontoCell(div, notas, 2, 2);
-
-		notas.getCellByCoords(2, 2).getContent().delete();
 	}
 
 	@Atomic
@@ -143,4 +119,25 @@ public class BubbleDocsApplication {
 		xml.setFormat(Format.getPrettyFormat());
 		System.out.println(xml.outputString(jdomDoc));
 	}
-}
+	
+	@Atomic
+	private static void recoverFromBackup(byte[] doc, BubbleDocs bd) {
+		try {
+			org.jdom2.Document jdomDoc;
+			SAXBuilder builder = new SAXBuilder();
+			builder.setIgnoringElementContentWhitespace(true);
+			try {
+				jdomDoc = builder.build(new ByteArrayInputStream(doc));
+			} catch (JDOMException | IOException e) {
+				e.printStackTrace();
+				throw new ImportDocumentException();
+			}
+			Element rootElement = jdomDoc.getRootElement();
+			bd.importFromXML(rootElement);
+			
+		} catch (ImportDocumentException ide) {
+			System.err.println("Error importing document");
+		}
+	}
+
+}// End BubbleDocsApplication Class
