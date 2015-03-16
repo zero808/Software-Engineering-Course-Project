@@ -114,6 +114,7 @@ public class Spreadsheet extends Spreadsheet_Base {
 		
 		for (Element cellElement : cells.getChildren("cell")) {
 			Cell c = new Cell();
+			addCells(c);
 			c.importFromXML(cellElement); 
 		}
 		
