@@ -55,7 +55,7 @@ public class Div extends Div_Base {
 		for (Literal l : super.getLiteralsSet())
 			values.add(l.getValue());
 		return values.get(0) / values.get(1);
-		// TODO Throw exception
+		// TODO Needs to check for #VALUES, dividing by 0 and the order of the arguments.
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class Div extends Div_Base {
 		Element f = new Element ("function");
 		Element bf = new Element ("binary_function");
 		Element div = new Element ("div");
-		//element.setAttribute("wprotected", Boolean.toString(super.getWProtected()));
+		
 		for (Reference r : super.getReferencesSet())
 			div.addContent(r.exportToXML());
 		for (Literal l : super.getLiteralsSet())
@@ -75,9 +75,42 @@ public class Div extends Div_Base {
 	}
 
 	@Override
-	public void importFromXML(Element cellElement) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void importFromXML(Element DivElement) {
+		for (Element argElement : DivElement.getChildren("literal")) {
+			Literal l = new Literal();
+			l.importFromXML(argElement);
+			addLiterals(l);
+			l.setBinary(this);
+		}
 
+		for (Element argElement : DivElement.getChildren("reference")) {
+			Reference r = new Reference();
+			r.importFromXML(argElement);
+			addReferences(r);
+			r.setBinary(this);
+		}
+	}
+	
+	@Override
+	public void delete() {
+		for (Literal l : super.getLiteralsSet()) {
+			l.setBinary(null);
+			super.removeLiterals(l);
+			l.delete();
+		}
+		for (Reference r : super.getReferencesSet()) {
+			r.setBinary(null);
+			super.removeReferences(r);
+			r.delete();
+
+		}
+		setCell(null);
+		deleteDomainObject();
+	}
+	
+	@Override
+	public String toString() {
+		return "Funcao Div";
+		//TODO Make it print the arguments and the value also.
+	}
 }

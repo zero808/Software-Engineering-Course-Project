@@ -1,5 +1,7 @@
 package pt.tecnico.bubbledocs.domain;
 
+import org.jdom2.Element;
+
 public abstract class Avg extends Avg_Base {
 
 	public Avg() {
@@ -18,12 +20,22 @@ public abstract class Avg extends Avg_Base {
 			total += cell.getContent().getValue();
 		}
 		return total / super.getRange().getCellsSet().size();
+		//TODO Needs to check for #VALUES.
+	}
+	
+	@Override
+	public Element exportToXML() {
+		Element f = new Element("function");
+		//TODO Second Delivery.
+		return f;
+	}
+	
+	public void importFromXML(Element cellElement) {
+		//TODO Second Delivery.
 	}
 
 	@Override
 	public void delete() {
-		// TODO Auto-generated method stub
-		
+		// TODO Second Delivery.	
 	}
-
 }
