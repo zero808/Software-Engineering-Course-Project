@@ -28,9 +28,9 @@ public class Spreadsheet extends Spreadsheet_Base {
 		setBubbledocs(FenixFramework.getDomainRoot().getBubbledocs());
 
 		_idnext = bd.getIdGlobal();
-		bd.setIdGlobal(_idnext++);
-
 		setId(_idnext);
+		bd.setIdGlobal(++_idnext);
+
 		setName(name);
 		setDate(date);
 		setNRows(nRows);

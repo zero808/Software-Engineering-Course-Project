@@ -27,9 +27,9 @@ public class User extends User_Base {
 		
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
 		_idnext = bd.getIdGlobal();
-		bd.setIdGlobal(_idnext++);
-
 		setId(_idnext);
+		bd.setIdGlobal(++_idnext);
+
 		super.setUsername(username);
 		setName(name);
 		setPassword(pass);

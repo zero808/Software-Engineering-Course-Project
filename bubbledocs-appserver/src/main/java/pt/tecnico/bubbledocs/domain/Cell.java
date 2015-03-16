@@ -108,7 +108,15 @@ public class Cell extends Cell_Base {
 	}
 
 	public void delete() {
-		super.getContent().delete();
+		if(super.getContent() != null) {
+			super.getContent().delete();
+		}
+		setSpreadsheet(null);
+		
+		if(getReference() != null) {
+			setReference(null);
+		}
+		
 		deleteDomainObject();
 	}
 

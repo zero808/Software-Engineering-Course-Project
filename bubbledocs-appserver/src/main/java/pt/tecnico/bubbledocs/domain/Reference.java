@@ -30,8 +30,12 @@ public class Reference extends Reference_Base {
 	
 	@Override
 	public void delete() {
-		//deletes the connection from the cell to this reference
-		super.getReferencedCell().setReference(null);
+		
+		if(super.getReferencedCell() != null) {
+			//deletes the connection from the cell to this reference
+			super.getReferencedCell().setReference(null);
+		}
+	
 		//and deletes the connection between this reference and the cell
 		super.setCell(null);
 		deleteDomainObject();

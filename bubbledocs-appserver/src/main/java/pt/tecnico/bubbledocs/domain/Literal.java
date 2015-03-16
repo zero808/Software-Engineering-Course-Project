@@ -25,6 +25,7 @@ public class Literal extends Literal_Base {
 
 	@Override
 	public void delete() {
+		setCell(null);
 		deleteDomainObject();
 	}
 
