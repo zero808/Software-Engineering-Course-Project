@@ -67,7 +67,7 @@ public class Spreadsheet extends Spreadsheet_Base {
 		element.setAttribute("owner", getUser().getUsername());
 		element.setAttribute("date-millisecond", Integer.toString(getDate().getMillisOfSecond()));
 		element.setAttribute("date-second", Integer.toString(getDate().getSecondOfMinute()));
-		element.setAttribute("date-minute", Integer.toString(getDate().getMinuteOfDay()));
+		element.setAttribute("date-minute", Integer.toString(getDate().getMinuteOfHour()));
 		element.setAttribute("date-hour", Integer.toString(getDate().getHourOfDay()));
 		element.setAttribute("date-day", Integer.toString(getDate().getDayOfMonth()));
 		element.setAttribute("date-month", Integer.toString(getDate().getMonthOfYear()));
