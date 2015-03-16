@@ -1,8 +1,5 @@
 package pt.tecnico.bubbledocs;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
@@ -15,16 +12,12 @@ import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.exception.ImportDocumentException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 
 import org.joda.time.DateTime;
 
 import javax.transaction.*;
 
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -58,6 +51,10 @@ public class BubbleDocsApplication {
 							+ ex);
 				}
 		}
+		
+		//org.jdom2.Document wholeDoc = convertToXML();
+		
+		//printDomainInXML(doc);
 	
 		listAllUsers(); 
 		
@@ -75,10 +72,13 @@ public class BubbleDocsApplication {
 		}
 		
 		listSpreadsheetsOf("pf");
-
-		//org.jdom2.Document doc = convertToXML();
-
-		//printDomainInXML(doc);
+		
+		//recoverFromBackup(wholeDoc); //TODO Not Working
+		
+		listSpreadsheetsOf("pf");
+		
+		org.jdom2.Document doc2 = convertSpreadsheetsOfUserToXML("pf");
+		printDomainInXML(doc2);
 
 	}
 
@@ -138,23 +138,10 @@ public class BubbleDocsApplication {
 	}
 	
 	@Atomic
-	private static void recoverFromBackup(byte[] doc, BubbleDocs bd) {
-		try {
-			org.jdom2.Document jdomDoc;
-			SAXBuilder builder = new SAXBuilder();
-			builder.setIgnoringElementContentWhitespace(true);
-			try {
-				jdomDoc = builder.build(new ByteArrayInputStream(doc));
-			} catch (JDOMException | IOException e) {
-				e.printStackTrace();
-				throw new ImportDocumentException();
-			}
-			Element rootElement = jdomDoc.getRootElement();
-			bd.importFromXML(rootElement);
-			
-		} catch (ImportDocumentException ide) {
-			System.err.println("Error importing document");
-		}
+	private static void recoverFromBackup(org.jdom2.Document jdomDoc) {
+		BubbleDocs bd = BubbleDocs.getInstance();
+
+		bd.importFromXML(jdomDoc.getRootElement());
 	}
 	
 	@Atomic
@@ -194,6 +181,19 @@ public class BubbleDocsApplication {
 
 		return jdomDoc;
 	}
+	
+	@Atomic
+	public static org.jdom2.Document convertSpreadsheetToXML(String spreadsheetName) {
+		BubbleDocs bd = BubbleDocs.getInstance();
+		Spreadsheet s = bd.getSpreadsheetByName(spreadsheetName);
+		
+		org.jdom2.Document jdomDoc = new org.jdom2.Document();
+
+		jdomDoc.setRootElement(s.exportToXML());
+
+		return jdomDoc;
+	}
+	
 	
 	@Atomic
 	public static void deleteSpreadsheetOf(String username, String spreadsheetName) throws SpreadsheetDoesNotExistException {

@@ -85,6 +85,7 @@ public class User extends User_Base {
 	}
 	
 	public void importFromXML(Element userElement) {
+
 		setUsername(userElement.getAttribute("username").getValue());
 		setName(userElement.getAttribute("name").getValue());
 		setPassword(userElement.getAttribute("pass").getValue());
@@ -92,9 +93,11 @@ public class User extends User_Base {
 
 		//Maybe missing permissions on this side too.
 		for (Element spreadsheetElement : spreadsheets.getChildren("spreadsheet")) {
-			Spreadsheet s = new Spreadsheet();
-			s.importFromXML(spreadsheetElement);
-			addSpreadsheets(s);
+			if(getSpreadsheetByName(spreadsheetElement.getAttribute("name").getValue()) == null) {
+				Spreadsheet s = new Spreadsheet();
+				s.importFromXML(spreadsheetElement);
+				addSpreadsheets(s);
+			}	
 		}
 	}
 
