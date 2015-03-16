@@ -98,25 +98,25 @@ public class BubbleDocsApplication {
 		pf.addLiteraltoCell(l, notas, 3, 4);
 
 		//Reference to (5, 6) on (1, 1).
-		Cell c1 = notas.getCellByCoords(5, 6);
-		Reference r = new Reference(c1);
-		pf.addReferencetoCell(r, notas, 1, 1);
+		//Cell c1 = notas.getCellByCoords(5, 6);
+		//Reference r = new Reference(c1);
+		//pf.addReferencetoCell(r, notas, 1, 1);
 
 		//Function Add with arguments Literal 2 and Reference to (3, 4) on (5, 6).
-		Literal l2 = new Literal(2); 
-		Cell c2 = notas.getCellByCoords(3, 4);
-		Reference r2 = new Reference(c2);
-		Add add = new Add(l2, r2); 
-		pf.addFunctiontoCell(add, notas, 5, 6);
+		//Literal l2 = new Literal(2); 
+		//Cell c2 = notas.getCellByCoords(3, 4);
+		//Reference r2 = new Reference(c2);
+		//Add add = new Add(l2, r2); 
+		//pf.addFunctiontoCell(add, notas, 5, 6);
 		
 		//Function Div with arguments Reference (1, 1) and Reference to (3, 4) on (2, 2)
-		Cell c3 = notas.getCellByCoords(1, 1);
-		Cell copy = notas.getCellByCoords(3, 4);
-		Cell c4 = new Cell(copy.getRow(), copy.getCollumn(), copy.getWProtected()); //Terrible Hax.
-		Reference r3 = new Reference(c3);	
-		Reference r4 = new Reference(c4);
-		Div div = new Div(r3, r4);
-		pf.addFunctiontoCell(div, notas, 2, 2);
+		//Cell c3 = notas.getCellByCoords(1, 1);
+		//Cell copy = notas.getCellByCoords(3, 4);
+		//Cell c4 = new Cell(copy.getRow(), copy.getCollumn(), copy.getWProtected()); //Terrible Hax.
+		//Reference r3 = new Reference(c3);	
+		//Reference r4 = new Reference(c4);
+		//Div div = new Div(r3, r4);
+		//pf.addFunctiontoCell(div, notas, 2, 2);
 	}
 
 	@Atomic
