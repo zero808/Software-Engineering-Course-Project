@@ -60,7 +60,9 @@ public class BubbleDocs extends BubbleDocs_Base {
 				} else {
 					Element spreadsheets = user.getChild("spreadsheets");
 					for (Element spreadsheetElement : spreadsheets.getChildren("spreadsheet")) {
-						if(getSpreadsheetByName(spreadsheetElement.getAttribute("name").getValue()) == null) {
+						try{
+							getSpreadsheetByName(spreadsheetElement.getAttribute("name").getValue());
+						}catch (SpreadsheetDoesNotExistException ex){
 							Spreadsheet s = new Spreadsheet();
 							s.importFromXML(spreadsheetElement);
 							addSpreadsheets(s);

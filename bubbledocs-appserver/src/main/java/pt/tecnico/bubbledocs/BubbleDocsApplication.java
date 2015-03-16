@@ -52,9 +52,9 @@ public class BubbleDocsApplication {
 				}
 		}
 		
-		//org.jdom2.Document wholeDoc = convertToXML();
+		org.jdom2.Document wholeDoc = convertToXML();
 		
-		//printDomainInXML(doc);
+		//printDomainInXML(wholeDoc);
 	
 		listAllUsers(); 
 		
@@ -73,7 +73,7 @@ public class BubbleDocsApplication {
 		
 		listSpreadsheetsOf("pf");
 		
-		//recoverFromBackup(wholeDoc); //TODO Not Working
+		recoverFromBackup(wholeDoc); //TODO Not Working
 		
 		listSpreadsheetsOf("pf");
 		
