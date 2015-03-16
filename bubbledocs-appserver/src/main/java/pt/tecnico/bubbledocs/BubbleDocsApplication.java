@@ -16,6 +16,7 @@ import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.ImportDocumentException;
+import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 
 import org.joda.time.DateTime;
 
@@ -40,10 +41,9 @@ public class BubbleDocsApplication {
 
 			BubbleDocs bd = BubbleDocs.getInstance();
 			Root root = Root.getInstance();
+			
 			populateDomain(bd, root);
-
-			// Do stuff here later
-
+			
 			tm.commit();
 			committed = true;
 		} catch (SystemException | NotSupportedException | RollbackException
@@ -58,10 +58,27 @@ public class BubbleDocsApplication {
 							+ ex);
 				}
 		}
-
-		org.jdom2.Document doc = convertToXML();
-
+	
+		listAllUsers(); 
+		
+		listSpreadsheetsOf("pf"); 
+		
+		listSpreadsheetsOf("ra");
+		
+		org.jdom2.Document doc = convertSpreadsheetsOfUserToXML("pf");
 		printDomainInXML(doc);
+		
+		try {
+			deleteSpreadsheetOf("pf", "Notas ES");
+		} catch (SpreadsheetDoesNotExistException e) {
+			System.out.println("User does not have that spreadsheet" + e.getSpreadsheetName());
+		}
+		
+		listSpreadsheetsOf("pf");
+
+		//org.jdom2.Document doc = convertToXML();
+
+		//printDomainInXML(doc);
 
 	}
 
@@ -85,14 +102,14 @@ public class BubbleDocsApplication {
 		Reference r = new Reference(c1);
 		pf.addReferencetoCell(r, notas, 1, 1);
 
-		//Function Add with arguments Literal 2 and Reference (3, 4) on (5, 6).
+		//Function Add with arguments Literal 2 and Reference to (3, 4) on (5, 6).
 		Literal l2 = new Literal(2); 
 		Cell c2 = notas.getCellByCoords(3, 4);
 		Reference r2 = new Reference(c2);
 		Add add = new Add(l2, r2); 
 		pf.addFunctiontoCell(add, notas, 5, 6);
 		
-
+		//Function Div with arguments Reference (1, 1) and Reference to (3, 4) on (2, 2)
 		Cell c3 = notas.getCellByCoords(1, 1);
 		Cell copy = notas.getCellByCoords(3, 4);
 		Cell c4 = new Cell(copy.getRow(), copy.getCollumn(), copy.getWProtected()); //Terrible Hax.
@@ -137,6 +154,63 @@ public class BubbleDocsApplication {
 			
 		} catch (ImportDocumentException ide) {
 			System.err.println("Error importing document");
+		}
+	}
+	
+	@Atomic
+	static void listAllUsers() {
+		BubbleDocs bd = BubbleDocs.getInstance();
+		
+		for(User u : bd.getUsersSet()) {
+			System.out.println("Id: " + u.getId() + " " + "Nome: " + u.getName() + " " + "Username: " + u.getUsername() + " " + "Password: " + u.getPassword() + "\n");
+		}
+	}
+	
+	@Atomic
+	static void listSpreadsheetsOf(String username) {
+		BubbleDocs bd = BubbleDocs.getInstance();
+		User user = bd.getUserByUsername(username);
+		
+		System.out.println("Spreadsheets of " + user.getUsername() + "\n");
+		
+		if(user.getSpreadsheetsSet().isEmpty()) {
+			System.out.println("User doesnt have any spreadsheets");
+			return;
+		}
+		
+		for(Spreadsheet s : user.getSpreadsheetsSet()) {
+			System.out.println("Nome: " + s.getName() + "\n");
+		}
+	}
+	
+	@Atomic
+	public static org.jdom2.Document convertSpreadsheetsOfUserToXML(String username) {
+		BubbleDocs bd = BubbleDocs.getInstance();
+		User user = bd.getUserByUsername(username);
+		
+		org.jdom2.Document jdomDoc = new org.jdom2.Document();
+
+		jdomDoc.setRootElement(user.exportToXML());
+
+		return jdomDoc;
+	}
+	
+	@Atomic
+	public static void deleteSpreadsheetOf(String username, String spreadsheetName) throws SpreadsheetDoesNotExistException {
+		BubbleDocs bd = BubbleDocs.getInstance();
+		User user = bd.getUserByUsername(username);
+		
+		if(user.getSpreadsheetsSet().isEmpty()) {
+			System.out.println("User doesnt have any spreadsheets");
+			return;
+		}
+		
+		for(Spreadsheet s : user.getSpreadsheetsSet()) {
+			if(s.getName().equals(spreadsheetName)) {
+				s.deleteSpreadsheetContent();
+			} else {
+				throw new SpreadsheetDoesNotExistException(spreadsheetName);
+			}
 		}
 	}
 
