@@ -44,22 +44,35 @@ public class BubbleDocs extends BubbleDocs_Base {
 	}
 	
 	public void importFromXML(Element bubbledocsElement) {
-		
+
 		Element users = bubbledocsElement.getChild("users");
-		
-		Element root = users.getChild("root");
+
+		//Element root = users.getChild("root");
 		Root r = Root.getInstance();
-		r.importFromXML(root);
-		
+		//r.importFromXML(root);
+
 		for (Element user : users.getChildren("user")) {
-			if(!(user.getName().equals("root"))) { //Not sure if its getName()
-				User u = new User();
-			    u.importFromXML(user);
-			    r.addUser(u);
+			if(!(user.getAttribute("username").getValue().equals("root"))) {
+				if(getUserByUsername(user.getAttribute("username").getValue()) == null) {
+					User u = new User();
+					u.importFromXML(user);
+					r.addUser(u);	
+				} else {
+					Element spreadsheets = user.getChild("spreadsheets");
+					for (Element spreadsheetElement : spreadsheets.getChildren("spreadsheet")) {
+						if(getSpreadsheetByName(spreadsheetElement.getAttribute("name").getValue()) == null) {
+							Spreadsheet s = new Spreadsheet();
+							s.importFromXML(spreadsheetElement);
+							addSpreadsheets(s);
+						}	
+					}
+				}
+
 			}
 		}
 	}
-	
+
+
 	public User getUserByUsername(String username) {
 		for(User user : getUsersSet()) {
 			if(user.getUsername().equals(username)) {

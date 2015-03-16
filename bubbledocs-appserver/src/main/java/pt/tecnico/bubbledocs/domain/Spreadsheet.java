@@ -64,6 +64,7 @@ public class Spreadsheet extends Spreadsheet_Base {
 	public Element exportToXML() {
 		Element element = new Element("spreadsheet");
 		element.setAttribute("name", getName());
+		element.setAttribute("owner", getUser().getUsername());
 		element.setAttribute("date-millisecond", Integer.toString(getDate().getMillisOfSecond()));
 		element.setAttribute("date-second", Integer.toString(getDate().getSecondOfMinute()));
 		element.setAttribute("date-minute", Integer.toString(getDate().getMinuteOfDay()));
@@ -92,7 +93,12 @@ public class Spreadsheet extends Spreadsheet_Base {
 	}
 	
 	public void importFromXML(Element spreadsheetElement) {
+		
+		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		User owner = bd.getUserByUsername(spreadsheetElement.getAttribute("owner").getValue());
+		
 		setName(spreadsheetElement.getAttribute("name").getValue());
+		setUser(owner);
 		DateTime date;
 		
 		try {

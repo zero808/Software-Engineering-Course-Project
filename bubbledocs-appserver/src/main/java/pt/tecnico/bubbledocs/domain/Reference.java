@@ -46,17 +46,12 @@ public class Reference extends Reference_Base {
  		Element element = new Element("reference");
  		
  		if(getReferencedCell() != null) {
+ 			element.setAttribute("row", Integer.toString(super.getReferencedCell().getRow()));
+	 	 	element.setAttribute("collumn", Integer.toString(super.getReferencedCell().getCollumn()));
+	 	 	
  			if(getCell() != null) {
- 				element.setAttribute("row", Integer.toString(super.getCell().getRow()));
- 	 	 		element.setAttribute("collumn", Integer.toString(super.getCell().getCollumn()));
- 			} else {
  				element.setAttribute("desc", "Reference not saved in any cell of spreadsheet");
  			}
-
- 	 		Element referenceTo = new Element("referenceTo");
- 			element.addContent(referenceTo);
- 	 		
- 	 		referenceTo.addContent(getReferencedCell().exportToXML());
  		} else {
  			element.setAttribute("cont", "#VALUE");
  		}
