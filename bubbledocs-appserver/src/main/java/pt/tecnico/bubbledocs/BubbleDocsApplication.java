@@ -111,8 +111,7 @@ public class BubbleDocsApplication {
 		
 		//Function Div with arguments Reference (1, 1) and Reference to (3, 4) on (2, 2)
 		Cell c3 = notas.getCellByCoords(1, 1);
-		Cell copy = notas.getCellByCoords(3, 4);
-		Cell c4 = new Cell(copy.getRow(), copy.getCollumn(), copy.getWProtected()); //Terrible Hax.
+		Cell c4 = notas.getCellByCoords(3, 4);
 		Reference r3 = new Reference(c3);	
 		Reference r4 = new Reference(c4);
 		Div div = new Div(r3, r4);
