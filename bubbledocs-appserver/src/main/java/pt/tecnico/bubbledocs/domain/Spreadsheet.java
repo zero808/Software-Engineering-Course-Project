@@ -113,10 +113,24 @@ public class Spreadsheet extends Spreadsheet_Base {
 		
 		Element cells = spreadsheetElement.getChild("cells");
 		
-		for (Element cellElement : cells.getChildren("cell")) {
-			Cell c = new Cell();
-			super.addCells(c); //no exception
+		int _rowIterator = 1;
+		int _collumnIterator = 1;
+		
+		while(_rowIterator <= getNRows()) {
+			while(_collumnIterator <= getNCols()) {
+				Cell c = new Cell(_rowIterator, _collumnIterator, false);
+				addCells(c);
+				
+				_collumnIterator++;
+			}
+			_collumnIterator = 1; //Reset of column iterator.
+			_rowIterator++;
 		}
+		
+//		for (Element cellElement : cells.getChildren("cell")) {
+//			Cell c = new Cell();
+//			super.addCells(c); //no exception
+//		}
 		
 		Iterator<Cell> it = getCellsSet().iterator();
 		for (Element cellElement : cells.getChildren("cell")) {
