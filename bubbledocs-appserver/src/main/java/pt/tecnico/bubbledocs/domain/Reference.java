@@ -64,7 +64,7 @@ public class Reference extends Reference_Base {
 		int row = Integer.parseInt(element.getAttribute("row").getValue());
 		int collumn = Integer.parseInt(element.getAttribute("collumn").getValue());
 		
-		Spreadsheet ss = getCell().getSpreadsheet();
+		Spreadsheet ss = getBinary().getCell().getSpreadsheet();
 		setReferencedCell(ss.getCellByCoords(row, collumn));	
 	}
 }

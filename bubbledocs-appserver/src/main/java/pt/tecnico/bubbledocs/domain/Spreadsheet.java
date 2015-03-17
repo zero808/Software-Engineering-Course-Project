@@ -1,5 +1,6 @@
 package pt.tecnico.bubbledocs.domain;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -114,8 +115,14 @@ public class Spreadsheet extends Spreadsheet_Base {
 		
 		for (Element cellElement : cells.getChildren("cell")) {
 			Cell c = new Cell();
-			addCells(c);
-			c.importFromXML(cellElement); 
+			super.addCells(c); //no exception
+		}
+		
+		Iterator<Cell> it = getCellsSet().iterator();
+		for (Element cellElement : cells.getChildren("cell")) {
+			Cell c = it.next();
+			c.importFromXML(cellElement);
+			
 		}
 		
 		Element permissions = spreadsheetElement.getChild("permissions");

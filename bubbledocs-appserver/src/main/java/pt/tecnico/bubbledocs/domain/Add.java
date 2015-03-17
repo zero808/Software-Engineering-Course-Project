@@ -77,16 +77,17 @@ public class Add extends Add_Base {
 	public void importFromXML(Element AddElement) {
 		for (Element argElement : AddElement.getChildren("literal")) {
 			Literal l = new Literal();
+			l.setBinary(this);
 			l.importFromXML(argElement);
 			addLiterals(l);
-			l.setBinary(this);
+			
 		}
 
 		for (Element argElement : AddElement.getChildren("reference")) {
 			Reference r = new Reference();
+			r.setBinary(this);
 			r.importFromXML(argElement);
 			addReferences(r);
-			r.setBinary(this);
 		}
 	}
 	
