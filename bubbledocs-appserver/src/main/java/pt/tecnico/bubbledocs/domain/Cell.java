@@ -48,13 +48,13 @@ public class Cell extends Cell_Base {
 			Element subcontent;
 			if ((subcontent = content.getChild("reference")) != null) {
 				Reference r = new Reference();
-				r.importFromXML(subcontent);
 				r.setCell(this);
+				r.importFromXML(subcontent);
 			} else {
 				if ((subcontent = content.getChild("literal")) != null) {
 					Literal l = new Literal();
-					l.importFromXML(subcontent);
 					l.setCell(this);
+					l.importFromXML(subcontent);
 				} else {
 					if ((subcontent = content.getChild("function")) != null) {
 						Element functionType;
@@ -62,23 +62,23 @@ public class Cell extends Cell_Base {
 							Element functionName;
 							if ((functionName = functionType.getChild("add")) != null) {
 								Add add = new Add();
-								add.importFromXML(functionName);
 								add.setCell(this);
+								add.importFromXML(functionName);
 							} else {
 								if ((functionName = functionType.getChild("sub")) != null) {
 									Sub sub = new Sub();
-									sub.importFromXML(functionName);
 									sub.setCell(this);
+									sub.importFromXML(functionName);
 								} else {
 									if ((functionName = functionType.getChild("div")) != null) {
 										Div div = new Div();
-										div.importFromXML(functionName);
 										div.setCell(this);
+										div.importFromXML(functionName);
 									} else {
 										if ((functionName = functionType.getChild("mul")) != null) {
 											Mul mul = new Mul();
-											mul.importFromXML(functionName);
 											mul.setCell(this);
+											mul.importFromXML(functionName);
 										}
 									}
 								}
