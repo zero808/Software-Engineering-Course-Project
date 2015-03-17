@@ -1,6 +1,7 @@
 package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
+
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
 public class Cell extends Cell_Base {
@@ -113,8 +114,10 @@ public class Cell extends Cell_Base {
 		}
 		setSpreadsheet(null);
 		
-		if(getReference() != null) {
-			setReference(null);
+		if(!getReferenceSet().isEmpty()) {
+			for (Reference r : getReferenceSet()) {
+				getReferenceSet().remove(r);
+			}
 		}
 		
 		deleteDomainObject();

@@ -140,7 +140,9 @@ relation BinaryHasLiterals {
 }
   
 relation ReferenceHasCell {
-	Reference playsRole reference;
+	Reference playsRole reference{
+	 multiplicity *;
+	}
 	Cell playsRole referencedCell;  
 }
  

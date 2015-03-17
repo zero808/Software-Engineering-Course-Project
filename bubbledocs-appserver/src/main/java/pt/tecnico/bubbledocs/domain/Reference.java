@@ -12,7 +12,7 @@ public class Reference extends Reference_Base {
 	public Reference(Cell c) {
 		super();
 		super.setReferencedCell(c);
-		c.setReference(this);
+		c.addReference(this);
 	}
 	
 	@Override
@@ -33,7 +33,7 @@ public class Reference extends Reference_Base {
 		
 		if(super.getReferencedCell() != null) {
 			//deletes the connection from the cell to this reference
-			super.getReferencedCell().setReference(null);
+			super.getReferencedCell().removeReference(this);
 		}
 	
 		//and deletes the connection between this reference and the cell
