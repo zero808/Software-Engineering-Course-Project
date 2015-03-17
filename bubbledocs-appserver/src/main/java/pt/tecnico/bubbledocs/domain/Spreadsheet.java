@@ -127,11 +127,6 @@ public class Spreadsheet extends Spreadsheet_Base {
 			_rowIterator++;
 		}
 		
-//		for (Element cellElement : cells.getChildren("cell")) {
-//			Cell c = new Cell();
-//			super.addCells(c); //no exception
-//		}
-		
 		Iterator<Cell> it = getCellsSet().iterator();
 		for (Element cellElement : cells.getChildren("cell")) {
 			Cell c = it.next();

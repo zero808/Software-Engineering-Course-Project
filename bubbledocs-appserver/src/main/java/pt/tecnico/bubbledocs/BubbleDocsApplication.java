@@ -73,7 +73,7 @@ public class BubbleDocsApplication {
 		
 		listSpreadsheetsOf("pf");
 		
-		recoverFromBackup(wholeDoc); //TODO Not Working
+		recoverFromBackup(wholeDoc);
 		
 		listSpreadsheetsOf("pf");
 		
@@ -90,7 +90,7 @@ public class BubbleDocsApplication {
 		root.addUser(pf);
 		root.addUser(ra);
 
-		Spreadsheet notas = new Spreadsheet("Notas ES", new DateTime(), 10, 10); //new DateTime() gives the current one.
+		Spreadsheet notas = new Spreadsheet("Notas ES", new DateTime(), 300, 20); //new DateTime() gives the current one.
 		pf.addSpreadsheets(notas);
 		
 		//Literal 5 on position (3,4).
