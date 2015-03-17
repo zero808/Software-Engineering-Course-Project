@@ -60,17 +60,17 @@ public class Mul extends Mul_Base {
 
 	@Override
 	public Element exportToXML() {
-		Element f = new Element ("function");
-		Element bf = new Element ("binary_function");
-		Element mul = new Element ("mul");
-		
+		Element f = new Element("function");
+		Element bf = new Element("binary_function");
+		Element mul = new Element("mul");
+
 		for (Reference r : super.getReferencesSet())
 			mul.addContent(r.exportToXML());
 		for (Literal l : super.getLiteralsSet())
 			mul.addContent(l.exportToXML());
 		bf.addContent(mul);
 		f.addContent(bf);
-		
+
 		return f;
 	}
 
@@ -78,19 +78,19 @@ public class Mul extends Mul_Base {
 	public void importFromXML(Element MulElement) {
 		for (Element argElement : MulElement.getChildren("literal")) {
 			Literal l = new Literal();
+			l.setBinary(this);
 			l.importFromXML(argElement);
 			addLiterals(l);
-			l.setBinary(this);
 		}
 
 		for (Element argElement : MulElement.getChildren("reference")) {
 			Reference r = new Reference();
+			r.setBinary(this);
 			r.importFromXML(argElement);
 			addReferences(r);
-			r.setBinary(this);
 		}
 	}
-	
+
 	@Override
 	public void delete() {
 		for (Literal l : super.getLiteralsSet()) {
@@ -107,10 +107,10 @@ public class Mul extends Mul_Base {
 		setCell(null);
 		deleteDomainObject();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Funcao Mul";
-		//TODO Make it print the arguments and the value also.
+		// TODO Make it print the arguments and the value also.
 	}
 }
