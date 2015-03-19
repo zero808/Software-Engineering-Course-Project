@@ -4,8 +4,6 @@ import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 
 public class CellAlreadyExistsException extends BubbleDocsException {
 
-	/**
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private int _row;
@@ -23,4 +21,9 @@ public class CellAlreadyExistsException extends BubbleDocsException {
 	public int getCollumn() {
 		return _collumn;
 	}
-}
+	
+	@Override
+	public String toString() {
+		return "Cell at " + "(" + getRow() + ", " + getCollumn() + ")" + "already exists.\n"; 
+	}
+}//End of CellAlreadyExistsException class.

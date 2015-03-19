@@ -5,7 +5,7 @@ import org.jdom2.Element;
 import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exception.InvalidPasswordException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
-import pt.tecnico.bubbledocs.exception.UsernameDoesNotExistException;
+import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
 
 public class BubbleDocs extends BubbleDocs_Base {
 
@@ -90,13 +90,22 @@ public class BubbleDocs extends BubbleDocs_Base {
 				return spreadsheet;
 			}
 		}
-		throw new SpreadsheetDoesNotExistException(name);
+		throw new SpreadsheetDoesNotExistException();
+	}
+	
+	public Spreadsheet getSpreadsheetById(int id) {
+		for (Spreadsheet spreadsheet : getSpreadsheetsSet()) {
+			if (spreadsheet.getId() == id) {
+				return spreadsheet;
+			}
+		}
+		return null;
 	}
 
-	public void login(String username, String password) throws InvalidPasswordException, UsernameDoesNotExistException {
+	public void login(String username, String password) throws InvalidPasswordException, UserDoesNotExistException {
 		
 		if(getUserByUsername(username) == null) {
-			throw new UsernameDoesNotExistException(username);
+			throw new UserDoesNotExistException();
 		}
 		
 		User u = getUserByUsername(username);

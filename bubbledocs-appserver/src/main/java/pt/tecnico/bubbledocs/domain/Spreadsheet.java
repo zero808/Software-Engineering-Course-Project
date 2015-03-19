@@ -108,7 +108,7 @@ public class Spreadsheet extends Spreadsheet_Base {
 			setNRows(spreadsheetElement.getAttribute("rows").getIntValue());
 			setNCols(spreadsheetElement.getAttribute("collumns").getIntValue());
 		} catch (DataConversionException e) {
-			throw new ImportDocumentException();
+			throw new ImportDocumentException(getName());
 		}
 		
 		Element cells = spreadsheetElement.getChild("cells");

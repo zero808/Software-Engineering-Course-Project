@@ -4,8 +4,6 @@ import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 
 public class InvalidPermissionException extends BubbleDocsException {
 
-	/**
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private String _username;
@@ -17,4 +15,9 @@ public class InvalidPermissionException extends BubbleDocsException {
 	public String getUsername() {
 		return _username;
 	}
-}
+	
+	@Override
+	public String toString() {
+		return "This username " + getUsername() + " does not have permissions to perform this action.\n";
+	}
+}// End InvalidPermissionException class.

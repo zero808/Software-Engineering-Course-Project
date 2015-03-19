@@ -3,15 +3,18 @@ package pt.tecnico.bubbledocs.service;
 import javax.transaction.NotSupportedException;
 import javax.transaction.SystemException;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.core.WriteOnReadError;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 
-public class BubbleDocsServiceTest {
+public abstract class BubbleDocsServiceTest {
 
 	@Before
 	public void setUp() throws Exception {
@@ -32,34 +35,41 @@ public class BubbleDocsServiceTest {
 			e.printStackTrace();
 		}
 	}
-
-	// should redefine this method in the subclasses if it is needed to specify
-	// some initial state
-	public void populate4Test() {
-	}
-
-	// auxiliary methods that access the domain layer and are needed in the test classes
-	// for defining the initial state and checking that the service has the expected behavior
+	
+	//Each test suite overrides this depending on what it needs.
+	public abstract void populate4Test();
+	
+	// Auxiliary methods that access the domain layer and are needed in the test classes.
+	// For defining the initial state and checking that the service has the expected behavior.
 	User createUser(String username, String password, String name) {
-		// add code here
-		return null;
+		Root r = Root.getInstance();
+		User user = new User(username, name, password);
+		
+		r.addUser(user);
+		
+		return user;
 	}
 
 	public Spreadsheet createSpreadSheet(User user, String name, int row, int column) {
-		// add code here
-		return null;
+		Spreadsheet spreadsheet = new Spreadsheet(name, new DateTime(), row, column);
+		
+		user.addSpreadsheets(spreadsheet);
+		
+		return spreadsheet;
 	}
 
 	// returns a spreadsheet whose name is equal to name
 	public Spreadsheet getSpreadSheet(String name) {
-		// add code here
-		return null;
+		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		
+		return bd.getSpreadsheetByName(name);
 	}
 
 	// returns the user registered in the application whose username is equal to username
 	User getUserFromUsername(String username) {
-		// add code here
-		return null;
+		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		
+		return bd.getUserByUsername(username);
 	}
 
 	// put a user into session and returns the token associated to it

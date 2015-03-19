@@ -122,5 +122,4 @@ public class Cell extends Cell_Base {
 		
 		deleteDomainObject();
 	}
-
 }
