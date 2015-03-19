@@ -4,17 +4,14 @@ import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 
 public class SpreadsheetDoesNotExistException extends BubbleDocsException {
 
-	/**
-	 */
 	private static final long serialVersionUID = 1L;
 
-	private String _spreadsheetName;
-
-	public SpreadsheetDoesNotExistException(String spreadsheetName) {
-		_spreadsheetName = spreadsheetName;
+	public SpreadsheetDoesNotExistException() {
+		//Just Needs to Exist.
 	}
 	
-	public String getSpreadsheetName() {
-		return _spreadsheetName;
+	@Override
+	public String toString() {
+		return "The spreadsheet requested does not exist.\n";
 	}
-}
+}// End SpreadsheetDoesNotExistException class.

@@ -4,18 +4,26 @@ import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 
 public class InvalidReferenceException extends BubbleDocsException {
 	
-	/**
-	 */
 	private static final long serialVersionUID = 1L;
 
-	private String _spreadsheetName;
+	private int _row;
+	private int _collumn;
 
-	public InvalidReferenceException(String spreadsheetname) {
-		_spreadsheetName = spreadsheetname;
+	public InvalidReferenceException(int row, int collumn) {
+		_row = row;
+		_collumn = collumn;
 	}
 	
-	public String getSpreadsheetName() {
-		return _spreadsheetName;
+	public int getRow() {
+		return _row;
 	}
-
+	
+	public int getCollumn() {
+		return _collumn;
+	}
+	
+	@Override
+	public String toString() {
+		return "Reference is pointing to an invalid location at " + "(" + getRow() + ", " + getCollumn() + ").\n";
+	}
 }

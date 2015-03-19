@@ -52,34 +52,29 @@ public class BubbleDocsApplication {
 				}
 		}
 		
-		org.jdom2.Document wholeDoc = convertToXML();
+		//org.jdom2.Document wholeDoc = convertToXML();
 		
 		//printDomainInXML(wholeDoc);
 	
-		listAllUsers(); 
+		//listAllUsers(); 
 		
-		listSpreadsheetsOf("pf"); 
+		//listSpreadsheetsOf("pf"); 
 		
-		listSpreadsheetsOf("ra");
+		//listSpreadsheetsOf("ra");
 		
-		org.jdom2.Document doc = convertSpreadsheetsOfUserToXML("pf");
-		printDomainInXML(doc);
+		//org.jdom2.Document doc = convertSpreadsheetsOfUserToXML("pf");
+		//printDomainInXML(doc);
 		
-		try {
-			deleteSpreadsheetOf("pf", "Notas ES");
-		} catch (SpreadsheetDoesNotExistException e) {
-			System.out.println("User does not have that spreadsheet" + e.getSpreadsheetName());
-		}
+		//deleteSpreadsheetOf("pf", "Notas ES");
 		
-		listSpreadsheetsOf("pf");
+		//listSpreadsheetsOf("pf");
 		
-		recoverFromBackup(wholeDoc);
+		//recoverFromBackup(wholeDoc);
 		
-		listSpreadsheetsOf("pf");
+		//listSpreadsheetsOf("pf");
 		
-		org.jdom2.Document doc2 = convertSpreadsheetsOfUserToXML("pf");
-		printDomainInXML(doc2);
-
+		//org.jdom2.Document doc2 = convertSpreadsheetsOfUserToXML("pf");
+		//printDomainInXML(doc2);
 	}
 
 	static void populateDomain(BubbleDocs bd, Root root) {
@@ -208,7 +203,7 @@ public class BubbleDocsApplication {
 			if(s.getName().equals(spreadsheetName)) {
 				s.deleteSpreadsheetContent();
 			} else {
-				throw new SpreadsheetDoesNotExistException(spreadsheetName);
+				throw new SpreadsheetDoesNotExistException();
 			}
 		}
 	}

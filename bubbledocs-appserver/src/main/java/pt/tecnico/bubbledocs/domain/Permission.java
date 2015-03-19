@@ -17,9 +17,9 @@ public class Permission extends Permission_Base {
 	public Permission(Spreadsheet spred, User user, boolean b) throws SpreadsheetDoesNotExistException, UserDoesNotExistException {
 
 		if (spred == null)
-			throw new SpreadsheetDoesNotExistException("NULL");
+			throw new SpreadsheetDoesNotExistException();
 		if (user == null)
-			throw new UserDoesNotExistException("NULL");
+			throw new UserDoesNotExistException();
 
 		setRw(b);
 		setUser(user);
@@ -62,7 +62,7 @@ public class Permission extends Permission_Base {
 		try {
 			setRw(permissionElement.getAttribute("type").getBooleanValue());
 		} catch (DataConversionException e) {
-			throw new ImportDocumentException();
+			throw new ImportDocumentException("permission");
 		}
 	}
 

@@ -44,7 +44,7 @@ public class Root extends Root_Base {
 		User toRemove = bd.getUserByUsername(username);
 
 		if (toRemove == null)
-			throw new UserDoesNotExistException(username);
+			throw new UserDoesNotExistException();
 
 		bd.removeUsers(toRemove);
 		for(Spreadsheet s : toRemove.getSpreadsheetsSet()) {
@@ -80,7 +80,7 @@ public class Root extends Root_Base {
 		Spreadsheet toRemove = getSpreadsheetByName(spreadsheetName);
 
 		if (toRemove == null)
-			throw new SpreadsheetDoesNotExistException(spreadsheetName);
+			throw new SpreadsheetDoesNotExistException();
 
 		super.removeSpreadsheets(toRemove);
 		toRemove.deleteSpreadsheetContent();

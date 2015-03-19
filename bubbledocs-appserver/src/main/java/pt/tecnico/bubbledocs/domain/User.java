@@ -40,7 +40,7 @@ public class User extends User_Base {
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
 		
 		if(username == null) {
-			throw new InvalidUsernameException("Null passed as username");
+			throw new InvalidUsernameException("Null passed as username.");
 		}
 		
 		if(username.equals("root")) {
@@ -49,7 +49,7 @@ public class User extends User_Base {
 		}
 			
 		if(username.equals("")) {
-			throw new InvalidUsernameException("Username cannot be empty");
+			throw new InvalidUsernameException("Username cannot be empty.");
 		}
 		
 		if(!(username.equals(getName()))) { //If its a new name, we need to check it doesn't already belong to another user.
@@ -132,7 +132,7 @@ public class User extends User_Base {
 	public void removeSpreadsheets(String spreadsheetName) throws SpreadsheetDoesNotExistException, InvalidPermissionException {
 		Spreadsheet toRemove = getSpreadsheetByName(spreadsheetName);
 		if (toRemove == null)
-			throw new SpreadsheetDoesNotExistException(spreadsheetName);
+			throw new SpreadsheetDoesNotExistException();
 
 		if (!(toRemove.getUser().getUsername().equals(getUsername())))
 			throw new InvalidPermissionException(getUsername());
@@ -168,10 +168,10 @@ public class User extends User_Base {
 
 	public void addLiteraltoCell(Literal l, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidPermissionException, CellIsProtectedException {
 		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
-			throw new OutofBondsException(s.getName());
+			throw new OutofBondsException(s.getNRows(), s.getNCols());
 
 		//if (!hasPermission(s))
-			//throw new InvalidPermissionException(getUsername()); //TODO Second Delivery.
+			//throw new InvalidPermissionException(getUsername()); //TODO
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
@@ -179,7 +179,7 @@ public class User extends User_Base {
 					cell.setContent(l);
 					return;
 				} else {
-					throw new CellIsProtectedException(s.getName());
+					throw new CellIsProtectedException(cell.getRow(), cell.getCollumn());
 				}
 			}
 		}
@@ -187,13 +187,13 @@ public class User extends User_Base {
 
 	public void addReferencetoCell(Reference r, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidReferenceException, InvalidPermissionException, CellIsProtectedException {
 		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
-			throw new OutofBondsException(s.getName());
+			throw new OutofBondsException(s.getNRows(), s.getNCols());
 
 		if (r.getReferencedCell().getRow() > s.getNRows() || r.getReferencedCell().getCollumn() > s.getNCols())
-			throw new InvalidReferenceException(s.getName());
+			throw new InvalidReferenceException(r.getReferencedCell().getRow(), r.getReferencedCell().getCollumn());
 
 		//if (!hasPermission(s))
-			//throw new InvalidPermissionException(getUsername()); //TODO Second Delivery.
+			//throw new InvalidPermissionException(getUsername()); //TODO
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
@@ -204,7 +204,7 @@ public class User extends User_Base {
 					cell.setContent(r);
 					return;
 				} else {
-					throw new CellIsProtectedException(s.getName());
+					throw new CellIsProtectedException(cell.getRow(), cell.getCollumn());
 				}
 			}
 		}
@@ -212,10 +212,10 @@ public class User extends User_Base {
 
 	public void addFunctiontoCell(Function f, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidPermissionException, CellIsProtectedException {
 		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
-			throw new OutofBondsException(s.getName());
+			throw new OutofBondsException(s.getNRows(), s.getNCols());
 
 		//if (!hasPermission(s))
-			//throw new InvalidPermissionException(getUsername()); //TODO Second Delivery.
+			//throw new InvalidPermissionException(getUsername()); //TODO
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
@@ -223,7 +223,7 @@ public class User extends User_Base {
 					cell.setContent(f);
 					return;
 				} else {
-					throw new CellIsProtectedException(s.getName());
+					throw new CellIsProtectedException(cell.getRow(), cell.getCollumn());
 				}
 			}
 		}
