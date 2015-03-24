@@ -60,14 +60,14 @@ public abstract class BubbleDocsServiceTest {
 
 	// returns a spreadsheet whose name is equal to name
 	public Spreadsheet getSpreadSheet(String name) {
-		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		BubbleDocs bd = BubbleDocs.getInstance();
 		
 		return bd.getSpreadsheetByName(name);
 	}
 
 	// returns the user registered in the application whose username is equal to username
 	User getUserFromUsername(String username) {
-		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		BubbleDocs bd = BubbleDocs.getInstance();
 		
 		return bd.getUserByUsername(username);
 	}

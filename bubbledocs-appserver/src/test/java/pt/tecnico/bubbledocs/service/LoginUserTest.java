@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.joda.time.LocalTime;
 import org.joda.time.Seconds;
 
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidPasswordException;
 import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
@@ -22,6 +23,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	@Override
 	public void populate4Test() {
+		BubbleDocs.getInstance();
 		createUser(USERNAME, PASSWORD, "João Pereira");
 	}
 
