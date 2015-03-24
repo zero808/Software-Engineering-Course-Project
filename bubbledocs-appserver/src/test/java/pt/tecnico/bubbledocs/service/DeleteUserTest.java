@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
@@ -24,6 +25,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 
 	@Override
 	public void populate4Test() {
+		BubbleDocs.getInstance();
 		createUser(USERNAME, PASSWORD, "António Rito Silva");
 		User smf = createUser(USERNAME_TO_DELETE, "smf", "Sérgio Fernandes");
 		createSpreadSheet(smf, USERNAME_TO_DELETE, 20, 20);

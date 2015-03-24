@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Test;
 
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
@@ -20,6 +21,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 
 	@Override
 	public void populate4Test() {
+		BubbleDocs.getInstance();
 		User luis = createUser("lf", "woot", "Luis");
 		Spreadsheet teste = createSpreadSheet(luis, "teste", 10, 10);
 		org.jdom2.Document DocTest = new org.jdom2.Document();
@@ -51,6 +53,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		}
 
 		assertEquals(docTestBytes, sucessDocXML);
+		//assertEquals("teste", "teste");
 	}
 
 	@Test(expected = SpreadsheetDoesNotExistException.class)
