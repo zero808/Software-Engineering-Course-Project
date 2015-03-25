@@ -150,15 +150,15 @@ public class Spreadsheet extends Spreadsheet_Base {
 	
 	public void deleteSpreadsheetContent() { //Used to remove a spreadsheet.
 		
-		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
-		
+		/*BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
 		for(User u : bd.getUsersSet()) {
 			for(Spreadsheet s : u.getSpreadsheetsSet()) {
 				if(s.getId() == getId()) { //Check for all users if any has this spreadsheet to be removed.
 					s.setUser(null);
 				}
 			}
-		}
+		}*/
+		setUser(null);
 		
 		setBubbledocs(null);
 		
