@@ -35,12 +35,36 @@ public class BubbleDocsApplication {
 			BubbleDocs bd = BubbleDocs.getInstance();
 			Root root = Root.getInstance();
 			
-			populateDomain(bd, root);
+			if (!isInicialized()) {
+				populateDomain(bd, root);
+			}
 			
+			org.jdom2.Document wholeDoc = convertToXML();
+			printDomainInXML(wholeDoc);
+			
+			listAllUsers(); 
+			
+			listSpreadsheetsOf("pf"); 
+			
+			listSpreadsheetsOf("ra");
+			
+			org.jdom2.Document doc = convertSpreadsheetsOfUserToXML("pf");
+			printDomainInXML(doc);
+			
+			deleteSpreadsheetOf("pf", "Notas ES");
+			
+			listSpreadsheetsOf("pf");
+			
+			recoverFromBackup(wholeDoc);
+			
+			listSpreadsheetsOf("pf");
+			
+			org.jdom2.Document doc2 = convertSpreadsheetsOfUserToXML("pf");
+			printDomainInXML(doc2);
+
 			tm.commit();
 			committed = true;
-		} catch (SystemException | NotSupportedException | RollbackException
-				| HeuristicMixedException | HeuristicRollbackException ex) {
+		} catch (SystemException | NotSupportedException | RollbackException | HeuristicMixedException | HeuristicRollbackException ex) {
 			System.err.println("Error in execution of transaction: " + ex);
 		} finally {
 			if (!committed)
@@ -51,32 +75,19 @@ public class BubbleDocsApplication {
 							+ ex);
 				}
 		}
-		
-		//org.jdom2.Document wholeDoc = convertToXML();
-		
-		//printDomainInXML(wholeDoc);
-	
-		//listAllUsers(); 
-		
-		//listSpreadsheetsOf("pf"); 
-		
-		//listSpreadsheetsOf("ra");
-		
-		//org.jdom2.Document doc = convertSpreadsheetsOfUserToXML("pf");
-		//printDomainInXML(doc);
-		
-		//deleteSpreadsheetOf("pf", "Notas ES");
-		
-		//listSpreadsheetsOf("pf");
-		
-		//recoverFromBackup(wholeDoc);
-		
-		//listSpreadsheetsOf("pf");
-		
-		//org.jdom2.Document doc2 = convertSpreadsheetsOfUserToXML("pf");
-		//printDomainInXML(doc2);
 	}
-
+	
+	@Atomic
+	private static boolean isInicialized() {
+		BubbleDocs bd = BubbleDocs.getInstance();
+		
+		if(bd.getUsersSet().size() == 1) {
+			return false;
+		} else 
+			return true;
+	}
+	
+	@Atomic
 	static void populateDomain(BubbleDocs bd, Root root) {
 
 		User pf = new User("pf", "Paul Door", "sub");
@@ -143,7 +154,9 @@ public class BubbleDocsApplication {
 		BubbleDocs bd = BubbleDocs.getInstance();
 		
 		for(User u : bd.getUsersSet()) {
-			System.out.println("Nome: " + u.getName() + " " + "Username: " + u.getUsername() + " " + "Password: " + u.getPassword() + "\n");
+			if(!(u.isRoot())) {
+				System.out.println(u.toString());
+			}
 		}
 	}
 	
@@ -152,10 +165,10 @@ public class BubbleDocsApplication {
 		BubbleDocs bd = BubbleDocs.getInstance();
 		User user = bd.getUserByUsername(username);
 		
-		System.out.println("Spreadsheets of " + user.getUsername() + "\n");
+		System.out.println("Spreadsheets of " + user.getUsername() + ":\n");
 		
 		if(user.getSpreadsheetsSet().isEmpty()) {
-			System.out.println("User doesnt have any spreadsheets");
+			System.out.println("User doesnt have any spreadsheets.\n");
 			return;
 		}
 		
@@ -188,20 +201,19 @@ public class BubbleDocsApplication {
 		return jdomDoc;
 	}
 	
-	
 	@Atomic
 	public static void deleteSpreadsheetOf(String username, String spreadsheetName) throws SpreadsheetDoesNotExistException {
 		BubbleDocs bd = BubbleDocs.getInstance();
 		User user = bd.getUserByUsername(username);
 		
 		if(user.getSpreadsheetsSet().isEmpty()) {
-			System.out.println("User doesnt have any spreadsheets");
+			System.out.println("User doesnt have any spreadsheets.\n");
 			return;
 		}
 		
 		for(Spreadsheet s : user.getSpreadsheetsSet()) {
 			if(s.getName().equals(spreadsheetName)) {
-				s.deleteSpreadsheetContent();
+				s.delete();
 			} else {
 				throw new SpreadsheetDoesNotExistException();
 			}

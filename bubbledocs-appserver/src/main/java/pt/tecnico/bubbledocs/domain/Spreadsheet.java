@@ -80,7 +80,9 @@ public class Spreadsheet extends Spreadsheet_Base {
 		element.addContent(cellsElement);
 		
 		for (Cell c : getCellsSet()) {
-			cellsElement.addContent(c.exportToXML());
+			if(c.getContent() != null) {
+				cellsElement.addContent(c.exportToXML());
+			}
 		}
 		
 		Element permissionsElement = new Element("permissions");
@@ -142,22 +144,9 @@ public class Spreadsheet extends Spreadsheet_Base {
 			addPermissions(p);
 		}
 	}
-
-	public void delete() { //Used to remove connection to user that is being removed.
-
-		setUser(null);
-	}
 	
-	public void deleteSpreadsheetContent() { //Used to remove a spreadsheet.
+	public void delete() { //When the user that created the spreadsheet is deleted then all the spreadsheets he had are also.
 		
-		/*BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
-		for(User u : bd.getUsersSet()) {
-			for(Spreadsheet s : u.getSpreadsheetsSet()) {
-				if(s.getId() == getId()) { //Check for all users if any has this spreadsheet to be removed.
-					s.setUser(null);
-				}
-			}
-		}*/
 		setUser(null);
 		
 		setBubbledocs(null);
@@ -233,12 +222,6 @@ public class Spreadsheet extends Spreadsheet_Base {
 			}
 		}
 		return null;
-	}
-	
-	public void printCells() {
-		for (Cell cell : getCellsSet()) {
-			cell.toString();
-		}
 	}
 	
 	public String toString() {

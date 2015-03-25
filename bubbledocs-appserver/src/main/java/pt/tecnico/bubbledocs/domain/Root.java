@@ -18,11 +18,10 @@ public class Root extends Root_Base {
 	}
 
 	private Root() {
-		super();
 		
+		super();
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
 		setBubbledocs(bd);
-		//setId(0);
 		setUsername("root");
 		setName("Super User");
 		setPassword("rootroot"); // So that it doesn't have null.
@@ -83,7 +82,7 @@ public class Root extends Root_Base {
 			throw new SpreadsheetDoesNotExistException();
 
 		super.removeSpreadsheets(toRemove);
-		toRemove.deleteSpreadsheetContent();
+		toRemove.delete();
 
 	}
 	

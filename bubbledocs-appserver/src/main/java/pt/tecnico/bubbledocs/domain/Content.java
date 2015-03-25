@@ -13,9 +13,12 @@ public abstract class Content extends Content_Base {
     	super.setCell(c);
     }
     
-    public abstract int getValue();
+    public void delete() {
+    	setCell(null);
+    	deleteDomainObject();
+    }
 
-	public abstract void delete();
+    public abstract int getValue();
 
 	public abstract Element exportToXML();
 	
