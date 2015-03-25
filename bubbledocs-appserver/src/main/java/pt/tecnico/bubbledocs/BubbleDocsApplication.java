@@ -143,7 +143,7 @@ public class BubbleDocsApplication {
 		BubbleDocs bd = BubbleDocs.getInstance();
 		
 		for(User u : bd.getUsersSet()) {
-			System.out.println("Id: " + u.getId() + " " + "Nome: " + u.getName() + " " + "Username: " + u.getUsername() + " " + "Password: " + u.getPassword() + "\n");
+			System.out.println("Nome: " + u.getName() + " " + "Username: " + u.getUsername() + " " + "Password: " + u.getPassword() + "\n");
 		}
 	}
 	

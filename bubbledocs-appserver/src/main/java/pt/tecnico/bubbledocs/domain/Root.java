@@ -22,7 +22,7 @@ public class Root extends Root_Base {
 		
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
 		setBubbledocs(bd);
-		setId(0);
+		//setId(0);
 		setUsername("root");
 		setName("Super User");
 		setPassword("rootroot"); // So that it doesn't have null.

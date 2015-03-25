@@ -23,12 +23,12 @@ public class User extends User_Base {
 
 	public User(String username, String name, String pass) {
 		super();
-		int _idnext;
 		
-		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
-		_idnext = bd.getIdGlobal();
-		setId(_idnext);
-		bd.setIdGlobal(++_idnext);
+		//int _idnext;
+		//BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		//_idnext = bd.getIdGlobal();
+		//setId(_idnext);
+		//bd.setIdGlobal(++_idnext);
 
 		super.setUsername(username);
 		setName(name);
@@ -260,7 +260,7 @@ public class User extends User_Base {
 	
 	@Override
 	public String toString() {
-		return "Id: " + getId() + " " + "Nome: " + getName() + " " + "Username: " + getUsername() + " " + "Password: " + getPassword() + "\n";
+		return "Nome: " + getName() + " " + "Username: " + getUsername() + " " + "Password: " + getPassword() + "\n";
 	}
 
 }// End User Class
