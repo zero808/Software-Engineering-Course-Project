@@ -24,12 +24,6 @@ public class Literal extends Literal_Base {
 	}
 
 	@Override
-	public void delete() {
-		setCell(null);
-		deleteDomainObject();
-	}
-
-	@Override
 	public Element exportToXML() {
 		Element element = new Element("literal");
 		element.setAttribute("value", Integer.toString(super.getVal()));

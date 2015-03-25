@@ -18,18 +18,10 @@ import pt.tecnico.bubbledocs.exception.UserDoesNotHavePermissionException;
 public class User extends User_Base {
 
 	protected User() {
-		super(); // Protected so that only Root can use it.
+		//Root needs this.
 	}
 
 	public User(String username, String name, String pass) {
-		super();
-		
-		//int _idnext;
-		//BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
-		//_idnext = bd.getIdGlobal();
-		//setId(_idnext);
-		//bd.setIdGlobal(++_idnext);
-
 		super.setUsername(username);
 		setName(name);
 		setPassword(pass);
@@ -43,13 +35,13 @@ public class User extends User_Base {
 			throw new InvalidUsernameException("Null passed as username.");
 		}
 		
-		if(username.equals("root")) {
-			super.setUsername("root");
-			return;
-		}
-			
 		if(username.equals("")) {
 			throw new InvalidUsernameException("Username cannot be empty.");
+		}
+		
+		if(username.equals("root") && isRoot()) {
+			super.setUsername(username);
+			return;
 		}
 		
 		if(!(username.equals(getName()))) { //If its a new name, we need to check it doesn't already belong to another user.
@@ -138,7 +130,7 @@ public class User extends User_Base {
 			throw new InvalidPermissionException(getUsername());
 
 		super.removeSpreadsheets(toRemove);
-		toRemove.deleteSpreadsheetContent();
+		toRemove.delete();
 	}
 
 	public List<Spreadsheet> listSpreadsheetsContains(String str) {

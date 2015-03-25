@@ -39,10 +39,24 @@ public abstract class Binary extends Binary_Base {
 		super.addReferences(arg1);
 		super.addReferences(arg2);
 	}
+	
+	public void delete() {
+		for (Literal l : super.getLiteralsSet()) {
+			l.setBinary(null);
+			super.removeLiterals(l);
+			l.delete();
+		}
+		for (Reference r : super.getReferencesSet()) {
+			r.setBinary(null);
+			super.removeReferences(r);
+			r.delete();
+
+		}
+		setCell(null);
+		deleteDomainObject();
+	}
 
 	public abstract int getValue();
-
-	public abstract void delete();
 
 	public abstract Element exportToXML();
 

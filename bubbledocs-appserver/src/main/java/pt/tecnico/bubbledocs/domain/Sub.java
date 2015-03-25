@@ -91,23 +91,6 @@ public class Sub extends Sub_Base {
 	}
 	
 	@Override
-	public void delete() {
-		for (Literal l : super.getLiteralsSet()) {
-			l.setBinary(null);
-			super.removeLiterals(l);
-			l.delete();
-		}
-		for (Reference r : super.getReferencesSet()) {
-			r.setBinary(null);
-			super.removeReferences(r);
-			r.delete();
-
-		}
-		setCell(null);
-		deleteDomainObject();
-	}
-	
-	@Override
 	public String toString() {
 		return "Funcao Sub";
 		//TODO Make it print the arguments and the value also.
