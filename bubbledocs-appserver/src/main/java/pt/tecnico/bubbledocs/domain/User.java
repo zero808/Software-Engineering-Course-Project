@@ -13,12 +13,11 @@ import pt.tecnico.bubbledocs.exception.OutofBondsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.InvalidReferenceException;
 import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
-import pt.tecnico.bubbledocs.exception.UserDoesNotHavePermissionException;
 
 public class User extends User_Base {
 
 	protected User() {
-		//Root needs this.
+		super(); //Root needs this.
 	}
 
 	public User(String username, String name, String pass) {
@@ -162,8 +161,8 @@ public class User extends User_Base {
 		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
 			throw new OutofBondsException(s.getNRows(), s.getNCols());
 
-		//if (!hasPermission(s))
-			//throw new InvalidPermissionException(getUsername()); //TODO
+//		if (!hasPermission(s))
+//			throw new InvalidPermissionException(getUsername());
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
@@ -184,8 +183,8 @@ public class User extends User_Base {
 		if (r.getReferencedCell().getRow() > s.getNRows() || r.getReferencedCell().getCollumn() > s.getNCols())
 			throw new InvalidReferenceException(r.getReferencedCell().getRow(), r.getReferencedCell().getCollumn());
 
-		//if (!hasPermission(s))
-			//throw new InvalidPermissionException(getUsername()); //TODO
+//		if (!hasPermission(s))
+//			throw new InvalidPermissionException(getUsername());
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
@@ -206,8 +205,8 @@ public class User extends User_Base {
 		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
 			throw new OutofBondsException(s.getNRows(), s.getNCols());
 
-		//if (!hasPermission(s))
-			//throw new InvalidPermissionException(getUsername()); //TODO
+//		if (!hasPermission(s))
+//			throw new InvalidPermissionException(getUsername());
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
@@ -230,7 +229,7 @@ public class User extends User_Base {
 	public void removePermissionfrom(Spreadsheet s, User u) {
 		if (hasOwnerPermission(s) || hasPermission(s)) {
 			if(s.getPermissionOfUser(u) == null) {
-				throw new UserDoesNotHavePermissionException(u.getName());
+				throw new InvalidPermissionException(u.getName());
 			} else {
 				s.getPermissionOfUser(u).setRw(false);
 			}

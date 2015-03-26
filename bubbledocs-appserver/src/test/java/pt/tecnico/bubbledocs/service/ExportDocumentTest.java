@@ -2,28 +2,32 @@ package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
-import org.jdom2.output.XMLOutputter;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
-import pt.tecnico.bubbledocs.exception.UserDoesNotHavePermissionException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
+import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
 
 public class ExportDocumentTest extends BubbleDocsServiceTest {
 
 	private String userToken;
 	//private String rootToken;
 
-	@Override
 	public void populate4Test() {
 		BubbleDocs.getInstance();
 		User luis = createUser("lf", "woot", "Luis");
 		Spreadsheet teste = createSpreadSheet(luis, "teste", 10, 10);
+		luis.addSpreadsheets(teste);
 		org.jdom2.Document DocTest = new org.jdom2.Document();
 
 		DocTest.setRootElement(teste.exportToXML());
@@ -32,28 +36,40 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 
 	@Test
 	public void success() {
-		Spreadsheet sucessTeste = getSpreadSheet("teste");
+		Spreadsheet spreadsheetSucessTest = getSpreadSheet("teste");
 		
-		ExportDocument service = new ExportDocument(userToken, sucessTeste.getId());
+		ExportDocument service = new ExportDocument(userToken, spreadsheetSucessTest.getId());
 		service.execute();
 		
-		byte[] sucessDocXML = service.getDocXML();
+		byte[] serviceDocBytes = service.getDocXML();
 		
-		org.jdom2.Document docTest = new org.jdom2.Document();
-		byte[] docTestBytes = null;
-
-		docTest.setRootElement(sucessTeste.exportToXML());
+		org.jdom2.Document serviceDoc = new org.jdom2.Document();
 		
-		XMLOutputter xml = new XMLOutputter();
-		
+		SAXBuilder builder = new SAXBuilder();
+		builder.setIgnoringElementContentWhitespace(true);
 		try {
-			docTestBytes = xml.outputString(docTest).getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
+			serviceDoc = builder.build(new ByteArrayInputStream(serviceDocBytes));
+		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
 		}
+		
+		Element serviceRootElement = serviceDoc.getRootElement();
+		Spreadsheet serviceSpreadsheet = new Spreadsheet();
+		serviceSpreadsheet.importFromXML(serviceRootElement);
 
-		assertEquals(docTestBytes, sucessDocXML);
-		//assertEquals("teste", "teste");
+		org.jdom2.Document docTest = new org.jdom2.Document();
+
+		docTest.setRootElement(spreadsheetSucessTest.exportToXML());
+		
+		Element testRootElement = serviceDoc.getRootElement();
+		Spreadsheet testSpreadsheet = new Spreadsheet();
+		testSpreadsheet.importFromXML(testRootElement);
+		
+		assertEquals(testSpreadsheet.getName(), serviceSpreadsheet.getName());
+		assertEquals(testSpreadsheet.getDate(), serviceSpreadsheet.getDate());
+		assertEquals(testSpreadsheet.getUser().getUsername(), serviceSpreadsheet.getUser().getUsername());
+		assertEquals(testSpreadsheet.getNRows(), serviceSpreadsheet.getNRows());
+		assertEquals(testSpreadsheet.getNCols(), serviceSpreadsheet.getNCols());
 	}
 
 	@Test(expected = SpreadsheetDoesNotExistException.class)
@@ -65,10 +81,12 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	@Test(expected = UserNotInSessionException.class)
 	public void userNotInSession() {
 		//TODO Login needs to be implemented.
+		throw new UserNotInSessionException("TODO");
 	}
 	
-	@Test(expected = UserDoesNotHavePermissionException.class)
+	@Test(expected = InvalidPermissionException.class)
 	public void userWithoutPermission() {
 		//TODO
+		throw new InvalidPermissionException("TODO");
 	}
 }// End ExportDocumentTest class.

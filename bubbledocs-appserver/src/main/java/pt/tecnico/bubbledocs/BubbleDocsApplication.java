@@ -40,7 +40,7 @@ public class BubbleDocsApplication {
 			}
 			
 			org.jdom2.Document wholeDoc = convertToXML();
-			printDomainInXML(wholeDoc);
+//			printDomainInXML(wholeDoc);
 			
 			listAllUsers(); 
 			
@@ -71,8 +71,7 @@ public class BubbleDocsApplication {
 				try {
 					tm.rollback();
 				} catch (SystemException ex) {
-					System.err.println("Error in roll back of transaction: "
-							+ ex);
+					System.err.println("Error in roll back of transaction: " + ex);
 				}
 		}
 	}
