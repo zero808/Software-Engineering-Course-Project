@@ -39,9 +39,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 
 		// User is the domain class that represents a User
 		User user = getUserFromUsername(USERNAME_DOES_NOT_EXIST);
-		if(user == null) {
-			System.out.println("user is actually null dummy");
-		}
+		
 		assertEquals(USERNAME_DOES_NOT_EXIST, user.getUsername());
 		assertEquals("jose", user.getPassword());
 		assertEquals("José Ferreira", user.getName());

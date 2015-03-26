@@ -165,13 +165,13 @@ public class Spreadsheet extends Spreadsheet_Base {
 	}
 	
 	public Cell getCellByCoords(int row, int collumn) {
-			for(Cell c : getCellsSet()) {
-				if(c.getRow() == row && c.getCollumn() == collumn) {
-					return c;
-				}
+		for(Cell c : getCellsSet()) {
+			if(c.getRow() == row && c.getCollumn() == collumn) {
+				return c;
 			}
-			return null;
 		}
+		return null;
+	}
 	
 	public List<Cell> getCellsInRange(Range r) {
 		List<Cell> _requestedCells = new ArrayList<Cell>();

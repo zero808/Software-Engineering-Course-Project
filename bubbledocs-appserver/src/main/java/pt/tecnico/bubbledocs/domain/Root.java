@@ -2,10 +2,10 @@ package pt.tecnico.bubbledocs.domain;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
+import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
 import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
-import pt.tecnico.bubbledocs.exception.UserDoesNotHavePermissionException;
 
 public class Root extends Root_Base {
 	
@@ -89,7 +89,7 @@ public class Root extends Root_Base {
 	@Override
 	public void removePermissionfrom(Spreadsheet s, User u) {
 			if(s.getPermissionOfUser(u) == null) {
-				throw new UserDoesNotHavePermissionException(u.getName());
+				throw new InvalidPermissionException(u.getName());
 			} else {
 				s.getPermissionOfUser(u).setRw(false);
 			}
