@@ -21,7 +21,7 @@ public class User extends User_Base {
 	}
 
 	public User(String username, String name, String pass) {
-		super.setUsername(username);
+		setUsername(username);
 		setName(name);
 		setPassword(pass);
 	}
@@ -43,16 +43,11 @@ public class User extends User_Base {
 			return;
 		}
 		
-		if(!(username.equals(getName()))) { //If its a new name, we need to check it doesn't already belong to another user.
-			if(!(bd.getUsersSet().isEmpty())) {
-				for(User u : bd.getUsersSet()) {
-					if(u.getUsername().equals(username)) {
-						throw new UserAlreadyExistsException(username);
-					}
-				}
-				super.setUsername(username);
+		for(User u : bd.getUsersSet()) {
+			if(u.getUsername().equals(username)) {
+				throw new UserAlreadyExistsException(username);
 			}
-		} 
+		}
 		
 		super.setUsername(username); //If its exactly the same, its allowed.	
 	}
