@@ -1,7 +1,5 @@
 package pt.tecnico.bubbledocs.domain;
 
-import java.util.ArrayList;
-
 import org.jdom2.Element;
 
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
@@ -12,49 +10,19 @@ public class Sub extends Sub_Base {
 		super();
 	}
 
-	public Sub(Literal arg1, Literal arg2) {
-		super();
-		arg1.setBinary(this);
-		arg2.setBinary(this);
-		super.addLiterals(arg1);
-		super.addLiterals(arg2);
-	}
-
-	public Sub(Reference arg1, Literal arg2) {
-		super();
-		arg1.setBinary(this);
-		arg2.setBinary(this);
-		super.addReferences(arg1);
-		super.addLiterals(arg2);
-	}
-
-	public Sub(Literal arg1, Reference arg2) {
-		super();
-		arg1.setBinary(this);
-		arg2.setBinary(this);
-		super.addReferences(arg2);
-		super.addLiterals(arg1);
-	}
-
-	public Sub(Reference arg1, Reference arg2) {
-		super();
-		arg1.setBinary(this);
-		arg2.setBinary(this);
-		super.addReferences(arg1);
-		super.addReferences(arg2);
+	public Sub(Argument arg1, Argument arg2){
+		Content a1 = arg1.retrieveContent();
+		Content a2 = arg2.retrieveContent();
+		a1.setBinary1(this);
+		a2.setBinary1(this);
+		
+		setArg1((Content)arg1);
+		setArg2((Content)arg2);
 	}
 
 	@Override
 	public int getValue() {
-		ArrayList<Integer> values = new ArrayList<Integer>();
-		if (super.getReferencesSet().size() + super.getLiteralsSet().size() != 2) {
-			throw new InvalidArgumentsException();
-		}
-		for (Reference r : super.getReferencesSet())
-			values.add(r.getValue());
-		for (Literal l : super.getLiteralsSet())
-			values.add(l.getValue());
-		return values.get(0) - values.get(1);
+		return super.getArg1().getValue()-super.getArg2().getValue();
 		// TODO Needs to check for #VALUES and the order of the arguments.
 	}
 
@@ -63,10 +31,10 @@ public class Sub extends Sub_Base {
 		Element f = new Element ("function");
 		Element bf = new Element ("binary_function");
 		Element sub = new Element ("sub");
-		for (Reference r : super.getReferencesSet())
-			sub.addContent(r.exportToXML());
-		for (Literal l : super.getLiteralsSet())
-			sub.addContent(l.exportToXML());
+		
+		sub.addContent(super.getArg1().exportToXML());
+		sub.addContent(super.getArg2().exportToXML());
+
 		bf.addContent(sub);
 		f.addContent(bf);
 		
@@ -75,19 +43,30 @@ public class Sub extends Sub_Base {
 
 	@Override
 	public void importFromXML(Element SubElement) {
-		for (Element argElement : SubElement.getChildren("literal")) {
-			Literal l = new Literal();
-			l.setBinary(this);
-			l.importFromXML(argElement);
-			addLiterals(l);
+		
+		int count=1;
+		
+		for (Element argElement : SubElement.getChildren()){
+			Content c = null;
+			if (argElement.getName().equals("literal")){
+				Literal l = new Literal();
+				l.setBinary1(this);
+				l.importFromXML(argElement);
+				if(count==1) this.setArg1(l);
+				if(count==2) this.setArg2(l);
+				System.out.println("Iterei sobre o literal");
+			}
+			if (argElement.getName().equals("reference")){
+				Reference r = new Reference();
+				r.setBinary1(this);
+				r.importFromXML(argElement);
+				if(count==1) this.setArg1(r);
+				if(count==2) this.setArg2(r);
+				System.out.println("Iterei sobre a ref");
+			}
+			count++;
 		}
-
-		for (Element argElement : SubElement.getChildren("reference")) {
-			Reference r = new Reference();
-			r.setBinary(this);
-			r.importFromXML(argElement);
-			addReferences(r);
-		}
+		
 	}
 	
 	@Override

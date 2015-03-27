@@ -16,7 +16,9 @@ public abstract class Avg extends Avg_Base {
 	@Override
 	public int getValue() {
 		int total = 0;
+		//int flag = 0;
 		for (Cell cell : super.getRange().getCellsSet()) {
+			if (cell.hasValidResult())
 			total += cell.getContent().getValue();
 		}
 		return total / super.getRange().getCellsSet().size();
