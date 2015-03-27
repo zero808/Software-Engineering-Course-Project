@@ -1,13 +1,17 @@
 package pt.tecnico.bubbledocs.service;
 
-//import pt.tecnico.bubbledocs.domain.Cell;
-//import pt.tecnico.bubbledocs.domain.Reference;
+import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.Cell;
+import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
+import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.CellIsProtectedException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidReferenceException;
+import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.OutofBondsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
+import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class AssignReferenceCell extends BubbleDocsService {
@@ -15,10 +19,10 @@ public class AssignReferenceCell extends BubbleDocsService {
 	private String result;
 	private int cell_row;
 	private int cell_collumn;
-	//private int reference_row;
-	//private int reference_collumn;
+	private int reference_row;
+	private int reference_collumn;
 	private int docId;
-	//private String tokenUser;
+	private String tokenUser;
 
 	public AssignReferenceCell(String tokenUser, int docId, String cellId, String reference) {
 		String cell_parts[] = cellId.split(";");
@@ -27,31 +31,70 @@ public class AssignReferenceCell extends BubbleDocsService {
 		int cell_row_int = Integer.parseInt(cell_row);
 		int cell_collumn_int = Integer.parseInt(cell_collumn);
 		
-		//String reference_parts[] = reference.split(";");
-		//String reference_row = reference_parts[0];
-		//String reference_collumn = reference_parts[1];
-		//int reference_row_int = Integer.parseInt(reference_row);
-		//int reference_collumn_int = Integer.parseInt(reference_collumn);
+		String reference_parts[] = reference.split(";");
+		String reference_row = reference_parts[0];
+		String reference_collumn = reference_parts[1];
+		int reference_row_int = Integer.parseInt(reference_row);
+		int reference_collumn_int = Integer.parseInt(reference_collumn);
 		
 		this.docId = docId;
-		//this.tokenUser = tokenUser;
+		this.tokenUser = tokenUser;
 		this.cell_row = cell_row_int;
 		this.cell_collumn = cell_collumn_int;
-		//this.reference_row = reference_row_int;
-		//this.reference_collumn = reference_collumn_int;
+		this.reference_row = reference_row_int;
+		this.reference_collumn = reference_collumn_int;
 	}
 
 	@Override
-	protected void dispatch() throws InvalidReferenceException, OutofBondsException, InvalidPermissionException, CellIsProtectedException, UserNotInSessionException, SpreadsheetDoesNotExistException {
-		Spreadsheet spreadsheet = getSpreadsheet(this.docId);
-		//Cell referenced_cell = getCellByCoords(spreadsheet, this.reference_row, this.reference.collumn);
-		//Reference reference = new Reference(referenced_cell);
+	protected void dispatch() throws InvalidReferenceException, InvalidTokenException, OutofBondsException, InvalidPermissionException, CellIsProtectedException, UserNotInSessionException, SpreadsheetDoesNotExistException, UserDoesNotExistException {
+		BubbleDocs bd = getBubbleDocs();
+		Spreadsheet spreadsheet = getSpreadsheet(docId);
+		String username = bd.getUsernameByToken(tokenUser);
 		
-		//TODO BubbleDocs needs a method that given a token, returns true if its valid and false otherwise.
-        //TODO BubbleDocs needs a method that given a token gives the username that it belongs to for permission checking and to add the reference to the spreadsheet.
-		//user.addReferencetoCell(reference, spreadsheet, this.cell_row, this.cell_collumn);
+		if(tokenUser.equals("")) {
+			throw new InvalidTokenException();
+		}
 		
-		result = getCellByCoords(spreadsheet, this.cell_row, this.cell_collumn).getContent().toString();
+		if(!(bd.isInSession(tokenUser))) {
+			throw new UserNotInSessionException(username);
+		}
+		
+		User user = bd.getUserByUsername(username);
+
+		if(user == null) {
+			throw new UserDoesNotExistException();
+		}
+		
+		if(cell_row > spreadsheet.getNRows() || cell_collumn > spreadsheet.getNCols()) {
+			throw new OutofBondsException(cell_row, cell_collumn);
+		}
+		
+		Cell cell = getCellByCoords(spreadsheet, cell_row, cell_collumn);
+		
+		if(reference_row > spreadsheet.getNRows() || reference_collumn > spreadsheet.getNCols()) {
+			throw new InvalidReferenceException(reference_row, reference_collumn);
+		}
+		
+		Cell referenced_cell = getCellByCoords(spreadsheet, reference_row, reference_collumn);
+		Reference reference = new Reference(referenced_cell);
+		
+		if(cell.getWProtected()) {
+			throw new CellIsProtectedException(cell.getRow(), cell.getCollumn());
+		}
+
+		if(user.hasOwnerPermission(spreadsheet)) {
+			user.addReferencetoCell(reference, spreadsheet, cell_row, cell_collumn);
+
+			result = getCellByCoords(spreadsheet, cell_row, cell_collumn).getContent().toString();
+		}else {
+			if(user.hasPermission(spreadsheet)) {
+				user.addReferencetoCell(reference, spreadsheet, cell_row, cell_collumn);
+
+				result = getCellByCoords(spreadsheet, cell_row, cell_collumn).getContent().toString();
+			}else {
+				throw new InvalidPermissionException(username);
+			}
+		}
 	}
 
 	public final String getResult() {

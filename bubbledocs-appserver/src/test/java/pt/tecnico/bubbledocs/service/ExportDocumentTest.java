@@ -38,9 +38,6 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		luis.addSpreadsheets(teste);
 		
 		luis.givePermissionto(getSpreadSheet("teste"), ze, true);
-		
-		org.jdom2.Document DocTest = new org.jdom2.Document();
-		DocTest.setRootElement(teste.exportToXML());
 	}
 
 	@Test
