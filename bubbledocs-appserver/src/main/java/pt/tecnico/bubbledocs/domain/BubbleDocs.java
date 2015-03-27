@@ -110,12 +110,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	
 	public boolean isRoot(String userToken) throws InvalidTokenException {
 		if (_tokenUsernameMap.containsKey(userToken)) {
-			if (_tokenUsernameMap.get(userToken).equals("root")) {
-				return true;
-			}
-			else {
-				return false;
-			}
+			return _tokenUsernameMap.get(userToken).equals("root");
 		}
 		else {
 			throw new InvalidTokenException();
@@ -176,12 +171,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	}
 	
 	public boolean isInSession(String userToken) {
-		if (_tokenUsernameMap.containsKey(userToken)) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return _tokenUsernameMap.containsKey(userToken);
 	}
 	
 	public LocalTime getLastAccessTimeInSession(String userToken) {
