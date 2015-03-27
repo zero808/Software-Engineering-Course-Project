@@ -68,7 +68,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 
 		org.jdom2.Document docTest = new org.jdom2.Document();
 
-		docTest.setRootElement(spreadsheetSucessTest.exportToXML());
+		docTest.setRootElement(serviceSpreadsheet.exportToXML());
 		
 		Element testRootElement = docTest.getRootElement();
 		Spreadsheet testSpreadsheet = new Spreadsheet();
@@ -106,6 +106,10 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	@Test(expected = InvalidPermissionException.class)
 	public void userNotOwner() {
 		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
+		User luisUser = getUserFromUsername("lf");
+		User zeUser = getUserFromUsername("zz");
+
+		luisUser.removePermissionfrom(spreadsheetTest, zeUser);
 		
 		ExportDocument service = new ExportDocument(notOwnerToken, spreadsheetTest.getId());
 		service.execute();

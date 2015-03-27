@@ -233,12 +233,8 @@ public class User extends User_Base {
 
 	public boolean hasPermission(Spreadsheet s) {
 		BubbleDocs bd = BubbleDocs.getInstance();
-		
-		if(s.getPermissionOfUser(bd.getUserByUsername(getUsername())) == null) {
-			return false;
-		} else {
-			return true;
-		}
+
+		return s.getPermissionOfUser(bd.getUserByUsername(getUsername())).getRw();
 	}
 	
 	@Override
