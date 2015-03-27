@@ -1,21 +1,30 @@
 package pt.tecnico.bubbledocs.domain;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Random;
+
 import org.jdom2.Element;
+import org.joda.time.DateTime;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exception.InvalidPasswordException;
+import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
+import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class BubbleDocs extends BubbleDocs_Base {
-
+	
+	private ConcurrentHashMap<String, DateTime> _tokenTimeMap;
+	private ConcurrentHashMap<String, String> _tokenUsernameMap;
+	
 	public static BubbleDocs getInstance() {
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
 		if (bd == null)
 			bd = new BubbleDocs();
 		return bd;
 	}
-
+	
 	private BubbleDocs() {
 		FenixFramework.getDomainRoot().setBubbledocs(this);
 		setIdGlobal(1); // root id = 0
@@ -57,24 +66,24 @@ public class BubbleDocs extends BubbleDocs_Base {
 					User u = new User();
 					u.importFromXML(user);
 					r.addUser(u);	
-				} else {
+				} 
+				else {
 					Element spreadsheets = user.getChild("spreadsheets");
 					for (Element spreadsheetElement : spreadsheets.getChildren("spreadsheet")) {
-						try{
+						try {
 							getSpreadsheetByName(spreadsheetElement.getAttribute("name").getValue());
-						}catch (SpreadsheetDoesNotExistException ex){
+						} 
+						catch (SpreadsheetDoesNotExistException ex) {
 							Spreadsheet s = new Spreadsheet();
 							s.importFromXML(spreadsheetElement);
 							addSpreadsheets(s);
-						}	
+						}
 					}
 				}
-
 			}
 		}
 	}
-
-
+	
 	public User getUserByUsername(String username) {
 		for(User user : getUsersSet()) {
 			if(user.getUsername().equals(username)) {
@@ -82,6 +91,44 @@ public class BubbleDocs extends BubbleDocs_Base {
 			}
 		}
 		return null;
+	}
+	
+	public String getUsernameByToken(String userToken) throws InvalidTokenException {
+		if (_tokenUsernameMap.containsKey(userToken)) {
+			return _tokenUsernameMap.get(userToken);
+		}
+		else {
+			throw new InvalidTokenException();
+		}
+	}
+	
+	public String getTokenByUsername(String username) throws UserDoesNotExistException, UserNotInSessionException {
+		
+		if (getUserByUsername(username) == null) {
+			throw new UserDoesNotExistException();
+		}
+		
+		for (String userToken : _tokenUsernameMap.keySet()) {
+			if (_tokenUsernameMap.get(userToken).equals(username)) {
+				return userToken;
+			}
+		}
+		
+		throw new UserNotInSessionException(username);
+	}
+	
+	public boolean isRoot(String userToken) throws InvalidTokenException {
+		if (_tokenUsernameMap.containsKey(userToken)) {
+			if (_tokenUsernameMap.get(userToken).equals("root")) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			throw new InvalidTokenException();
+		}
 	}
 	
 	public Spreadsheet getSpreadsheetByName(String name) throws SpreadsheetDoesNotExistException {
@@ -101,18 +148,48 @@ public class BubbleDocs extends BubbleDocs_Base {
 		}
 		return null;
 	}
-
-	public void login(String username, String password) throws InvalidPasswordException, UserDoesNotExistException {
+	
+	public void login(String username, String password) throws UserDoesNotExistException, InvalidPasswordException {
 		
-		if(getUserByUsername(username) == null) {
+		if (getUserByUsername(username) == null) {
 			throw new UserDoesNotExistException();
 		}
 		
-		User u = getUserByUsername(username);
-		String pass = u.getPassword();
-		
+		String pass = getUserByUsername(username).getPassword();
 		if (pass == null || !(pass.equals(password))) {
 			throw new InvalidPasswordException();
+		}
+		
+		DateTime actualDate = new DateTime();				//Creates Actual Date
+		DateTime expirationDate = actualDate.plusHours(2);	//Creates Expiration Date (2 hours ahead)
+		
+		//If in session, resets user expiration
+		if (_tokenUsernameMap.containsValue(username)) {
+			_tokenTimeMap.replace(getTokenByUsername(username), expirationDate);
+		}
+		//If not, creates new token and new session
+		else {
+			Random rand = new Random();
+			String _token = username + rand.nextInt(10);
+			_tokenUsernameMap.put(_token, username);
+			_tokenTimeMap.put(_token, expirationDate);
+		}
+		
+		//Removes sessions of expired date users
+		for (String uToken : _tokenTimeMap.keySet()) {
+			if (_tokenTimeMap.get(uToken).isBefore(actualDate)) {
+				_tokenTimeMap.remove(uToken);
+				_tokenUsernameMap.remove(uToken);
+			}
+		}
+	}
+	
+	public boolean isInSession(String userToken) {
+		if (_tokenUsernameMap.containsKey(userToken)) {
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 	
@@ -130,5 +207,5 @@ public class BubbleDocs extends BubbleDocs_Base {
 			}
 		}
 	}
-
+	
 }// End BubbleDocs Class
