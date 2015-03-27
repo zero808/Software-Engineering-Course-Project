@@ -92,12 +92,12 @@ public class BubbleDocs extends BubbleDocs_Base {
 		return null;
 	}
 	
-	public String getUsernameByToken(String userToken) throws InvalidTokenException {
+	public String getUsernameByToken(String userToken) {
 		if (_tokenUsernameMap.containsKey(userToken)) {
 			return _tokenUsernameMap.get(userToken);
 		}
 		else {
-			throw new InvalidTokenException();
+			return null;
 		}
 	}
 	
@@ -154,34 +154,25 @@ public class BubbleDocs extends BubbleDocs_Base {
 		LocalTime expirationDate = actualDate.plusHours(2);	//Creates Expiration Date (2 hours ahead)
 		String userToken;
 		
-		if (!(_tokenTimeMap.isEmpty()) && !(_tokenUsernameMap.isEmpty())) {
-			//If in session, resets user expiration
-			if (_tokenUsernameMap.containsValue(username)) {
-				_tokenTimeMap.replace(getTokenByUsername(username), expirationDate);
-				userToken = getTokenByUsername(username);
-			}
-			//If not, creates new token and new session
-			else {
-				Random rand = new Random();
-				String token = username + rand.nextInt(10);
-				_tokenUsernameMap.put(token, username);
-				_tokenTimeMap.put(token, expirationDate);
-				userToken = token;
-			}
+		//If in session, deletes token
+		if (!(_tokenTimeMap.isEmpty()) && !(_tokenUsernameMap.isEmpty()) && _tokenUsernameMap.containsValue(username)) {
+			String token = getTokenByUsername(username);
+			_tokenUsernameMap.remove(token);
+			_tokenTimeMap.remove(token);
 		}
-		else {
-			Random rand = new Random();
-			String token = username + rand.nextInt(10);
-			_tokenUsernameMap.put(token, username);
-			_tokenTimeMap.put(token, expirationDate);
-			userToken = token;
-		}
+		
+		//New token
+		Random rand = new Random();
+		String token = username + rand.nextInt(10);
+		_tokenUsernameMap.put(token, username);
+		_tokenTimeMap.put(token, expirationDate);
+		userToken = token;
 		
 		//Removes sessions of expired date users
 		for (String uToken : _tokenTimeMap.keySet()) {
 			if (_tokenTimeMap.get(uToken).isBefore(actualDate)) {
-				_tokenTimeMap.remove(uToken);
 				_tokenUsernameMap.remove(uToken);
+				_tokenTimeMap.remove(uToken);
 			}
 		}
 		return userToken;
