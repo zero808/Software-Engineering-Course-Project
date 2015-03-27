@@ -14,31 +14,40 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
+import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
 
 public class ExportDocumentTest extends BubbleDocsServiceTest {
 
-	private String userToken;
-	//private String rootToken;
+	private String ownerToken;
+	private String notOwnerToken;
+	private String notInSessionToken = "antonio6";
 
 	public void populate4Test() {
 		BubbleDocs.getInstance();
+		
 		User luis = createUser("lf", "woot", "Luis");
+		this.ownerToken = addUserToSession("lf");
+		
+		User ze = createUser("zz", "pass", "Jose");
+		this.notOwnerToken = addUserToSession("zz");
+		
 		Spreadsheet teste = createSpreadSheet(luis, "teste", 10, 10);
 		luis.addSpreadsheets(teste);
+		
+		luis.givePermissionto(getSpreadSheet("teste"), ze, true);
+		
 		org.jdom2.Document DocTest = new org.jdom2.Document();
-
 		DocTest.setRootElement(teste.exportToXML());
-		//TODO Add root and user to session.
 	}
 
 	@Test
 	public void success() {
 		Spreadsheet spreadsheetSucessTest = getSpreadSheet("teste");
 		
-		ExportDocument service = new ExportDocument(userToken, spreadsheetSucessTest.getId());
+		ExportDocument service = new ExportDocument(ownerToken, spreadsheetSucessTest.getId());
 		service.execute();
 		
 		byte[] serviceDocBytes = service.getDocXML();
@@ -61,7 +70,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 
 		docTest.setRootElement(spreadsheetSucessTest.exportToXML());
 		
-		Element testRootElement = serviceDoc.getRootElement();
+		Element testRootElement = docTest.getRootElement();
 		Spreadsheet testSpreadsheet = new Spreadsheet();
 		testSpreadsheet.importFromXML(testRootElement);
 		
@@ -74,19 +83,43 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 
 	@Test(expected = SpreadsheetDoesNotExistException.class)
 	public void spreadsheetDoesNotExist() {
-		ExportDocument service = new ExportDocument(userToken, -1); //No spreadsheet should ever have -1 Id.
+		ExportDocument service = new ExportDocument(ownerToken, -1); //No spreadsheet should ever have -1 Id.
 		service.execute();
 	}
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void userNotInSession() {
-		//TODO Login needs to be implemented.
-		throw new UserNotInSessionException("TODO");
+		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
+		
+		ExportDocument service = new ExportDocument(notInSessionToken, spreadsheetTest.getId());
+		service.execute();
+	}
+	
+	@Test(expected = InvalidTokenException.class)
+	public void invalidToken() {
+		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
+		
+		ExportDocument service = new ExportDocument("", spreadsheetTest.getId());
+		service.execute();
+	}
+	
+	@Test(expected = InvalidPermissionException.class)
+	public void userNotOwner() {
+		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
+		
+		ExportDocument service = new ExportDocument(notOwnerToken, spreadsheetTest.getId());
+		service.execute();
 	}
 	
 	@Test(expected = InvalidPermissionException.class)
 	public void userWithoutPermission() {
-		//TODO
-		throw new InvalidPermissionException("TODO");
+		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
+		User luisUser = getUserFromUsername("lf");
+		User zeUser = getUserFromUsername("zz");
+
+		luisUser.removePermissionfrom(spreadsheetTest, zeUser);
+
+		ExportDocument service = new ExportDocument(notOwnerToken, spreadsheetTest.getId());
+		service.execute();
 	}
 }// End ExportDocumentTest class.

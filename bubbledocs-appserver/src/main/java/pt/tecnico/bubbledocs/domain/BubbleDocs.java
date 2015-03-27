@@ -26,7 +26,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	
 	private BubbleDocs() {
 		FenixFramework.getDomainRoot().setBubbledocs(this);
-		setIdGlobal(1); // root id = 0
+		setIdGlobal(0);
 	}
 	
 	public Element exportToXML() {
@@ -54,10 +54,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	public void importFromXML(Element bubbledocsElement) {
 
 		Element users = bubbledocsElement.getChild("users");
-
-		//Element root = users.getChild("root");
 		Root r = Root.getInstance();
-		//r.importFromXML(root);
 
 		for (Element user : users.getChildren("user")) {
 			if(!(user.getAttribute("username").getValue().equals("root"))) {
@@ -93,12 +90,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	}
 	
 	public String getUsernameByToken(String userToken) {
-		if (_tokenUsernameMap.containsKey(userToken)) {
-			return _tokenUsernameMap.get(userToken);
-		}
-		else {
-			return null;
-		}
+		return _tokenUsernameMap.get(userToken);
 	}
 	
 	private String getTokenByUsername(String username) throws UserDoesNotExistException, UserNotInSessionException {
@@ -195,20 +187,4 @@ public class BubbleDocs extends BubbleDocs_Base {
 	public LocalTime getLastAccessTimeInSession(String userToken) {
 		return _tokenTimeMap.get(userToken).minusHours(2);
 	}
-	
-	public void printUsers() {
-		for (User user : getUsersSet()) {
-			if (!(user.isRoot())) { // Only print the actual users without root.
-				user.toString();
-			}
-		}
-	}
-	public void printSpreadsheets() {
-		for (User user : getUsersSet()) {
-			for (Spreadsheet spreadsheet : user.getSpreadsheetsSet()) {
-				spreadsheet.toString();
-			}
-		}
-	}
-	
 }// End BubbleDocs Class
