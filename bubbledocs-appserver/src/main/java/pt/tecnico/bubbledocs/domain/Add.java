@@ -53,7 +53,6 @@ public class Add extends Add_Base {
 				l.importFromXML(argElement);
 				if(count==1) this.setArg1(l);
 				if(count==2) this.setArg2(l);
-				System.out.println("Iterei sobre o literal");
 			}
 			if (argElement.getName().equals("reference")){
 				Reference r = new Reference();
@@ -61,7 +60,6 @@ public class Add extends Add_Base {
 				r.importFromXML(argElement);
 				if(count==1) this.setArg1(r);
 				if(count==2) this.setArg2(r);
-				System.out.println("Iterei sobre a ref");
 			}
 			count++;
 		}
