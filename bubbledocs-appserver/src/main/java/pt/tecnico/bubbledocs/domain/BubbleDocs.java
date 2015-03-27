@@ -4,10 +4,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.Random;
 
 import org.jdom2.Element;
-import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
 import pt.ist.fenixframework.FenixFramework;
-import pt.tecnico.bubbledocs.exception.InvalidPasswordException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
@@ -15,7 +14,7 @@ import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class BubbleDocs extends BubbleDocs_Base {
 	
-	private ConcurrentHashMap<String, DateTime> _tokenTimeMap;
+	private ConcurrentHashMap<String, LocalTime> _tokenTimeMap;
 	private ConcurrentHashMap<String, String> _tokenUsernameMap;
 	
 	public static BubbleDocs getInstance() {
@@ -102,7 +101,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 		}
 	}
 	
-	public String getTokenByUsername(String username) throws UserDoesNotExistException, UserNotInSessionException {
+	private String getTokenByUsername(String username) throws UserDoesNotExistException, UserNotInSessionException {
 		
 		if (getUserByUsername(username) == null) {
 			throw new UserDoesNotExistException();
@@ -149,30 +148,33 @@ public class BubbleDocs extends BubbleDocs_Base {
 		return null;
 	}
 	
-	public void login(String username, String password) throws UserDoesNotExistException, InvalidPasswordException {
+	public String login(String username, String password) {
 		
-		if (getUserByUsername(username) == null) {
-			throw new UserDoesNotExistException();
+		LocalTime actualDate = new LocalTime();				//Creates Actual Date
+		LocalTime expirationDate = actualDate.plusHours(2);	//Creates Expiration Date (2 hours ahead)
+		String userToken;
+		
+		if (!(_tokenTimeMap.isEmpty()) && !(_tokenUsernameMap.isEmpty())) {
+			//If in session, resets user expiration
+			if (_tokenUsernameMap.containsValue(username)) {
+				_tokenTimeMap.replace(getTokenByUsername(username), expirationDate);
+				userToken = getTokenByUsername(username);
+			}
+			//If not, creates new token and new session
+			else {
+				Random rand = new Random();
+				String token = username + rand.nextInt(10);
+				_tokenUsernameMap.put(token, username);
+				_tokenTimeMap.put(token, expirationDate);
+				userToken = token;
+			}
 		}
-		
-		String pass = getUserByUsername(username).getPassword();
-		if (pass == null || !(pass.equals(password))) {
-			throw new InvalidPasswordException();
-		}
-		
-		DateTime actualDate = new DateTime();				//Creates Actual Date
-		DateTime expirationDate = actualDate.plusHours(2);	//Creates Expiration Date (2 hours ahead)
-		
-		//If in session, resets user expiration
-		if (_tokenUsernameMap.containsValue(username)) {
-			_tokenTimeMap.replace(getTokenByUsername(username), expirationDate);
-		}
-		//If not, creates new token and new session
 		else {
 			Random rand = new Random();
-			String _token = username + rand.nextInt(10);
-			_tokenUsernameMap.put(_token, username);
-			_tokenTimeMap.put(_token, expirationDate);
+			String token = username + rand.nextInt(10);
+			_tokenUsernameMap.put(token, username);
+			_tokenTimeMap.put(token, expirationDate);
+			userToken = token;
 		}
 		
 		//Removes sessions of expired date users
@@ -182,6 +184,12 @@ public class BubbleDocs extends BubbleDocs_Base {
 				_tokenUsernameMap.remove(uToken);
 			}
 		}
+		return userToken;
+	}
+	
+	public void removeUserFromSession(String uToken) {
+		_tokenTimeMap.remove(uToken);
+		_tokenUsernameMap.remove(uToken);
 	}
 	
 	public boolean isInSession(String userToken) {
@@ -191,6 +199,10 @@ public class BubbleDocs extends BubbleDocs_Base {
 		else {
 			return false;
 		}
+	}
+	
+	public LocalTime getLastAccessTimeInSession(String userToken) {
+		return _tokenTimeMap.get(userToken).minusHours(2);
 	}
 	
 	public void printUsers() {

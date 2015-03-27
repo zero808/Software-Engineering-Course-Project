@@ -30,8 +30,8 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	// returns the time of the last access for the user with token userToken.
 	// It must get this data from the session object of the application
 	private LocalTime getLastAccessTimeInSession(String userToken) {
-		// add code here
-		return null;
+		BubbleDocs bd = BubbleDocs.getInstance();
+		return bd.getLastAccessTimeInSession(userToken);
 	}
 
 	@Test
