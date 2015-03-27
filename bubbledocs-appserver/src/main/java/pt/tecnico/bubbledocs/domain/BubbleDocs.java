@@ -14,8 +14,8 @@ import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class BubbleDocs extends BubbleDocs_Base {
 	
-	private ConcurrentHashMap<String, LocalTime> _tokenTimeMap;
-	private ConcurrentHashMap<String, String> _tokenUsernameMap;
+	private ConcurrentHashMap<String, LocalTime> _tokenTimeMap = new ConcurrentHashMap<String, LocalTime>();
+	private ConcurrentHashMap<String, String> _tokenUsernameMap = new ConcurrentHashMap<String, String>();
 	
 	public static BubbleDocs getInstance() {
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
