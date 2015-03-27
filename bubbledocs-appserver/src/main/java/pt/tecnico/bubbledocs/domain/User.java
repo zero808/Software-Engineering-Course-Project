@@ -95,12 +95,6 @@ public class User extends User_Base {
 		}
 		return null;
 	}
-	
-	@Override
-	public void addSpreadsheets(Spreadsheet s) {
-		s.setUser(this);
-		super.addSpreadsheets(s);
-	}
 
 	public void addUser(User u) throws InvalidPermissionException {
 		throw new InvalidPermissionException(getUsername());
@@ -221,10 +215,10 @@ public class User extends User_Base {
 		}
 	}
 
-	public void removePermissionfrom(Spreadsheet s, User u) {
+	public void removePermissionfrom(Spreadsheet s, User u) throws InvalidPermissionException {
 		if (hasOwnerPermission(s) || hasPermission(s)) {
 			if(s.getPermissionOfUser(u) == null) {
-				throw new InvalidPermissionException(u.getName());
+				throw new InvalidPermissionException(u.getUsername());
 			} else {
 				s.getPermissionOfUser(u).setRw(false);
 			}
@@ -232,16 +226,19 @@ public class User extends User_Base {
 	}
 
 	public boolean hasOwnerPermission(Spreadsheet s) {
-		if (s.getUser().getName().equals(getName()))
+		if (s.getUser().getUsername().equals(getUsername()))
 			return true;
 		return false;
 	}
 
 	public boolean hasPermission(Spreadsheet s) {
-		if(getPermission().getSpreadsheet().getName().equals(s.getName()) && getPermission().getRw() == true) {
+		BubbleDocs bd = BubbleDocs.getInstance();
+		
+		if(s.getPermissionOfUser(bd.getUserByUsername(getUsername())) == null) {
+			return false;
+		} else {
 			return true;
 		}
-		return false;
 	}
 	
 	@Override

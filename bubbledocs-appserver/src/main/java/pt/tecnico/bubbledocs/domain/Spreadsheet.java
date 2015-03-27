@@ -215,6 +215,12 @@ public class Spreadsheet extends Spreadsheet_Base {
 		return _requestedCells;
 	}
 	
+	@Override
+	public void addPermissions(Permission p) {
+		p.setSpreadsheet(this);
+		super.addPermissions(p);
+	}
+	
 	public Permission getPermissionOfUser(User u) {
 		for(Permission p : getPermissionsSet()) {
 			if(p.getUser().getName().equals(u.getName())) {

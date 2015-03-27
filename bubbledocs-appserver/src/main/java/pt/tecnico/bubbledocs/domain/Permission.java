@@ -26,8 +26,6 @@ public class Permission extends Permission_Base {
 		setSpreadsheet(spred);
 
 		spred.addPermissions(this);
-		user.addSpreadsheets(spred);
-
 	}
 
 	public void edit(boolean b) {
