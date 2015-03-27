@@ -47,19 +47,32 @@ public class ExportDocument extends BubbleDocsService {
 		if(user == null) {
 			throw new UserDoesNotExistException();
 		}
+		
+		if(user.hasOwnerPermission(spreadsheet)) {
 
-		if(!(user.hasOwnerPermission(spreadsheet)) || !(user.hasPermission(spreadsheet))) {
-			throw new InvalidPermissionException(username);
-		}
+			jdomDoc.setRootElement(spreadsheet.exportToXML());
 
-		jdomDoc.setRootElement(spreadsheet.exportToXML());
+			XMLOutputter xml = new XMLOutputter();
+			try {
+				this.docXML = xml.outputString(jdomDoc).getBytes("UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				throw new ExportDocumentException(spreadsheet.getName());
+			}
+		}else {
+			if(user.hasPermission(spreadsheet)) {
+				jdomDoc.setRootElement(spreadsheet.exportToXML());
 
-		XMLOutputter xml = new XMLOutputter();
-		try {
-			this.docXML = xml.outputString(jdomDoc).getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			throw new ExportDocumentException(spreadsheet.getName());
+				XMLOutputter xml = new XMLOutputter();
+				try {
+					this.docXML = xml.outputString(jdomDoc).getBytes("UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+					throw new ExportDocumentException(spreadsheet.getName());
+				}
+			}else {
+				throw new InvalidPermissionException(username);
+			}
 		}
 	}	
 	
