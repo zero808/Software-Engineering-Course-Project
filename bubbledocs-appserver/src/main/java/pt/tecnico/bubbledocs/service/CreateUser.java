@@ -30,17 +30,16 @@ public class CreateUser extends BubbleDocsService {
 	protected void dispatch() throws BubbleDocsException {
 		
 		//the user is not logged in
-		//if(!validToken(this.userToken))
-		//	throw new UserNotInSessionException(this.newUsername);
+		if(!bd.isInSession(this.userToken))
+			throw new UserNotInSessionException(this.newUsername);
 		
 		//the username is already being used
 		if(this.bd.getUserByUsername(this.newUsername) != null)
 			throw new UserAlreadyExistsException(this.newUsername);
 		
-		//FIXME add the isRoot method
 		//only root can create new users
-//		if(!isRoot(this.userToken))
-//			throw new InvalidPermissionException(this.newUsername);
+		if(!bd.isRoot(this.userToken))
+			throw new InvalidPermissionException(this.newUsername);
 		
 		//make sure the username is not the empty string
 		if(this.newUsername.equals(""))
