@@ -10,19 +10,17 @@ public class AssignLiteralCell extends BubbleDocsService {
 	private String result;
 	private String _accessUsername;
 	private int _docId;
-	private int _cellRow;
-	private int _cellCol;
+	private String _cellId;
 	private int _literal;
 	
 	public AssignLiteralCell(String accessUsername, int docId, String cellId,
 			String literal) {
 		_accessUsername = accessUsername;
 		_docId = docId;
+		//testa o inteiro antes
 		_literal = Integer.parseInt(literal);
+		_cellId = cellId;
 		
-		String cell_parts[] = cellId.split(";");
-		_cellRow = Integer.parseInt(cell_parts[0]);
-		_cellCol = Integer.parseInt(cell_parts[1]);
 	}
 
 	@Override
@@ -30,8 +28,12 @@ public class AssignLiteralCell extends BubbleDocsService {
 		//TODO
 		//Validar sessão
 		//Validar permissão
+		
+		String cell_parts[] = _cellId.split(";");
+		int cellRow = Integer.parseInt(cell_parts[0]);
+		int cellCol = Integer.parseInt(cell_parts[1]);
 		Spreadsheet s = getSpreadsheet(_docId);
-		Cell c = getCellByCoords(s, _cellRow, _cellCol);
+		Cell c = getCellByCoords(s, cellRow, cellCol);
 		Literal l = new Literal(_literal);
 		c.setContent(l);
 	}

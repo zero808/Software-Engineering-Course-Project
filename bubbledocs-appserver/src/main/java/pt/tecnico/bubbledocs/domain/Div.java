@@ -1,7 +1,5 @@
 package pt.tecnico.bubbledocs.domain;
 
-import java.util.ArrayList;
-
 import org.jdom2.Element;
 
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
@@ -11,51 +9,21 @@ public class Div extends Div_Base {
 	public Div() {
 		super();
 	}
-
-	public Div(Literal arg1, Literal arg2) {
-		super();
-		arg1.setBinary(this);
-		arg2.setBinary(this);
-		super.addLiterals(arg1);
-		super.addLiterals(arg2);
-	}
-
-	public Div(Reference arg1, Literal arg2) {
-		super();
-		arg1.setBinary(this);
-		arg2.setBinary(this);
-		super.addReferences(arg1);
-		super.addLiterals(arg2);
-	}
-
-	public Div(Literal arg1, Reference arg2) {
-		super();
-		arg1.setBinary(this);
-		arg2.setBinary(this);
-		super.addReferences(arg2);
-		super.addLiterals(arg1);
-	}
-
-	public Div(Reference arg1, Reference arg2) {
-		super();
-		arg1.setBinary(this);
-		arg2.setBinary(this);
-		super.addReferences(arg1);
-		super.addReferences(arg2);
+	
+	public Div(Argument arg1, Argument arg2){
+		Content a1 = arg1.retrieveContent();
+		Content a2 = arg2.retrieveContent();
+		a1.setBinary1(this);
+		a2.setBinary1(this);
+		
+		setArg1((Content)arg1);
+		setArg2((Content)arg2);
 	}
 
 	@Override
 	public int getValue() {
-		ArrayList<Integer> values = new ArrayList<Integer>();
-		if (super.getReferencesSet().size() + super.getLiteralsSet().size() != 2) {
-			throw new InvalidArgumentsException();
-		}
-		for (Reference r : super.getReferencesSet())
-			values.add(r.getValue());
-		for (Literal l : super.getLiteralsSet())
-			values.add(l.getValue());
-		return values.get(0) / values.get(1);
-		// TODO Needs to check for #VALUES, dividing by 0 and the order of the arguments.
+		return super.getArg1().getValue()/super.getArg2().getValue();
+		// TODO Needs to check for #VALUES and dividing by 0.
 	}
 
 	@Override
@@ -64,10 +32,9 @@ public class Div extends Div_Base {
 		Element bf = new Element ("binary_function");
 		Element div = new Element ("div");
 		
-		for (Reference r : super.getReferencesSet())
-			div.addContent(r.exportToXML());
-		for (Literal l : super.getLiteralsSet())
-			div.addContent(l.exportToXML());
+		div.addContent(super.getArg1().exportToXML());
+		div.addContent(super.getArg2().exportToXML());		
+
 		bf.addContent(div);
 		f.addContent(bf);
 		
@@ -76,25 +43,34 @@ public class Div extends Div_Base {
 
 	@Override
 	public void importFromXML(Element DivElement) {
-		for (Element argElement : DivElement.getChildren("literal")) {
-			Literal l = new Literal();
-			l.setBinary(this);
-			l.importFromXML(argElement);
-			addLiterals(l);
-			
+		
+		int count=1;
+		
+		for (Element argElement : DivElement.getChildren()){
+			Content c = null;
+			if (argElement.getName().equals("literal")){
+				Literal l = new Literal();
+				l.setBinary1(this);
+				l.importFromXML(argElement);
+				if(count==1) this.setArg1(l);
+				if(count==2) this.setArg2(l);
+				System.out.println("Iterei sobre o literal");
+			}
+			if (argElement.getName().equals("reference")){
+				Reference r = new Reference();
+				r.setBinary1(this);
+				r.importFromXML(argElement);
+				if(count==1) this.setArg1(r);
+				if(count==2) this.setArg2(r);
+				System.out.println("Iterei sobre a ref");
+			}
+			count++;
 		}
-
-		for (Element argElement : DivElement.getChildren("reference")) {
-			Reference r = new Reference();
-			r.setBinary(this);
-			r.importFromXML(argElement);
-			addReferences(r);
-		}
+		
 	}
 	
 	@Override
 	public String toString() {
 		return "Funcao Div";
-		//TODO Make it print the arguments and the value also.
 	}
 }

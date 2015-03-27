@@ -2,7 +2,7 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
 
-public class Literal extends Literal_Base {
+public class Literal extends Literal_Base implements Argument{
 
 	public Literal() {
 		super();
@@ -33,5 +33,10 @@ public class Literal extends Literal_Base {
 	@Override
 	public void importFromXML(Element element) {
 		setVal(Integer.parseInt(element.getAttribute("value").getValue()));
+	}
+
+	@Override
+	public Content retrieveContent() {
+		return this;
 	}
 }

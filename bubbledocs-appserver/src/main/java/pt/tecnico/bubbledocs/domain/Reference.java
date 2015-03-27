@@ -2,7 +2,7 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
 
-public class Reference extends Reference_Base {
+public class Reference extends Reference_Base implements Argument{
 
 	public Reference() {
 		super();
@@ -17,7 +17,7 @@ public class Reference extends Reference_Base {
 	@Override
 	public String toString() {
 		if(super.getReferencedCell().getContent() == null) 
-			return "\n#VALUE";
+			return "#VALUE";
 		else
 			return super.getReferencedCell().getContent().toString();
 	}
@@ -60,13 +60,19 @@ public class Reference extends Reference_Base {
 
 	@Override
 	public void importFromXML(Element element) {
+		
 		int row = Integer.parseInt(element.getAttribute("row").getValue());
 		int collumn = Integer.parseInt(element.getAttribute("collumn").getValue());
 		
 		Spreadsheet ss;
-		if(getBinary()!=null) ss = getBinary().getCell().getSpreadsheet();
+		if(getBinary1()!=null) ss = getBinary1().getCell().getSpreadsheet();
 		else ss = getCell().getSpreadsheet();
 		
 		setReferencedCell(ss.getCellByCoords(row, collumn));	
+	}
+
+	@Override
+	public Content retrieveContent() {
+		return this;
 	}
 }

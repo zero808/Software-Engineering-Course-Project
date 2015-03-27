@@ -8,50 +8,27 @@ public abstract class Binary extends Binary_Base {
 		super();
 	}
 
-	public Binary(Literal arg1, Literal arg2) {
-		super();
-		arg1.setBinary(this);
-		arg2.setBinary(this);
-		super.addLiterals(arg1);
-		super.addLiterals(arg2);
-	}
-
-	public Binary(Reference arg1, Literal arg2) {
-		super();
-		arg1.setBinary(this);
-		arg2.setBinary(this);
-		super.addReferences(arg1);
-		super.addLiterals(arg2);
-	}
-
-	public Binary(Literal arg1, Reference arg2) {
-		super();
-		arg1.setBinary(this);
-		arg2.setBinary(this);
-		super.addReferences(arg2);
-		super.addLiterals(arg1);
-	}
-
-	public Binary(Reference arg1, Reference arg2) {
-		super();
-		arg1.setBinary(this);
-		arg2.setBinary(this);
-		super.addReferences(arg1);
-		super.addReferences(arg2);
+	public Binary(Argument arg1, Argument arg2){
+		Content a1 = (Content)arg1;
+		Content a2 = (Content)arg2;
+		a1.setBinary1(this);
+		a2.setBinary1(this);
+		
+		setArg1((Content)arg1);
+		setArg2((Content)arg2);
 	}
 	
 	public void delete() {
-		for (Literal l : super.getLiteralsSet()) {
-			l.setBinary(null);
-			super.removeLiterals(l);
-			l.delete();
-		}
-		for (Reference r : super.getReferencesSet()) {
-			r.setBinary(null);
-			super.removeReferences(r);
-			r.delete();
-
-		}
+		Content a1 = getArg1();
+		Content a2 = getArg2();
+		
+		a1.setBinary1(null);
+		a2.setBinary1(null);
+		setArg1(null);
+		setArg2(null);
+		a1.delete();
+		a2.delete();
+		
 		setCell(null);
 		deleteDomainObject();
 	}
