@@ -120,18 +120,19 @@ public abstract class BubbleDocsServiceTest {
 
 	// put a user into session and returns the token associated to it
 	String addUserToSession(String username) {
-		// add code here
-		return null;
+		BubbleDocs bd = BubbleDocs.getInstance();
+		return bd.login(username, bd.getUserByUsername(username).getPassword());
 	}
 
 	// remove a user from session given its token
 	void removeUserFromSession(String token) {
-		// add code here
+		BubbleDocs bd = BubbleDocs.getInstance();
+		bd.removeUserFromSession(token);
 	}
 
 	// return the user registered in session whose token is equal to token
 	User getUserFromSession(String token) {
-		// add code here
-		return null;
+		BubbleDocs bd = BubbleDocs.getInstance();
+		return bd.getUserByUsername(bd.getUsernameByToken(token));
 	}
 }// End BubbleDocsServiceTest class.
