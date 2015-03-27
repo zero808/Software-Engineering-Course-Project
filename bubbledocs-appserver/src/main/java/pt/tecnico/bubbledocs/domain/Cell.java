@@ -108,6 +108,12 @@ public class Cell extends Cell_Base {
 		}
 	}
 
+	public boolean hasValidResult(){
+		if (getContent() == null) return false;
+		if (getContent().toString().equals("#VALUE")) return false;
+		return true;
+	}
+	
 	public void delete() {
 		if(super.getContent() != null) {
 			super.getContent().delete();
