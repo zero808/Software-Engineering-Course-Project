@@ -7,7 +7,7 @@ import org.junit.Test;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.exception.OutofBondsException;
+import pt.tecnico.bubbledocs.exception.InvalidBoundsException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
@@ -27,6 +27,7 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 		User ze = createUser("zz", "pass", "Jose");
 		this.userWithSpredToken = addUserToSession("zz");
 		
+		//isto parece mau. Estou a fazer uma coisa que vou testar ;_;
 		Spreadsheet teste = createSpreadSheet(ze, "teste", 10, 10);
 		luis.addSpreadsheets(teste);
 		
@@ -40,10 +41,14 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 		service.execute();
 		
 		int expected_id = 1;
+
+		Spreadsheet s = service.getSheet();
 		
-		int result = service.getSheetId();
-		
-		assertEquals(expected_id, result);
+		assertEquals(expected_id, s.getId());
+		assertEquals("teste", s.getName());
+		assertEquals(getUserFromSession(userNoSpredToken).getUsername(), s.getUser().getUsername());
+		assertEquals(10, s.getNRows());
+		assertEquals(10, s.getNCols());
 	}
 	
 	@Test
@@ -53,28 +58,32 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 		
 		int expected_id = 1;
 		
-		int result = service.getSheetId();
+		Spreadsheet s = service.getSheet();
 		
-		assertEquals(expected_id, result);
+		assertEquals(expected_id, s.getId());
+		assertEquals("teste", s.getName());
+		assertEquals(getUserFromSession(userWithSpredToken).getUsername(), s.getUser().getUsername());
+		assertEquals(10, s.getNRows());
+		assertEquals(10, s.getNCols());
 	}
 	
-	@Test(expected = OutofBondsException.class)
+	@Test(expected = InvalidBoundsException.class)
 	public void outofBonds1() {
 		
-		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,"teste",-1,10);
+		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,"teste",-10,10);
 		service.execute();
 	}
 	
-	@Test(expected = OutofBondsException.class)
+	@Test(expected = InvalidBoundsException.class)
 	public void outofBonds2() {
-		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,"teste",10,-1);
+		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,"teste",10,-10);
 		service.execute();
 	}
 	
-	@Test(expected = OutofBondsException.class)
+	@Test(expected = InvalidBoundsException.class)
 	public void outofBonds3() {
 		
-		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,"teste",-1,-1);
+		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,"teste",0,0);
 		service.execute();
 	}
 	
