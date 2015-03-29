@@ -174,6 +174,17 @@ public class BubbleDocs extends BubbleDocs_Base {
 		return _tokenUsernameMap.containsKey(userToken);
 	}
 	
+	public String getTokenByUsernameNoException(String username){
+		
+		for (String userToken : _tokenUsernameMap.keySet()) {
+			if (_tokenUsernameMap.get(userToken).equals(username)) {
+				return userToken;
+			}
+		}
+		
+		return null;
+	}
+	
 	public LocalTime getLastAccessTimeInSession(String userToken) {
 		return _tokenTimeMap.get(userToken).minusHours(2);
 	}
