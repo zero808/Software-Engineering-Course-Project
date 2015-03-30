@@ -6,7 +6,7 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
-import pt.tecnico.bubbledocs.exception.OutofBondsException;
+import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 
 public abstract class BubbleDocsService {
@@ -31,10 +31,10 @@ public abstract class BubbleDocsService {
 		return s;
 	}
 	
-	static Cell getCellByCoords(Spreadsheet s, int row, int collumn) throws OutofBondsException {
+	static Cell getCellByCoords(Spreadsheet s, int row, int collumn) throws OutofBoundsException {
 		Cell c = s.getCellByCoords(row, collumn);
 		if(c == null) {
-			throw new OutofBondsException(row, collumn);
+			throw new OutofBoundsException(row, collumn);
 		}
 		
 		return c;

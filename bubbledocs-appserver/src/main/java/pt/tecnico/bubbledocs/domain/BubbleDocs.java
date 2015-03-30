@@ -126,6 +126,15 @@ public class BubbleDocs extends BubbleDocs_Base {
 		throw new SpreadsheetDoesNotExistException();
 	}
 	
+	public Spreadsheet getSpreadsheetByNameNoException(String name) {
+		for (Spreadsheet spreadsheet : getSpreadsheetsSet()) {
+			if (spreadsheet.getName().equals(name)) {
+				return spreadsheet;
+			}
+		}
+		return null;
+	}
+	
 	public Spreadsheet getSpreadsheetById(int id) {
 		for (Spreadsheet spreadsheet : getSpreadsheetsSet()) {
 			if (spreadsheet.getId() == id) {

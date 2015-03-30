@@ -2,7 +2,7 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
 
-import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
+//import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
 public class Sub extends Sub_Base {
 
@@ -47,7 +47,7 @@ public class Sub extends Sub_Base {
 		int count=1;
 		
 		for (Element argElement : SubElement.getChildren()){
-			Content c = null;
+//			Content c = null;
 			if (argElement.getName().equals("literal")){
 				Literal l = new Literal();
 				l.setBinary1(this);

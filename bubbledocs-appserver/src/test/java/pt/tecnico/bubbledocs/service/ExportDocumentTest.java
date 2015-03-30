@@ -77,6 +77,44 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		assertEquals(testSpreadsheet.getNRows(), serviceSpreadsheet.getNRows());
 		assertEquals(testSpreadsheet.getNCols(), serviceSpreadsheet.getNCols());
 	}
+	
+	@Test
+	public void successNotOwner() {
+		Spreadsheet spreadsheetSucessTest = getSpreadSheet("teste");
+
+		ExportDocument service = new ExportDocument(notOwnerToken, spreadsheetSucessTest.getId());
+		service.execute();
+
+		byte[] serviceDocBytes = service.getDocXML();
+
+		org.jdom2.Document serviceDoc = new org.jdom2.Document();
+
+		SAXBuilder builder = new SAXBuilder();
+		builder.setIgnoringElementContentWhitespace(true);
+		try {
+			serviceDoc = builder.build(new ByteArrayInputStream(serviceDocBytes));
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		}
+
+		Element serviceRootElement = serviceDoc.getRootElement();
+		Spreadsheet serviceSpreadsheet = new Spreadsheet();
+		serviceSpreadsheet.importFromXML(serviceRootElement);
+
+		org.jdom2.Document docTest = new org.jdom2.Document();
+
+		docTest.setRootElement(serviceSpreadsheet.exportToXML());
+
+		Element testRootElement = docTest.getRootElement();
+		Spreadsheet testSpreadsheet = new Spreadsheet();
+		testSpreadsheet.importFromXML(testRootElement);
+
+		assertEquals(testSpreadsheet.getName(), serviceSpreadsheet.getName());
+		assertEquals(testSpreadsheet.getDate(), serviceSpreadsheet.getDate());
+		assertEquals(testSpreadsheet.getUser().getUsername(), serviceSpreadsheet.getUser().getUsername());
+		assertEquals(testSpreadsheet.getNRows(), serviceSpreadsheet.getNRows());
+		assertEquals(testSpreadsheet.getNCols(), serviceSpreadsheet.getNCols());
+	}
 
 	@Test(expected = SpreadsheetDoesNotExistException.class)
 	public void spreadsheetDoesNotExist() {

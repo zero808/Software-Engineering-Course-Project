@@ -2,7 +2,7 @@ package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Cell;
-import pt.tecnico.bubbledocs.domain.Content;
+//import pt.tecnico.bubbledocs.domain.Content;
 import pt.tecnico.bubbledocs.domain.Literal;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
@@ -20,8 +20,7 @@ public class AssignLiteralCell extends BubbleDocsService {
 	private String _cellId;
 	private int _literal;
 	
-	public AssignLiteralCell(String tokenUser, int docId, String cellId,
-			String literal) {
+	public AssignLiteralCell(String tokenUser, int docId, String cellId, String literal) {
 		_tokenUser = tokenUser;
 		_docId = docId;
 		//testa o inteiro antes

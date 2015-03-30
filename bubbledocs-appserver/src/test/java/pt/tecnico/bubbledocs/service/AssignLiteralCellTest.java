@@ -5,16 +5,16 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
-import pt.tecnico.bubbledocs.domain.Cell;
+//import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Literal;
-import pt.tecnico.bubbledocs.domain.Reference;
+//import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.CellIsProtectedException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
-import pt.tecnico.bubbledocs.exception.InvalidReferenceException;
+//import pt.tecnico.bubbledocs.exception.InvalidReferenceException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
-import pt.tecnico.bubbledocs.exception.OutofBondsException;
+import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
@@ -57,7 +57,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		assertEquals(expected_literal.toString(), result);
 	}
 
-	@Test(expected = OutofBondsException.class)
+	@Test(expected = OutofBoundsException.class)
 	public void cellIsOutOfBonds() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "11;11"; // Is an invalid position since the spreadsheet
@@ -143,4 +143,4 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 				testSpreadsheet.getId(), cell, literal);
 		service.execute();
 	}
-}// End AssignReferenceCellTest class.
+}// End AssignLiteralCellTest class.

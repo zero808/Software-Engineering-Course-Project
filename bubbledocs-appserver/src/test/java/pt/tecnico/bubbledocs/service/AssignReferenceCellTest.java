@@ -10,10 +10,11 @@ import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.CellIsProtectedException;
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidReferenceException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
-import pt.tecnico.bubbledocs.exception.OutofBondsException;
+import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
@@ -56,6 +57,33 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		assertEquals(expected_reference.toString(), result);
 	}
 	
+	@Test
+	public void successNotOwner() {
+		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
+		String cell = "1;1";
+		String reference = "1;2";
+		
+		Cell expected_cell = new Cell(1, 1, false);
+		Reference expected_reference = new Reference(expected_cell);
+		
+		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
+		service.execute();
+		
+		String result = service.getResult();
+		
+		assertEquals(expected_reference.toString(), result);
+	}
+	
+	@Test(expected = InvalidArgumentsException.class)
+	public void invalidArguments() {
+		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
+		String cell = "-1;-1";
+		String reference = "-1;-1";
+		
+		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
+		service.execute();
+	}
+	
 	@Test(expected = InvalidReferenceException.class)
 	public void referenceIsInvalid() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
@@ -66,7 +94,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
-	@Test(expected = OutofBondsException.class)
+	@Test(expected = OutofBoundsException.class)
 	public void cellIsOutOfBonds() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "11;11"; //Is an invalid position since the spreadsheet is 10x10.
