@@ -74,4 +74,4 @@ public class ExportDocument extends BubbleDocsService {
 	public byte[] getDocXML() {
 		return docXML;
 	}
-}// End of ExportDocument class.
+}// End of ExportDocument class

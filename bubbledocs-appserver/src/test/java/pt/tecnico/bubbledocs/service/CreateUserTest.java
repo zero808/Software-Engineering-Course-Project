@@ -11,8 +11,6 @@ import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
-//TODO Exceptions might need to change or even create new ones.
-
 public class CreateUserTest extends BubbleDocsServiceTest {
 
 	// the tokens

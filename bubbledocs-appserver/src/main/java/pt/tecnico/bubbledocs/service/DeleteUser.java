@@ -47,4 +47,4 @@ public class DeleteUser extends BubbleDocsService {
 			bd.removeUserFromSession(tok);
 		}
 	}
-}// End DeleteUser Class.
+}// End DeleteUser Class

@@ -34,8 +34,6 @@ public class AssignLiteralCell extends BubbleDocsService {
 		BubbleDocs bd = getBubbleDocs();
 		String username = bd.getUsernameByToken(_tokenUser);
 		
-		//TODO
-		//Validar sessão
 		if(_tokenUser.equals("")) {
 			throw new InvalidTokenException();
 		}
@@ -83,5 +81,4 @@ public class AssignLiteralCell extends BubbleDocsService {
 	public String getResult() {
 		return result;
 	}
-	
-}
+}// End AssignLiteralCell class

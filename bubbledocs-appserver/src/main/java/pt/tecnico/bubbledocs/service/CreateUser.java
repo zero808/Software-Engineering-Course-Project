@@ -47,4 +47,4 @@ public class CreateUser extends BubbleDocsService {
 		user = new User(this.newUsername, this.name, this.password);
 		this.bd.addUsers(user);
 	}
-}
+}// End CreateUser class
