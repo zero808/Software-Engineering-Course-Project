@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
@@ -26,7 +25,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 	private String notInSessionToken = "antonio6";
 
 	public void populate4Test() {
-		BubbleDocs.getInstance();
+		getBubbleDocs();
 		
 		User luis = createUser("lf", "woot", "Luis");
 		this.ownerToken = addUserToSession("lf");

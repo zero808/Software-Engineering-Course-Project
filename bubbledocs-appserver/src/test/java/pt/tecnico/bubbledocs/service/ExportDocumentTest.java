@@ -10,7 +10,6 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.junit.Test;
 
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
@@ -26,7 +25,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	private String notInSessionToken = "antonio6";
 
 	public void populate4Test() {
-		BubbleDocs.getInstance();
+		getBubbleDocs();
 		
 		User luis = createUser("lf", "woot", "Luis");
 		this.ownerToken = addUserToSession("lf");

@@ -23,14 +23,14 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	@Override
 	public void populate4Test() {
-		BubbleDocs.getInstance();
+		getBubbleDocs();
 		createUser(USERNAME, PASSWORD, "João Pereira");
 	}
 
 	// returns the time of the last access for the user with token userToken.
 	// It must get this data from the session object of the application
 	private LocalTime getLastAccessTimeInSession(String userToken) {
-		BubbleDocs bd = BubbleDocs.getInstance();
+		BubbleDocs bd = getBubbleDocs();
 		return bd.getLastAccessTimeInSession(userToken);
 	}
 

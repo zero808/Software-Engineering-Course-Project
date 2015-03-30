@@ -19,7 +19,7 @@ public class DeleteUser extends BubbleDocsService {
 
 	@Override
 	protected void dispatch() throws BubbleDocsException {
-		BubbleDocs bd = BubbleDocs.getInstance();
+		BubbleDocs bd = getBubbleDocs();
 
 		// root is not in session
 		if (!bd.isInSession(userToken))

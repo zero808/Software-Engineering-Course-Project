@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
 //import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Literal;
 //import pt.tecnico.bubbledocs.domain.Reference;
@@ -26,7 +25,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	private String notInSessionToken = "antonio6";
 
 	public void populate4Test() {
-		BubbleDocs.getInstance();
+		getBubbleDocs();
 
 		User leo = createUser("lv", "pass", "Leo");
 		this.ownerToken = addUserToSession("lv");

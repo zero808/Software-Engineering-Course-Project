@@ -22,7 +22,7 @@ public class CreateUser extends BubbleDocsService {
 		this.newUsername = newUsername;
 		this.password = password;
 		this.name = name;
-		this.bd = BubbleDocs.getInstance();
+		this.bd = getBubbleDocs();
 	}
 
 	@Override

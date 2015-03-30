@@ -25,7 +25,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 
 	@Override
 	public void populate4Test() {
-		BubbleDocs.getInstance();
+		getBubbleDocs();
 		createUser(USERNAME, PASSWORD, "António Rito Silva");
 		User smf = createUser(USERNAME_TO_DELETE, "smf", "Sérgio Fernandes");
 		createSpreadSheet(smf, USERNAME_TO_DELETE, 20, 20);
@@ -35,7 +35,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void success() {
-		BubbleDocs bd = BubbleDocs.getInstance();
+		BubbleDocs bd = getBubbleDocs();
 		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
 		service.execute();
 		
@@ -57,7 +57,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	 */
 	@Test
 	public void successToDeleteIsNotInSession() {
-		BubbleDocs bd = BubbleDocs.getInstance();
+		BubbleDocs bd = getBubbleDocs();
 		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
 		service.execute();
 		
@@ -79,7 +79,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	 */
 	@Test
 	public void successToDeleteIsInSession() {
-		BubbleDocs bd = BubbleDocs.getInstance();
+		BubbleDocs bd = getBubbleDocs();
 		String token = addUserToSession(USERNAME_TO_DELETE);
 		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
 		service.execute();

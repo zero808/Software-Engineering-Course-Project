@@ -1,7 +1,6 @@
 package pt.tecnico.bubbledocs.service;
 
 import pt.ist.fenixframework.Atomic;
-import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
@@ -16,11 +15,12 @@ public abstract class BubbleDocsService {
 		dispatch();
 	}
 	
-	static BubbleDocs getBubbleDocs() {
-		return FenixFramework.getDomainRoot().getBubbledocs();
+	protected static BubbleDocs getBubbleDocs() {
+		//return FenixFramework.getDomainRoot().getBubbledocs();
+		return BubbleDocs.getInstance();
 	}
 	
-	static Spreadsheet getSpreadsheet(int docId) throws SpreadsheetDoesNotExistException {
+	protected static Spreadsheet getSpreadsheet(int docId) throws SpreadsheetDoesNotExistException {
 		BubbleDocs bd = getBubbleDocs();
 		Spreadsheet s = bd.getSpreadsheetById(docId);
 		
@@ -31,7 +31,7 @@ public abstract class BubbleDocsService {
 		return s;
 	}
 	
-	static Cell getCellByCoords(Spreadsheet s, int row, int collumn) throws OutofBoundsException {
+	protected static Cell getCellByCoords(Spreadsheet s, int row, int collumn) throws OutofBoundsException {
 		Cell c = s.getCellByCoords(row, collumn);
 		if(c == null) {
 			throw new OutofBoundsException(row, collumn);
