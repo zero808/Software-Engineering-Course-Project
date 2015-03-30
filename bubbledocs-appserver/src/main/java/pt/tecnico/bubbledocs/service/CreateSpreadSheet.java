@@ -30,7 +30,7 @@ public class CreateSpreadSheet extends BubbleDocsService {
 		this.userToken = userToken;
 		this.name = name;
 		nrow = rows;
-		ncol = columns;	
+		ncol = columns;
 	}
 
 	@Override
