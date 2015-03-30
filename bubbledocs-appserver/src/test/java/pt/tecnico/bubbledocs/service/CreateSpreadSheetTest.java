@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidBoundsException;
@@ -18,7 +17,7 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 	private static final String legalCharTestName = "Az1 9_+-";
 	@Override
 	public void populate4Test() {
-		BubbleDocs.getInstance();
+		getBubbleDocs();
 		
 		//this user has no previous spreadsheet
 		User luis = createUser("lf", "woot", "Luis");

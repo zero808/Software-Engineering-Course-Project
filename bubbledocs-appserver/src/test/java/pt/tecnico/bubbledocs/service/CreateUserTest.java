@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
@@ -24,7 +23,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 
 	@Override
 	public void populate4Test() {
-		BubbleDocs.getInstance();
+		getBubbleDocs();
 		createUser(USERNAME, PASSWORD, "António Rito Silva");
 		root = addUserToSession("root");
 		ars = addUserToSession("ars");

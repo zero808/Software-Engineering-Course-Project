@@ -47,7 +47,12 @@ public abstract class BubbleDocsServiceTest {
 	
 	// Auxiliary methods that access the domain layer and are needed in the test classes.
 	// For defining the initial state and checking that the service has the expected behavior.
-	User createUser(String username, String password, String name) throws UserAlreadyExistsException, InvalidArgumentsException {
+	protected static BubbleDocs getBubbleDocs() {
+		//return FenixFramework.getDomainRoot().getBubbledocs();
+		return BubbleDocs.getInstance();
+	}
+	
+	protected User createUser(String username, String password, String name) throws UserAlreadyExistsException, InvalidArgumentsException {
 		Root r = Root.getInstance();
 		User user = new User(username, name, password);
 		
@@ -56,7 +61,7 @@ public abstract class BubbleDocsServiceTest {
 		return user;
 	}
 
-	public Spreadsheet createSpreadSheet(User user, String name, int row, int column) {
+	protected Spreadsheet createSpreadSheet(User user, String name, int row, int column) {
 		Spreadsheet spreadsheet = new Spreadsheet(name, new DateTime(), row, column);
 		
 		user.addSpreadsheets(spreadsheet);
@@ -65,8 +70,8 @@ public abstract class BubbleDocsServiceTest {
 	}
 
 	// returns a spreadsheet whose name is equal to name
-	public Spreadsheet getSpreadSheet(String name) throws SpreadsheetDoesNotExistException {
-		BubbleDocs bd = BubbleDocs.getInstance();
+	protected Spreadsheet getSpreadSheet(String name) throws SpreadsheetDoesNotExistException {
+		BubbleDocs bd = getBubbleDocs();
 		Spreadsheet s = bd.getSpreadsheetByName(name);
 		
 		if(s == null) {
@@ -77,8 +82,8 @@ public abstract class BubbleDocsServiceTest {
 	}
 	
 	// returns a cell from the spreadsheet with the given coordinates.
-	public Cell getCellByCoords(String spreadsheetName, int row, int collumn) throws SpreadsheetDoesNotExistException, OutofBoundsException {
-		BubbleDocs bd = BubbleDocs.getInstance();
+	protected Cell getCellByCoords(String spreadsheetName, int row, int collumn) throws SpreadsheetDoesNotExistException, OutofBoundsException {
+		BubbleDocs bd = getBubbleDocs();
 		Spreadsheet s = bd.getSpreadsheetByName(spreadsheetName);
 		
 		if(s == null) {
@@ -95,8 +100,8 @@ public abstract class BubbleDocsServiceTest {
 	}
 	
 	// protects a cell from being overwritten.
-	public void protectCell(String spreadsheetName, int row, int collumn) throws SpreadsheetDoesNotExistException {
-		BubbleDocs bd = BubbleDocs.getInstance();
+	protected void protectCell(String spreadsheetName, int row, int collumn) throws SpreadsheetDoesNotExistException {
+		BubbleDocs bd = getBubbleDocs();
 		Spreadsheet s = bd.getSpreadsheetByName(spreadsheetName);
 
 		if(s == null) {
@@ -107,8 +112,9 @@ public abstract class BubbleDocsServiceTest {
 	}
 
 	// returns the user registered in the application whose username is equal to username
-	User getUserFromUsername(String username) throws UserDoesNotExistException {
-		BubbleDocs bd = BubbleDocs.getInstance();
+	//TODO Change to return null and not throw exception? -> Requires changes in tests
+	protected User getUserFromUsername(String username) throws UserDoesNotExistException {
+		BubbleDocs bd = getBubbleDocs();
 		User u = bd.getUserByUsername(username);
 		
 		if(u == null) {
@@ -119,20 +125,20 @@ public abstract class BubbleDocsServiceTest {
 	}
 
 	// put a user into session and returns the token associated to it
-	String addUserToSession(String username) {
-		BubbleDocs bd = BubbleDocs.getInstance();
+	protected String addUserToSession(String username) {
+		BubbleDocs bd = getBubbleDocs();
 		return bd.login(username, bd.getUserByUsername(username).getPassword());
 	}
 
 	// remove a user from session given its token
-	void removeUserFromSession(String token) {
-		BubbleDocs bd = BubbleDocs.getInstance();
+	protected void removeUserFromSession(String token) {
+		BubbleDocs bd = getBubbleDocs();
 		bd.removeUserFromSession(token);
 	}
 
 	// return the user registered in session whose token is equal to token
-	User getUserFromSession(String token) {
-		BubbleDocs bd = BubbleDocs.getInstance();
+	protected User getUserFromSession(String token) {
+		BubbleDocs bd = getBubbleDocs();
 		return bd.getUserByUsername(bd.getUsernameByToken(token));
 	}
 }// End BubbleDocsServiceTest class.
