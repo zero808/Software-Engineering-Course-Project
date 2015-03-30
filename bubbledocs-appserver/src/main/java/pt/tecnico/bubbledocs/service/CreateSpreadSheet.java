@@ -6,6 +6,7 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidBoundsException;
+import pt.tecnico.bubbledocs.exception.InvalidSpreadsheetNameException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
@@ -34,6 +35,7 @@ public class CreateSpreadSheet extends BubbleDocsService {
 
 	@Override
 	protected void dispatch() throws InvalidTokenException, UserNotInSessionException, InvalidBoundsException {
+	protected void dispatch() throws BubbleDocsException , InvalidTokenException , UserNotInSessionException , InvalidBoundsException, InvalidSpreadsheetNameException{
 		BubbleDocs bd = getBubbleDocs();
 		DateTime date = new DateTime();
 
@@ -49,6 +51,11 @@ public class CreateSpreadSheet extends BubbleDocsService {
 		
 		if(nrow < 1 || ncol < 1) 
 			throw new InvalidBoundsException(nrow, ncol);
+		
+		//only accept spreadsheet name in Alfa numeric format plus
+		//symbols + - _ and spaces
+		if(name.matches("(.*)[^ A-Za-z0-9_+-](.*)") || name.equals(""))
+			throw new InvalidSpreadsheetNameException();
 		
 		Spreadsheet s = new Spreadsheet(name,date,nrow,ncol);
 		user.addSpreadsheets(s);
