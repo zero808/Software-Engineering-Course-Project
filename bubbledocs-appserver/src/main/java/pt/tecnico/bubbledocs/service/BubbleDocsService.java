@@ -41,4 +41,4 @@ public abstract class BubbleDocsService {
 	}
 
 	protected abstract void dispatch() throws BubbleDocsException;
-}
+}// End BubbleDocsService class

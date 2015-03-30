@@ -100,4 +100,4 @@ public class AssignReferenceCell extends BubbleDocsService {
 	public final String getResult() {
 		return result;
 	}
-}
+}// End AssignReferenceCell class

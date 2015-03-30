@@ -24,16 +24,14 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 		User luis = createUser("lf", "woot", "Luis");
 		this.userNoSpredToken = addUserToSession("lf");
 		
-		//this user already has spreadsheet and want's another
+		//this user already has spreadsheet and wants another
 		User ze = createUser("zz", "pass", "Jose");
 		this.userWithSpredToken = addUserToSession("zz");
 		
-		//isto parece mau. Estou a fazer uma coisa que vou testar ;_;
 		Spreadsheet teste = createSpreadSheet(ze, "teste", 10, 10);
 		luis.addSpreadsheets(teste);
 		
 		luis.givePermissionto(getSpreadSheet("teste"), ze, true);
-		
 	}
 	
 	@Test
@@ -108,5 +106,4 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 		CreateSpreadSheet service = new CreateSpreadSheet(notInSessionToken,"teste",10,10);
 		service.execute();
 	}
-
-}
+}// End CreateSpreadSheetTest class

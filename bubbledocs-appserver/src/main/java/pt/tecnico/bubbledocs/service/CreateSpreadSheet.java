@@ -60,4 +60,4 @@ public class CreateSpreadSheet extends BubbleDocsService {
 		user.addSpreadsheets(s);
 		this.s = s;
 	}
-}// End CreateSpreadSheet class.
+}// End CreateSpreadSheet class

@@ -48,8 +48,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 
 		Literal expected_literal = new Literal(Integer.parseInt(literal));
 
-		AssignLiteralCell service = new AssignLiteralCell(ownerToken,
-				sucessTestSpreadsheet.getId(), cell, literal);
+		AssignLiteralCell service = new AssignLiteralCell(ownerToken, sucessTestSpreadsheet.getId(), cell, literal);
 		service.execute();
 
 		String result = service.getResult();
@@ -143,4 +142,4 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 				testSpreadsheet.getId(), cell, literal);
 		service.execute();
 	}
-}// End AssignLiteralCellTest class.
+}// End AssignLiteralCellTest Class

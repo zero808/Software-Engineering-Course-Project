@@ -36,4 +36,4 @@ public class LoginUser extends BubbleDocsService {
 	public final String getUserToken() {
 		return userToken;
 	}
-}
+}// End LoginUser class

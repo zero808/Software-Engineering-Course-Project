@@ -127,4 +127,4 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	public void accessUserDoesNotExist() {
 		new DeleteUser(USERNAME_DOES_NOT_EXIST, USERNAME_TO_DELETE).execute();
 	}
-}// End DeleteUserTest class.
+}// End DeleteUserTest class

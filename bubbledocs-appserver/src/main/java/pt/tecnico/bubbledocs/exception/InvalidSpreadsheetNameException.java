@@ -7,7 +7,7 @@ public class InvalidSpreadsheetNameException extends BubbleDocsException {
 	private static final long serialVersionUID = 1L;
 
 	public InvalidSpreadsheetNameException() {
-		//just needs to exist
+		//Just needs to exist
 	}
 	
 	@Override
