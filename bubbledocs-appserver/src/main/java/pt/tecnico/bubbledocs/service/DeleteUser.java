@@ -42,7 +42,7 @@ public class DeleteUser extends BubbleDocsService {
 		userToDelete.delete();
 		
 		// toDeleteUser is in session,so we need to remove it.
-		String tok = bd.getTokenByUsernameNoException(toDeleteUsername);
+		String tok = bd.getTokenByUsername(toDeleteUsername);
 		if (tok != null) {
 			bd.removeUserFromSession(tok);
 		}
