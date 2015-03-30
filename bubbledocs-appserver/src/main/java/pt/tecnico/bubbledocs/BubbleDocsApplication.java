@@ -51,9 +51,13 @@ public class BubbleDocsApplication {
 				populateDomain(bd, root);
 			}
 			
-			bd.login("root", "rootroot");
-			String pfToken = bd.login("pf", "sub");
-			bd.login("ra", "cor");
+			LoginUser service_login = new LoginUser("root", "rootroot");
+			service_login.execute();
+			LoginUser service_login_pf = new LoginUser("pf", "sub");
+			service_login_pf.execute();
+			String pfToken = service_login_pf.getUserToken();
+			LoginUser service_login_ra = new LoginUser("ra", "cor");
+			service_login_ra.execute();
 			
 			org.jdom2.Document wholeDoc = new org.jdom2.Document();
 			
