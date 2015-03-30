@@ -31,18 +31,24 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		createSpreadSheet(smf, USERNAME_TO_DELETE, 20, 20);
 
 		root = addUserToSession(ROOT_USERNAME);
-	};
-
+	}
+	
+	@Test
 	public void success() {
+		BubbleDocs bd = BubbleDocs.getInstance();
 		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
 		service.execute();
-
-		boolean deleted = getUserFromUsername(USERNAME_TO_DELETE) == null;
-
+		
+		boolean deleted = false;
+		
+		try {
+			getUserFromUsername(USERNAME_TO_DELETE);
+		} catch (UserDoesNotExistException e) {
+			deleted = true;
+		}
+		
 		assertTrue("user was not deleted", deleted);
-
-		assertNull("Spreadsheet was not deleted",
-				getSpreadSheet(SPREADSHEET_NAME));
+		assertNull("Spreadsheet was not deleted", bd.getSpreadsheetByNameNoException(SPREADSHEET_NAME));
 	}
 
 	/*
@@ -51,7 +57,20 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	 */
 	@Test
 	public void successToDeleteIsNotInSession() {
-		success();
+		BubbleDocs bd = BubbleDocs.getInstance();
+		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
+		service.execute();
+		
+		boolean deleted = false;
+		
+		try {
+			getUserFromUsername(USERNAME_TO_DELETE);
+		} catch (UserDoesNotExistException e) {
+			deleted = true;
+		}
+		
+		assertTrue("user was not deleted", deleted);
+		assertNull("Spreadsheet was not deleted", bd.getSpreadsheetByNameNoException(SPREADSHEET_NAME));
 	}
 
 	/*
@@ -60,8 +79,21 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	 */
 	@Test
 	public void successToDeleteIsInSession() {
+		BubbleDocs bd = BubbleDocs.getInstance();
 		String token = addUserToSession(USERNAME_TO_DELETE);
-		success();
+		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
+		service.execute();
+		
+		boolean deleted = false;
+		
+		try {
+			getUserFromUsername(USERNAME_TO_DELETE);
+		} catch (UserDoesNotExistException e) {
+			deleted = true;
+		}
+		
+		assertTrue("user was not deleted", deleted);
+		assertNull("Spreadsheet was not deleted", bd.getSpreadsheetByNameNoException(SPREADSHEET_NAME));
 		assertNull("Removed user but not removed from session", getUserFromSession(token));
 	}
 

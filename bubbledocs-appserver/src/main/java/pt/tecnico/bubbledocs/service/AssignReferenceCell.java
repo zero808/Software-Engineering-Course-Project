@@ -6,12 +6,12 @@ import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.CellIsProtectedException;
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidReferenceException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
-import pt.tecnico.bubbledocs.exception.OutofBondsException;
+import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
-import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class AssignReferenceCell extends BubbleDocsService {
@@ -46,10 +46,14 @@ public class AssignReferenceCell extends BubbleDocsService {
 	}
 
 	@Override
-	protected void dispatch() throws InvalidReferenceException, InvalidTokenException, OutofBondsException, InvalidPermissionException, CellIsProtectedException, UserNotInSessionException, SpreadsheetDoesNotExistException, UserDoesNotExistException {
+	protected void dispatch() throws InvalidReferenceException, InvalidTokenException, OutofBoundsException, InvalidArgumentsException, InvalidPermissionException, CellIsProtectedException, UserNotInSessionException, SpreadsheetDoesNotExistException {
 		BubbleDocs bd = getBubbleDocs();
 		Spreadsheet spreadsheet = getSpreadsheet(docId);
 		String username = bd.getUsernameByToken(tokenUser);
+		
+		if(cell_row < 1 || cell_collumn < 1 || reference_row < 1 || reference_collumn < 1) {
+			throw new InvalidArgumentsException();
+		}
 		
 		if(tokenUser.equals("")) {
 			throw new InvalidTokenException();
@@ -59,14 +63,10 @@ public class AssignReferenceCell extends BubbleDocsService {
 			throw new UserNotInSessionException(username);
 		}
 		
-		User user = bd.getUserByUsername(username);
-
-		if(user == null) {
-			throw new UserDoesNotExistException();
-		}
+		User user = bd.getUserByUsername(username); //Not my responsibility to test if its null, it shouldn't.
 		
 		if(cell_row > spreadsheet.getNRows() || cell_collumn > spreadsheet.getNCols()) {
-			throw new OutofBondsException(cell_row, cell_collumn);
+			throw new OutofBoundsException(cell_row, cell_collumn);
 		}
 		
 		Cell cell = getCellByCoords(spreadsheet, cell_row, cell_collumn);

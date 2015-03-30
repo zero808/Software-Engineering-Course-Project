@@ -11,7 +11,6 @@ import pt.tecnico.bubbledocs.exception.ExportDocumentException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
-import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class ExportDocument extends BubbleDocsService {
@@ -26,7 +25,7 @@ public class ExportDocument extends BubbleDocsService {
 	}
 
 	@Override
-	protected void dispatch() throws ExportDocumentException, SpreadsheetDoesNotExistException, InvalidPermissionException, UserNotInSessionException, InvalidTokenException, UserDoesNotExistException {
+	protected void dispatch() throws ExportDocumentException, SpreadsheetDoesNotExistException, InvalidPermissionException, UserNotInSessionException, InvalidTokenException {
 		BubbleDocs bd = getBubbleDocs();
 		org.jdom2.Document jdomDoc = new org.jdom2.Document();
 
@@ -42,11 +41,7 @@ public class ExportDocument extends BubbleDocsService {
 			throw new UserNotInSessionException(username);
 		}
 		
-		User user = bd.getUserByUsername(username);
-
-		if(user == null) {
-			throw new UserDoesNotExistException();
-		}
+		User user = bd.getUserByUsername(username); //Not my responsibility to test if its null, it shouldn't.
 		
 		if(user.hasOwnerPermission(spreadsheet)) {
 

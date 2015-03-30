@@ -5,7 +5,6 @@ import org.joda.time.DateTime;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidBoundsException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
@@ -26,10 +25,7 @@ public class CreateSpreadSheet extends BubbleDocsService {
 		return s;
 	}
 	
-	
-
-	public CreateSpreadSheet(String userToken, String name, int rows,
-			int columns) {
+	public CreateSpreadSheet(String userToken, String name, int rows, int columns) {
 		this.userToken = userToken;
 		this.name = name;
 		nrow = rows;
@@ -38,7 +34,7 @@ public class CreateSpreadSheet extends BubbleDocsService {
 	}
 
 	@Override
-	protected void dispatch() throws BubbleDocsException , InvalidTokenException , UserNotInSessionException , InvalidBoundsException{
+	protected void dispatch() throws InvalidTokenException, UserNotInSessionException, InvalidBoundsException {
 		BubbleDocs bd = getBubbleDocs();
 		DateTime date = new DateTime();
 
@@ -59,5 +55,4 @@ public class CreateSpreadSheet extends BubbleDocsService {
 		user.addSpreadsheets(s);
 		this.s = s;
 	}
-
-}
+}// End CreateSpreadSheet class.

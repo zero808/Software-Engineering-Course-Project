@@ -9,7 +9,7 @@ import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exception.CellIsProtectedException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
-import pt.tecnico.bubbledocs.exception.OutofBondsException;
+import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.InvalidReferenceException;
 import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
@@ -143,15 +143,13 @@ public class User extends User_Base {
 		}
 
 		setBubbledocs(null);
+		setPermission(null);
 		deleteDomainObject();
 	}
 
-	public void addLiteraltoCell(Literal l, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidPermissionException, CellIsProtectedException {
+	public void addLiteraltoCell(Literal l, Spreadsheet s, int row, int collumn) throws OutofBoundsException, InvalidPermissionException, CellIsProtectedException {
 		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
-			throw new OutofBondsException(s.getNRows(), s.getNCols());
-
-//		if (!hasPermission(s))
-//			throw new InvalidPermissionException(getUsername());
+			throw new OutofBoundsException(s.getNRows(), s.getNCols());
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
@@ -165,15 +163,12 @@ public class User extends User_Base {
 		}
 	}
 
-	public void addReferencetoCell(Reference r, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidReferenceException, InvalidPermissionException, CellIsProtectedException {
+	public void addReferencetoCell(Reference r, Spreadsheet s, int row, int collumn) throws OutofBoundsException, InvalidReferenceException, InvalidPermissionException, CellIsProtectedException {
 		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
-			throw new OutofBondsException(s.getNRows(), s.getNCols());
+			throw new OutofBoundsException(s.getNRows(), s.getNCols());
 
 		if (r.getReferencedCell().getRow() > s.getNRows() || r.getReferencedCell().getCollumn() > s.getNCols())
 			throw new InvalidReferenceException(r.getReferencedCell().getRow(), r.getReferencedCell().getCollumn());
-
-//		if (!hasPermission(s))
-//			throw new InvalidPermissionException(getUsername());
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
@@ -190,12 +185,9 @@ public class User extends User_Base {
 		}
 	}
 
-	public void addFunctiontoCell(Function f, Spreadsheet s, int row, int collumn) throws OutofBondsException, InvalidPermissionException, CellIsProtectedException {
+	public void addFunctiontoCell(Function f, Spreadsheet s, int row, int collumn) throws OutofBoundsException, InvalidPermissionException, CellIsProtectedException {
 		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
-			throw new OutofBondsException(s.getNRows(), s.getNCols());
-
-//		if (!hasPermission(s))
-//			throw new InvalidPermissionException(getUsername());
+			throw new OutofBoundsException(s.getNRows(), s.getNCols());
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {

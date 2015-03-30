@@ -1,7 +1,6 @@
 package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
-import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
@@ -20,8 +19,6 @@ public class DeleteUser extends BubbleDocsService {
 
 	@Override
 	protected void dispatch() throws BubbleDocsException {
-		// add code here
-
 		BubbleDocs bd = BubbleDocs.getInstance();
 
 		// root is not in session
@@ -41,16 +38,13 @@ public class DeleteUser extends BubbleDocsService {
 			throw new UserDoesNotExistException();
 
 		User userToDelete = bd.getUserByUsername(toDeleteUsername);
-		for (Spreadsheet s : userToDelete.getSpreadsheetsSet()) {
-			s.delete();
-		}
 
+		userToDelete.delete();
+		
 		// toDeleteUser is in session,so we need to remove it.
 		String tok = bd.getTokenByUsernameNoException(toDeleteUsername);
-		if (tok !=null) {
+		if (tok != null) {
 			bd.removeUserFromSession(tok);
 		}
-
 	}
-
-}
+}// End DeleteUser Class.

@@ -15,7 +15,7 @@ import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
-import pt.tecnico.bubbledocs.exception.OutofBondsException;
+import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
 import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
@@ -77,7 +77,7 @@ public abstract class BubbleDocsServiceTest {
 	}
 	
 	// returns a cell from the spreadsheet with the given coordinates.
-	public Cell getCellByCoords(String spreadsheetName, int row, int collumn) throws SpreadsheetDoesNotExistException, OutofBondsException {
+	public Cell getCellByCoords(String spreadsheetName, int row, int collumn) throws SpreadsheetDoesNotExistException, OutofBoundsException {
 		BubbleDocs bd = BubbleDocs.getInstance();
 		Spreadsheet s = bd.getSpreadsheetByName(spreadsheetName);
 		
@@ -88,7 +88,7 @@ public abstract class BubbleDocsServiceTest {
 		Cell c = s.getCellByCoords(row, collumn);
 		
 		if(c == null) {
-			throw new OutofBondsException(row, collumn);
+			throw new OutofBoundsException(row, collumn);
 		}
 		
 		return c;
