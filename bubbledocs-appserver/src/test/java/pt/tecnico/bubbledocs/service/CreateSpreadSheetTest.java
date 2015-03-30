@@ -8,13 +8,14 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidBoundsException;
+import pt.tecnico.bubbledocs.exception.InvalidSpreadsheetNameException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 	private String userNoSpredToken;
 	private String userWithSpredToken;
-	private String notInSessionToken = "antonio6";
-	
+	private static final String notInSessionToken = "antonio6";
+	private static final String legalCharTestName = "Az1 9_+-";
 	@Override
 	public void populate4Test() {
 		BubbleDocs.getInstance();
@@ -53,7 +54,7 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void success2() {
-		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,"teste",10,10);
+		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,legalCharTestName,10,10);
 		service.execute();
 		
 		int expected_id = 1;
@@ -61,10 +62,24 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 		Spreadsheet s = service.getSheet();
 		
 		assertEquals(expected_id, s.getId());
-		assertEquals("teste", s.getName());
+		assertEquals(legalCharTestName, s.getName());
 		assertEquals(getUserFromSession(userWithSpredToken).getUsername(), s.getUser().getUsername());
 		assertEquals(10, s.getNRows());
 		assertEquals(10, s.getNCols());
+	}
+	
+	@Test(expected = InvalidSpreadsheetNameException.class)
+	public void invalidName() {
+		
+		CreateSpreadSheet service = new CreateSpreadSheet(userNoSpredToken,"%&/()ççç",10,10);
+		service.execute();
+	}
+	
+	@Test(expected = InvalidSpreadsheetNameException.class)
+	public void invalidName2() {
+		
+		CreateSpreadSheet service = new CreateSpreadSheet(userNoSpredToken,"",10,10);
+		service.execute();
 	}
 	
 	@Test(expected = InvalidBoundsException.class)
