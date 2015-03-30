@@ -17,8 +17,7 @@ public class CreateUser extends BubbleDocsService {
 	BubbleDocs bd;
 	User user;
 
-	public CreateUser(String userToken, String newUsername,
-			String password, String name) {
+	public CreateUser(String userToken, String newUsername, String password, String name) {
 		this.userToken = userToken;
 		this.newUsername = newUsername;
 		this.password = password;

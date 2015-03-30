@@ -25,8 +25,7 @@ public class AssignLiteralCell extends BubbleDocsService {
 		_docId = docId;
 		//testa o inteiro antes
 		_literal = Integer.parseInt(literal);
-		_cellId = cellId;
-		
+		_cellId = cellId;	
 	}
 
 	@Override

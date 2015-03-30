@@ -1,5 +1,9 @@
 package pt.tecnico.bubbledocs;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
@@ -12,12 +16,20 @@ import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
-
-import org.joda.time.DateTime;
+import pt.tecnico.bubbledocs.service.AssignLiteralCell;
+import pt.tecnico.bubbledocs.service.AssignReferenceCell;
+import pt.tecnico.bubbledocs.service.CreateSpreadSheet;
+import pt.tecnico.bubbledocs.service.CreateUser;
+import pt.tecnico.bubbledocs.service.ExportDocument;
+import pt.tecnico.bubbledocs.service.LoginUser;
 
 import javax.transaction.*;
 
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -39,28 +51,90 @@ public class BubbleDocsApplication {
 				populateDomain(bd, root);
 			}
 			
-			org.jdom2.Document wholeDoc = convertToXML();
-//			printDomainInXML(wholeDoc);
+			bd.login("root", "rootroot");
+			String pfToken = bd.login("pf", "sub");
+			bd.login("ra", "cor");
 			
-			listAllUsers(); 
+			org.jdom2.Document wholeDoc = new org.jdom2.Document();
 			
-			listSpreadsheetsOf("pf"); 
+			try {
+				wholeDoc = convertToXML();
+			} catch (BubbleDocsException exception) {
+				exception.printStackTrace();
+				System.out.println(exception.toString());
+			}
 			
-			listSpreadsheetsOf("ra");
+			try {
+				listAllUsers();
+			} catch (BubbleDocsException exception) {
+				exception.printStackTrace();
+				System.out.println(exception.toString());
+			} 
 			
-			org.jdom2.Document doc = convertSpreadsheetsOfUserToXML("pf");
-			printDomainInXML(doc);
+			try {
+				listSpreadsheetsOf("pf");
+			} catch (BubbleDocsException exception) {
+				exception.printStackTrace();
+				System.out.println(exception.toString());
+			} 
 			
-			deleteSpreadsheetOf("pf", "Notas ES");
+			try {
+				listSpreadsheetsOf("ra");
+			} catch (BubbleDocsException exception) {
+				exception.printStackTrace();
+				System.out.println(exception.toString());
+			}
 			
-			listSpreadsheetsOf("pf");
 			
-			recoverFromBackup(wholeDoc);
+			ArrayList<org.jdom2.Document> docs_pf = convertSpreadsheetsOfUserToXML(pfToken);
 			
-			listSpreadsheetsOf("pf");
+			try {
+				for(org.jdom2.Document j : docs_pf) {
+					printDomainInXML(j);
+				}
+			} catch (BubbleDocsException exception) {
+				exception.printStackTrace();
+				System.out.println(exception.toString());
+			}
 			
-			org.jdom2.Document doc2 = convertSpreadsheetsOfUserToXML("pf");
-			printDomainInXML(doc2);
+			try {
+				deleteSpreadsheetOf("pf", "Notas ES");
+			} catch (BubbleDocsException exception) {
+				exception.printStackTrace();
+				System.out.println(exception.toString());
+			}
+			
+			try {
+				listSpreadsheetsOf("pf");
+			} catch (BubbleDocsException exception) {
+				exception.printStackTrace();
+				System.out.println(exception.toString());
+			}
+			
+			try {
+				recoverFromBackup(wholeDoc);
+			} catch (BubbleDocsException exception) {
+				exception.printStackTrace();
+				System.out.println(exception.toString());
+			}
+			
+			try {
+				listSpreadsheetsOf("pf");
+			} catch (BubbleDocsException exception) {
+				exception.printStackTrace();
+				System.out.println(exception.toString());
+			}
+			
+			docs_pf = convertSpreadsheetsOfUserToXML(pfToken);
+
+			try {
+				for(org.jdom2.Document j : docs_pf) {
+					printDomainInXML(j);
+				}
+			} catch (BubbleDocsException exception) {
+				exception.printStackTrace();
+				System.out.println(exception.toString());
+			}
 
 			tm.commit();
 			committed = true;
@@ -88,24 +162,35 @@ public class BubbleDocsApplication {
 	
 	@Atomic
 	static void populateDomain(BubbleDocs bd, Root root) {
-
-		User pf = new User("pf", "Paul Door", "sub");
-		User ra = new User("ra", "Step Rabbit", "cor");
-
-		root.addUser(pf);
-		root.addUser(ra);
-
-		Spreadsheet notas = new Spreadsheet("Notas ES", new DateTime(), 300, 20); //new DateTime() gives the current one.
-		pf.addSpreadsheets(notas);
+		
+		LoginUser service_login = new LoginUser("root", "rootroot");
+		service_login.execute();
+		String rootToken = service_login.getUserToken();
+		
+		CreateUser service_pf = new CreateUser(rootToken, "pf", "sub", "Paul Door");
+		service_pf.execute();
+		
+		CreateUser service_ra = new CreateUser(rootToken, "ra", "cor", "Step Rabbit");
+		service_ra.execute();
+		
+		LoginUser service_login_pf = new LoginUser("pf", "sub");
+		service_login_pf.execute();
+		String pfToken = service_login_pf.getUserToken();
+		
+		CreateSpreadSheet service_spreadsheet = new CreateSpreadSheet(pfToken, "Notas ES", 300, 20);
+		service_spreadsheet.execute();
+		
+		int docId = bd.getSpreadsheetByName("Notas ES").getId();
+		Spreadsheet notas = bd.getSpreadsheetByName("Notas ES");
+		User pf = bd.getUserByUsername("pf");
 		
 		//Literal 5 on position (3,4).
-		Literal l = new Literal(5);
-		pf.addLiteraltoCell(l, notas, 3, 4);
+		AssignLiteralCell service_literal1 = new AssignLiteralCell(pfToken, docId, "3;4", "5");
+		service_literal1.execute();
 
 		//Reference to (5, 6) on (1, 1).
-		Cell c1 = notas.getCellByCoords(5, 6);
-		Reference r = new Reference(c1);
-		pf.addReferencetoCell(r, notas, 1, 1);
+		AssignReferenceCell service_reference1 = new AssignReferenceCell(pfToken, docId, "1;1", "5;6");
+		service_reference1.execute();
 
 		//Function Add with arguments Literal 2 and Reference to (3, 4) on (5, 6).
 		Literal l2 = new Literal(2); 
@@ -177,15 +262,32 @@ public class BubbleDocsApplication {
 	}
 	
 	@Atomic
-	public static org.jdom2.Document convertSpreadsheetsOfUserToXML(String username) {
+	public static ArrayList<org.jdom2.Document> convertSpreadsheetsOfUserToXML(String userToken) {
 		BubbleDocs bd = BubbleDocs.getInstance();
-		User user = bd.getUserByUsername(username);
+		User user = bd.getUserByUsername(bd.getUsernameByToken(userToken));
 		
-		org.jdom2.Document jdomDoc = new org.jdom2.Document();
-
-		jdomDoc.setRootElement(user.exportToXML());
-
-		return jdomDoc;
+		ArrayList<Document> documentsList = new ArrayList<org.jdom2.Document>();
+		
+		for(Spreadsheet s : user.getSpreadsheetsSet()) {
+			ExportDocument service = new ExportDocument(userToken, s.getId());
+			service.execute();
+			
+			byte[] serviceDocBytes = service.getDocXML();
+			
+			org.jdom2.Document serviceDoc = new org.jdom2.Document();
+			
+			SAXBuilder builder = new SAXBuilder();
+			builder.setIgnoringElementContentWhitespace(true);
+			try {
+				serviceDoc = builder.build(new ByteArrayInputStream(serviceDocBytes));
+			} catch (JDOMException | IOException e) {
+				e.printStackTrace();
+			}
+			
+			documentsList.add(serviceDoc);
+		}
+		
+		return documentsList;
 	}
 	
 	@Atomic
@@ -218,5 +320,4 @@ public class BubbleDocsApplication {
 			}
 		}
 	}
-
 }// End BubbleDocsApplication Class
