@@ -7,10 +7,7 @@ import org.jdom2.Element;
 import org.joda.time.LocalTime;
 
 import pt.ist.fenixframework.FenixFramework;
-import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
-import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
-import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class BubbleDocs extends BubbleDocs_Base {
 	
@@ -93,27 +90,21 @@ public class BubbleDocs extends BubbleDocs_Base {
 		return _tokenUsernameMap.get(userToken);
 	}
 	
-	private String getTokenByUsername(String username) throws UserDoesNotExistException, UserNotInSessionException {
-		
-		if (getUserByUsername(username) == null) {
-			throw new UserDoesNotExistException();
-		}
-		
+	public String getTokenByUsername(String username) {
 		for (String userToken : _tokenUsernameMap.keySet()) {
 			if (_tokenUsernameMap.get(userToken).equals(username)) {
 				return userToken;
 			}
 		}
-		
-		throw new UserNotInSessionException(username);
+		return null;
 	}
 	
-	public boolean isRoot(String userToken) throws InvalidTokenException {
+	public boolean isRoot(String userToken) {
 		if (_tokenUsernameMap.containsKey(userToken)) {
 			return _tokenUsernameMap.get(userToken).equals("root");
 		}
 		else {
-			throw new InvalidTokenException();
+			return false;
 		}
 	}
 	
@@ -148,50 +139,58 @@ public class BubbleDocs extends BubbleDocs_Base {
 		
 		LocalTime actualDate = new LocalTime();				//Creates Actual Date
 		LocalTime expirationDate = actualDate.plusHours(2);	//Creates Expiration Date (2 hours ahead)
-		String userToken;
+		String oldToken = "";
 		
-		//If in session, deletes token
+		//If user already in session, removes token (user) from session to create a new one
 		if (!(_tokenTimeMap.isEmpty()) && !(_tokenUsernameMap.isEmpty()) && _tokenUsernameMap.containsValue(username)) {
-			String token = getTokenByUsername(username);
-			_tokenUsernameMap.remove(token);
-			_tokenTimeMap.remove(token);
+			oldToken = getTokenByUsername(username);
+			removeUserFromSession(oldToken);
 		}
 		
-		//New token
+		//Creates new token and puts user in session
 		Random rand = new Random();
-		String token = username + rand.nextInt(10);
-		_tokenUsernameMap.put(token, username);
-		_tokenTimeMap.put(token, expirationDate);
-		userToken = token;
+		String newToken = username + rand.nextInt(10);
+		while (newToken.equals(oldToken)) {
+			Random newRand = new Random();
+			newToken = username + newRand.nextInt(10);
+		}
+		putUserInSession(newToken, username, expirationDate);
 		
-		//Removes sessions of expired date users
-		for (String uToken : _tokenTimeMap.keySet()) {
-			if (_tokenTimeMap.get(uToken).isBefore(actualDate)) {
-				_tokenUsernameMap.remove(uToken);
-				_tokenTimeMap.remove(uToken);
+		//Removes expired date users from session
+		for (String token : _tokenTimeMap.keySet()) {
+			if (_tokenTimeMap.get(token).isBefore(actualDate)) {
+				removeUserFromSession(token);
 			}
 		}
-		return userToken;
+		return newToken;
 	}
 	
-	public void removeUserFromSession(String uToken) {
-		_tokenTimeMap.remove(uToken);
-		_tokenUsernameMap.remove(uToken);
+	private void putUserInSession(String userToken, String username, LocalTime expirationDate) {
+		_tokenUsernameMap.put(userToken, username);
+		_tokenTimeMap.put(userToken, expirationDate);
+	}
+	
+	public void removeUserFromSession(String userToken) {
+		_tokenUsernameMap.remove(userToken);
+		_tokenTimeMap.remove(userToken);
 	}
 	
 	public boolean isInSession(String userToken) {
-		return _tokenUsernameMap.containsKey(userToken);
-	}
-	
-	public String getTokenByUsernameNoException(String username){
-		
-		for (String userToken : _tokenUsernameMap.keySet()) {
-			if (_tokenUsernameMap.get(userToken).equals(username)) {
-				return userToken;
+		if (_tokenUsernameMap.containsKey(userToken) && _tokenTimeMap.containsKey(userToken)) {
+			LocalTime actualDate = new LocalTime();
+			if (_tokenTimeMap.get(userToken).isBefore(actualDate)) {
+				removeUserFromSession(userToken);
+				return false;
+			}
+			else {
+				LocalTime newExpirationDate = actualDate.plusHours(2);
+				_tokenTimeMap.replace(userToken, newExpirationDate);
+				return true;
 			}
 		}
-		
-		return null;
+		else {
+			return false;
+		}
 	}
 	
 	public LocalTime getLastAccessTimeInSession(String userToken) {

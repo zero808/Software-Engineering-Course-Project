@@ -1,6 +1,7 @@
 package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidPasswordException;
 import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
@@ -21,11 +22,13 @@ public class LoginUser extends BubbleDocsService {
 	@Override
 	protected void dispatch() throws BubbleDocsException {
 		
-		if (bd.getUserByUsername(username) == null) {
+		User user = bd.getUserByUsername(username);
+		
+		if (user == null) {
 			throw new UserDoesNotExistException();
 		}
 		
-		String pass = bd.getUserByUsername(username).getPassword();
+		String pass = user.getPassword();
 		if (pass == null || !(pass.equals(password))) {
 			throw new InvalidPasswordException();
 		}
