@@ -34,8 +34,7 @@ public class CreateSpreadSheet extends BubbleDocsService {
 	}
 
 	@Override
-	protected void dispatch() throws InvalidTokenException, UserNotInSessionException, InvalidBoundsException {
-	protected void dispatch() throws BubbleDocsException , InvalidTokenException , UserNotInSessionException , InvalidBoundsException, InvalidSpreadsheetNameException{
+	protected void dispatch() throws InvalidTokenException, UserNotInSessionException, InvalidBoundsException, InvalidSpreadsheetNameException {
 		BubbleDocs bd = getBubbleDocs();
 		DateTime date = new DateTime();
 
