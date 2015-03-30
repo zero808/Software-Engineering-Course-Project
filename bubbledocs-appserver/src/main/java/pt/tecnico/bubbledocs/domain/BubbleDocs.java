@@ -137,8 +137,8 @@ public class BubbleDocs extends BubbleDocs_Base {
 	
 	public String login(String username, String password) {
 		
-		LocalTime actualDate = new LocalTime();				//Creates Actual Date
-		LocalTime expirationDate = actualDate.plusHours(2);	//Creates Expiration Date (2 hours ahead)
+		LocalTime currentTime = new LocalTime();				//Creates Actual Date
+		LocalTime expirationDate = currentTime.plusHours(2);	//Creates Expiration Date (2 hours ahead)
 		String oldToken = "";
 		
 		//If user already in session, removes token (user) from session to create a new one
@@ -158,7 +158,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 		
 		//Removes expired date users from session
 		for (String token : _tokenTimeMap.keySet()) {
-			if (_tokenTimeMap.get(token).isBefore(actualDate)) {
+			if (_tokenTimeMap.get(token).isBefore(currentTime)) {
 				removeUserFromSession(token);
 			}
 		}
@@ -177,13 +177,13 @@ public class BubbleDocs extends BubbleDocs_Base {
 	
 	public boolean isInSession(String userToken) {
 		if (_tokenUsernameMap.containsKey(userToken) && _tokenTimeMap.containsKey(userToken)) {
-			LocalTime actualDate = new LocalTime();
-			if (_tokenTimeMap.get(userToken).isBefore(actualDate)) {
+			LocalTime currentTime = new LocalTime();
+			if (_tokenTimeMap.get(userToken).isBefore(currentTime)) {
 				removeUserFromSession(userToken);
 				return false;
 			}
 			else {
-				LocalTime newExpirationDate = actualDate.plusHours(2);
+				LocalTime newExpirationDate = currentTime.plusHours(2);
 				_tokenTimeMap.replace(userToken, newExpirationDate);
 				return true;
 			}
@@ -195,5 +195,9 @@ public class BubbleDocs extends BubbleDocs_Base {
 	
 	public LocalTime getLastAccessTimeInSession(String userToken) {
 		return _tokenTimeMap.get(userToken).minusHours(2);
+	}
+	
+	public void changeUserTokenExpirationDate(String userToken, LocalTime newExpirationDate) {
+		_tokenTimeMap.replace(userToken, newExpirationDate);		
 	}
 }// End BubbleDocs Class
