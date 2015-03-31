@@ -46,7 +46,6 @@ public class Add extends Add_Base {
 		int count=1;
 		
 		for (Element argElement : AddElement.getChildren()){
-//			Content c = null;
 			if (argElement.getName().equals("literal")){
 				Literal l = new Literal();
 				l.setBinary1(this);

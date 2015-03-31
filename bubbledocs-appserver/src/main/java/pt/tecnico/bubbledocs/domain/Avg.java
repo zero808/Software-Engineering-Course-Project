@@ -2,7 +2,9 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
 
-public abstract class Avg extends Avg_Base {
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
+
+public class Avg extends Avg_Base {
 
 	public Avg() {
 		super();
@@ -14,30 +16,43 @@ public abstract class Avg extends Avg_Base {
 	}
 
 	@Override
-	public int getValue() {
+	public int getValue() throws InvalidArgumentsException {
 		int total = 0;
-		//int flag = 0;
 		for (Cell cell : super.getRange().getCellsSet()) {
 			if (cell.hasValidResult())
-			total += cell.getContent().getValue();
+				total += cell.getContent().getValue();
 		}
 		return total / super.getRange().getCellsSet().size();
-		//TODO Needs to check for #VALUES.
 	}
-	
+
 	@Override
 	public Element exportToXML() {
 		Element f = new Element("function");
-		//TODO Second Delivery.
+		Element uf = new Element("unary_function");
+		Element avg = new Element("avg");
+
+		getRange().exportToXML();
+
+		uf.addContent(avg);
+		f.addContent(uf);
+
 		return f;
 	}
-	
-	public void importFromXML(Element cellElement) {
-		//TODO Second Delivery.
+
+	public void importFromXML(Element cellElement) {// mover pa cima
+		// create range(void)
+		Range r = new Range();
+		// set unary
+		r.setUnary(this);
+		this.setRange(r);
+		// range.import
+		Element element;
+		if ((element = cellElement.getChild("range")) != null)
+			r.importFromXML(element);
 	}
 
 	@Override
 	public void delete() {
-		// TODO Second Delivery.	
+		// TODO Second Delivery.
 	}
 }
