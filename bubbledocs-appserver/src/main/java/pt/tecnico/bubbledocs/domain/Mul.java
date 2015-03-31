@@ -3,6 +3,10 @@ package pt.tecnico.bubbledocs.domain;
 import org.jdom2.Element;
 //import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
+
+import pt.tecnico.bubbledocs.exception.BubbleDocsException;
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
+
 public class Mul extends Mul_Base {
 
 	public Mul() {
@@ -20,7 +24,9 @@ public class Mul extends Mul_Base {
 	}
 
 	@Override
-	public int getValue() {
+	public int getValue() throws BubbleDocsException{
+		if (getArg1().toString().equals("#VALUE")) throw new InvalidArgumentsException();
+		if (getArg2().toString().equals("#VALUE")) throw new InvalidArgumentsException();
 		return super.getArg1().getValue()*super.getArg2().getValue();
 		// TODO Needs to check for #VALUES
 	}
@@ -46,7 +52,6 @@ public class Mul extends Mul_Base {
 		int count=1;
 		
 		for (Element argElement : MulElement.getChildren()){
-//			Content c = null;
 			if (argElement.getName().equals("literal")){
 				Literal l = new Literal();
 				l.setBinary1(this);

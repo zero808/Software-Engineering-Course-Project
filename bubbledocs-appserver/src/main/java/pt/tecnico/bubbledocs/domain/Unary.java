@@ -15,9 +15,25 @@ public abstract class Unary extends Unary_Base {
 	
 	public abstract int getValue();
 
-	public abstract void delete();
-
 	public abstract Element exportToXML();
+	
+	public void importFromXML(Element cellElement) {
+		// create range(void)
+		Range r = new Range();
+		// set unary
+		r.setUnary(this);
+		this.setRange(r);
+		// range.import
+		Element element;
+		if ((element = cellElement.getChild("range")) != null)
+			r.importFromXML(element);
+	}
 
-	public abstract void importFromXML(Element cellElement);
+	@Override
+	public void delete() {
+		Range r = getRange();
+		setRange(null);
+		r.setUnary(null);
+		r.delete();
+	}
 }

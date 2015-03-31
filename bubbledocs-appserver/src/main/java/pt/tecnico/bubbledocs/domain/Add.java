@@ -3,6 +3,10 @@ package pt.tecnico.bubbledocs.domain;
 import org.jdom2.Element;
 //import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
+
+import pt.tecnico.bubbledocs.exception.BubbleDocsException;
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
+
 public class Add extends Add_Base {
 
 	public Add() {
@@ -20,9 +24,10 @@ public class Add extends Add_Base {
 	}
 
 	@Override
-	public int getValue() {
+	public int getValue() throws BubbleDocsException{
+		if (getArg1().toString().equals("#VALUE")) throw new InvalidArgumentsException();
+		if (getArg2().toString().equals("#VALUE")) throw new InvalidArgumentsException();
 		return super.getArg1().getValue()+super.getArg2().getValue();
-		// TODO Needs to check for #VALUE.
 	}
 
 	@Override

@@ -3,6 +3,12 @@ package pt.tecnico.bubbledocs.domain;
 import org.jdom2.Element;
 //import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
+
+
+import pt.tecnico.bubbledocs.exception.BubbleDocsException;
+import pt.tecnico.bubbledocs.exception.DivByZeroException;
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
+
 public class Div extends Div_Base {
 
 	public Div() {
@@ -20,9 +26,12 @@ public class Div extends Div_Base {
 	}
 
 	@Override
-	public int getValue() {
+	public int getValue() throws BubbleDocsException{
+		if (getArg1().toString().equals("#VALUE")) throw new InvalidArgumentsException();
+		if (getArg2().toString().equals("#VALUE")) throw new InvalidArgumentsException();
+		if (getArg2().getValue()==0) throw new DivByZeroException();
 		return super.getArg1().getValue()/super.getArg2().getValue();
-		// TODO Needs to check for #VALUES and dividing by 0.
+
 	}
 
 	@Override
@@ -46,7 +55,6 @@ public class Div extends Div_Base {
 		int count=1;
 		
 		for (Element argElement : DivElement.getChildren()){
-//			Content c = null;
 			if (argElement.getName().equals("literal")){
 				Literal l = new Literal();
 				l.setBinary1(this);

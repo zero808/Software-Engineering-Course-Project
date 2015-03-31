@@ -1,7 +1,5 @@
 package pt.tecnico.bubbledocs.domain;
 
-import java.util.ArrayList;
-
 import org.jdom2.Element;
 
 public class Range extends Range_Base {
@@ -9,14 +7,11 @@ public class Range extends Range_Base {
 	public Range() {
 		super();
 	}
-
-	private void generateRange(int row1, int col1, int row2, int col2) {
-		Spreadsheet s = getUnary().getCell().getSpreadsheet();
-		Cell initCell = s.getCellByCoords(row1, col1);
-		Cell endCell = s.getCellByCoords(row2, col2);
-		super.addCells(initCell);
-		super.addCells(endCell);
-
+	
+	public Range(Cell startCell, Cell endCell){
+		super();
+		addCells(startCell);
+		addCells(endCell);
 	}
 
 	public Element exportToXML() {
@@ -40,8 +35,6 @@ public class Range extends Range_Base {
 	}
 
 	public void importFromXML(Element cellElement) {
-		// parse values <range start:"3;4" end: "4;5" />
-		// unary.generateRange(values)
 		for (Element element : cellElement.getChildren()) {
 			if (element.getName().equals("startCell")
 					|| element.getName().equals("endCell")) {
@@ -54,5 +47,10 @@ public class Range extends Range_Base {
 				super.addCells(cell);
 			}
 		}
+	}
+
+	public void delete() {
+		set$cells(null);
+		deleteDomainObject();
 	}
 }

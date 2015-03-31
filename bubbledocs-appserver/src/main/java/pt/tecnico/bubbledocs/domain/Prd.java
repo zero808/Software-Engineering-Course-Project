@@ -2,7 +2,9 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
 
-public abstract class Prd extends Prd_Base {
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
+
+public class Prd extends Prd_Base {
 
 	public Prd() {
 		super();
@@ -14,28 +16,27 @@ public abstract class Prd extends Prd_Base {
 	}
 
 	@Override
-	public int getValue() {
+	public int getValue() throws InvalidArgumentsException {
 		int total = 1;
 		for (Cell cell : super.getRange().getCellsSet()) {
-			total *= cell.getContent().getValue();
+			if (cell.hasValidResult())
+				total *= cell.getContent().getValue();
 		}
 		return total;
-		//TODO Needs to check for #VALUES.
 	}
 
 	@Override
 	public Element exportToXML() {
 		Element f = new Element("function");
-		//TODO Second Delivery.
+		Element uf = new Element("unary_function");
+		Element prd = new Element("prd");
+
+		getRange().exportToXML();
+
+		uf.addContent(prd);
+		f.addContent(uf);
+
 		return f;
 	}
-	
-	public void importFromXML(Element cellElement) {
-		//TODO Second Delivery.
-	}
 
-	@Override
-	public void delete() {
-		// TODO Second Delivery.	
-	}
 }

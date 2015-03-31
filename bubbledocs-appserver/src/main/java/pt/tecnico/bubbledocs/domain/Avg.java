@@ -39,20 +39,4 @@ public class Avg extends Avg_Base {
 		return f;
 	}
 
-	public void importFromXML(Element cellElement) {// mover pa cima
-		// create range(void)
-		Range r = new Range();
-		// set unary
-		r.setUnary(this);
-		this.setRange(r);
-		// range.import
-		Element element;
-		if ((element = cellElement.getChild("range")) != null)
-			r.importFromXML(element);
-	}
-
-	@Override
-	public void delete() {
-		// TODO Second Delivery.
-	}
 }
