@@ -47,23 +47,28 @@ public class Sub extends Sub_Base {
 	public void importFromXML(Element SubElement) {
 		
 		int count=1;
+		Content a1 = null;
+		Content a2 = null;
 		
 		for (Element argElement : SubElement.getChildren()){
 			if (argElement.getName().equals("literal")){
 				Literal l = new Literal();
 				l.setBinary1(this);
 				l.importFromXML(argElement);
-				if(count==1) this.setArg1(l);
-				if(count==2) this.setArg2(l);
+				if(count==1) a1=l.retrieveContent();
+				if(count==2) a2=l.retrieveContent();
 			}
 			if (argElement.getName().equals("reference")){
 				Reference r = new Reference();
 				r.setBinary1(this);
 				r.importFromXML(argElement);
-				if(count==1) this.setArg1(r);
-				if(count==2) this.setArg2(r);
+				if(count==1) a1 = r.retrieveContent();
+				if(count==2) a2 = r.retrieveContent();
 			}
 			count++;
-		}	
+		}
+		setArg1(a1);
+		setArg2(a2);
+		
 	}
 }// End Sub class
