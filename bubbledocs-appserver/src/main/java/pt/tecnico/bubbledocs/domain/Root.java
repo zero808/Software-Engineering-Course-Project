@@ -3,9 +3,9 @@ package pt.tecnico.bubbledocs.domain;
 import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
+import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
-import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
 
 public class Root extends Root_Base {
 	
@@ -38,12 +38,12 @@ public class Root extends Root_Base {
 		return null;
 	}
 
-	public void removeUser(String username) throws UserDoesNotExistException {
+	public void removeUser(String username) throws LoginBubbleDocsException {
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
 		User toRemove = bd.getUserByUsername(username);
 
 		if (toRemove == null)
-			throw new UserDoesNotExistException();
+			throw new LoginBubbleDocsException("username");
 
 		bd.removeUsers(toRemove);
 		for(Spreadsheet s : toRemove.getSpreadsheetsSet()) {
@@ -102,6 +102,5 @@ public class Root extends Root_Base {
 	@Override
 	public boolean isRoot() {
 		return true;
-	}
-		
+	}		
 }// End Root class

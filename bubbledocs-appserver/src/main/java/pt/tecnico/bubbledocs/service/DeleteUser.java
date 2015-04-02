@@ -4,7 +4,7 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
-import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
+import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class DeleteUser extends BubbleDocsService {
@@ -27,7 +27,7 @@ public class DeleteUser extends BubbleDocsService {
 
 		// user (root) does not exist
 		if (bd.getUserByUsername(bd.getUsernameByToken(userToken)) == null)
-			throw new UserDoesNotExistException();
+			throw new LoginBubbleDocsException("username");
 
 		// Only root can delete users
 		if (!bd.isRoot(userToken))
@@ -35,7 +35,7 @@ public class DeleteUser extends BubbleDocsService {
 
 		// user does not exist
 		if (bd.getUserByUsername(toDeleteUsername) == null)
-			throw new UserDoesNotExistException();
+			throw new LoginBubbleDocsException("username");
 
 		User userToDelete = bd.getUserByUsername(toDeleteUsername);
 

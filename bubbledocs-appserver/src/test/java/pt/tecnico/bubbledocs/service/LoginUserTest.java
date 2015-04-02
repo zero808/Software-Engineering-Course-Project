@@ -11,8 +11,7 @@ import org.joda.time.Seconds;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.exception.InvalidPasswordException;
-import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
+import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 
 public class LoginUserTest extends BubbleDocsServiceTest {
 
@@ -124,13 +123,13 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		assertEquals(PASSWORD2, user2.getPassword());
 	}
 
-	@Test(expected = UserDoesNotExistException.class)
+	@Test(expected = LoginBubbleDocsException.class)
 	public void loginUnknownUser() {
 		LoginUser service = new LoginUser(USERNAME_NONEXISTENT, PASSWORD);
 		service.execute();
 	}
 
-	@Test(expected = InvalidPasswordException.class)
+	@Test(expected = LoginBubbleDocsException.class)
 	public void loginUserWithinWrongPassword() {
 		LoginUser service = new LoginUser(USERNAME, INCORRECT_PASSWORD);
 		service.execute();

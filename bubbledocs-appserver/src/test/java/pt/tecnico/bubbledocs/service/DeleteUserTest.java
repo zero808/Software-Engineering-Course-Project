@@ -8,7 +8,7 @@ import org.junit.Test;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
-import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
+import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class DeleteUserTest extends BubbleDocsServiceTest {
@@ -42,7 +42,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		
 		try {
 			getUserFromUsername(USERNAME_TO_DELETE);
-		} catch (UserDoesNotExistException e) {
+		} catch (LoginBubbleDocsException e) {
 			deleted = true;
 		}
 		
@@ -64,7 +64,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		
 		try {
 			getUserFromUsername(USERNAME_TO_DELETE);
-		} catch (UserDoesNotExistException e) {
+		} catch (LoginBubbleDocsException e) {
 			deleted = true;
 		}
 		
@@ -87,7 +87,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		
 		try {
 			getUserFromUsername(USERNAME_TO_DELETE);
-		} catch (UserDoesNotExistException e) {
+		} catch (LoginBubbleDocsException e) {
 			deleted = true;
 		}
 		
@@ -96,7 +96,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		assertNull("Removed user but not removed from session", getUserFromSession(token));
 	}
 
-	@Test(expected = UserDoesNotExistException.class)
+	@Test(expected = LoginBubbleDocsException.class)
 	public void userToDeleteDoesNotExist() {
 		new DeleteUser(root, USERNAME_DOES_NOT_EXIST).execute();
 	}

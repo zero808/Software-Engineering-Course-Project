@@ -5,8 +5,8 @@ import org.jdom2.Element;
 
 import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exception.ImportDocumentException;
+import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
-import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
 
 public class Permission extends Permission_Base {
 	
@@ -14,12 +14,12 @@ public class Permission extends Permission_Base {
 		super();
 	}
 
-	public Permission(Spreadsheet spred, User user, boolean b) throws SpreadsheetDoesNotExistException, UserDoesNotExistException {
+	public Permission(Spreadsheet spred, User user, boolean b) throws SpreadsheetDoesNotExistException, LoginBubbleDocsException {
 
 		if (spred == null)
 			throw new SpreadsheetDoesNotExistException();
 		if (user == null)
-			throw new UserDoesNotExistException();
+			throw new LoginBubbleDocsException("username");
 
 		setRw(b);
 		setUser(user);

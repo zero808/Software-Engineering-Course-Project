@@ -10,7 +10,6 @@ import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
-import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class AssignLiteralCell extends BubbleDocsService {
@@ -42,11 +41,7 @@ public class AssignLiteralCell extends BubbleDocsService {
 			throw new UserNotInSessionException(username);
 		}
 		
-		User user = bd.getUserByUsername(username);
-		
-		if(user == null) {
-			throw new UserDoesNotExistException();
-		}
+		User user = bd.getUserByUsername(username); //Not my responsibility to test if its null, it shouldn't.
 		
 		String cell_parts[] = _cellId.split(";");
 		int cellRow = Integer.parseInt(cell_parts[0]);

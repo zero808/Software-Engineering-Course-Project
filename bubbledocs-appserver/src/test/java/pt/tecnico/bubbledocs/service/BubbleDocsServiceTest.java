@@ -15,10 +15,10 @@ import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
+import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
-import pt.tecnico.bubbledocs.exception.UserDoesNotExistException;
 
 public abstract class BubbleDocsServiceTest {
 
@@ -111,12 +111,12 @@ public abstract class BubbleDocsServiceTest {
 	}
 
 	// returns the user registered in the application whose username is equal to username
-	protected User getUserFromUsername(String username) throws UserDoesNotExistException {
+	protected User getUserFromUsername(String username) throws LoginBubbleDocsException {
 		BubbleDocs bd = getBubbleDocs();
 		User u = bd.getUserByUsername(username);
 		
 		if(u == null) {
-			throw new UserDoesNotExistException();
+			throw new LoginBubbleDocsException("username");
 		}
 		
 		return u;
