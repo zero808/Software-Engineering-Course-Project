@@ -21,6 +21,7 @@ public class ExportDocument extends BubbleDocsService {
 	private byte[] docXML;
 	private String userToken;
 	private int docId;
+	private StoreRemoteServices storeRemote = new StoreRemoteServices();
 	
 	public ExportDocument(String userToken, int docId) {
 		this.userToken = userToken;
@@ -33,6 +34,8 @@ public class ExportDocument extends BubbleDocsService {
 		org.jdom2.Document jdomDoc = new org.jdom2.Document();
 
 		Spreadsheet spreadsheet = getSpreadsheet(docId);
+		
+		String spreadsheetName = spreadsheet.getName();
 
 		String username = bd.getUsernameByToken(userToken);
 		
@@ -74,10 +77,9 @@ public class ExportDocument extends BubbleDocsService {
 		}
 		
 		//New functionality for 3ª Delivery
-		StoreRemoteServices storeRemote = new StoreRemoteServices();
 		
 		try {
-			storeRemote.storeDocument(user.getUsername(), spreadsheet.getName(), getDocXML());
+			storeRemote.storeDocument(username, spreadsheetName, docXML);
 		} catch (RemoteInvocationException e) {
 			throw new UnavailableServiceException();
 		}

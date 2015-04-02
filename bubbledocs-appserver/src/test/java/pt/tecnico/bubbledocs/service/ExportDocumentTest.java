@@ -5,6 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+//import mockit.Expectations;
+import mockit.Mocked;
+
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
@@ -17,9 +20,13 @@ import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
+import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
 public class ExportDocumentTest extends BubbleDocsServiceTest {
-
+	
+	@Mocked
+	StoreRemoteServices storeRemote;
+	
 	private String ownerToken;
 	private String notOwnerToken;
 	private String notInSessionToken = "antonio6";
@@ -44,9 +51,16 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		Spreadsheet spreadsheetSucessTest = getSpreadSheet("teste");
 		
 		ExportDocument service = new ExportDocument(ownerToken, spreadsheetSucessTest.getId());
+		
 		service.execute();
 		
 		byte[] serviceDocBytes = service.getDocXML();
+		
+//		new Expectations() {
+//			{
+//				storeRemote.storeDocument("lf", "teste", serviceDocBytes);
+//			}
+//		};
 		
 		org.jdom2.Document serviceDoc = new org.jdom2.Document();
 		
