@@ -10,8 +10,11 @@ import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.ExportDocumentException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
+import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
+import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
+import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
 public class ExportDocument extends BubbleDocsService {
 	
@@ -25,7 +28,7 @@ public class ExportDocument extends BubbleDocsService {
 	}
 
 	@Override
-	protected void dispatch() throws ExportDocumentException, SpreadsheetDoesNotExistException, InvalidPermissionException, UserNotInSessionException, InvalidTokenException {
+	protected void dispatch() throws ExportDocumentException, UnavailableServiceException, SpreadsheetDoesNotExistException, InvalidPermissionException, UserNotInSessionException, InvalidTokenException {
 		BubbleDocs bd = getBubbleDocs();
 		org.jdom2.Document jdomDoc = new org.jdom2.Document();
 
@@ -68,6 +71,15 @@ public class ExportDocument extends BubbleDocsService {
 			}else {
 				throw new InvalidPermissionException(username);
 			}
+		}
+		
+		//New functionality for 3ª Delivery
+		StoreRemoteServices storeRemote = new StoreRemoteServices();
+		
+		try {
+			storeRemote.storeDocument(user.getUsername(), spreadsheet.getName(), getDocXML());
+		} catch (RemoteInvocationException e) {
+			throw new UnavailableServiceException();
 		}
 	}	
 	
