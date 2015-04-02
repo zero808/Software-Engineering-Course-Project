@@ -53,4 +53,4 @@ public class Range extends Range_Base {
 		set$cells(null);
 		deleteDomainObject();
 	}
-}
+}// End Range class

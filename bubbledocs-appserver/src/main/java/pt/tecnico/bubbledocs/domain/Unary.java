@@ -36,4 +36,4 @@ public abstract class Unary extends Unary_Base {
 		r.setUnary(null);
 		r.delete();
 	}
-}
+}// End Unary class

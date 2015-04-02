@@ -12,13 +12,11 @@ import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class CreateUserTest extends BubbleDocsServiceTest {
 
-	// the tokens
 	private String root;
 	private String ars;
 
 	private static final String USERNAME = "ars";
 	private static final String PASSWORD = "ars";
-	//private static final String ROOT_USERNAME = "root";
 	private static final String USERNAME_DOES_NOT_EXIST = "no-one";
 
 	@Override
@@ -34,7 +32,6 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 		CreateUser service = new CreateUser(root, USERNAME_DOES_NOT_EXIST, "jose", "José Ferreira");
 		service.execute();
 
-		// User is the domain class that represents a User
 		User user = getUserFromUsername(USERNAME_DOES_NOT_EXIST);
 		
 		assertEquals(USERNAME_DOES_NOT_EXIST, user.getUsername());
@@ -66,4 +63,4 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 		CreateUser service = new CreateUser(root, USERNAME_DOES_NOT_EXIST, "jose", "José Ferreira");
 		service.execute();
 	}
-}// End CreateUserTest class.
+}// End CreateUserTest class

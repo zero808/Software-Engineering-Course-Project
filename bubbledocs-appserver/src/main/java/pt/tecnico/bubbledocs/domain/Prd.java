@@ -38,5 +38,4 @@ public class Prd extends Prd_Base {
 
 		return f;
 	}
-
-}
+}// End Prd class

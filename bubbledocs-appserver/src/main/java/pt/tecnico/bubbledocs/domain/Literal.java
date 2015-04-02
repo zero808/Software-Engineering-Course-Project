@@ -39,4 +39,4 @@ public class Literal extends Literal_Base implements Argument{
 	public Content retrieveContent() {
 		return this;
 	}
-}
+}// End Literal class

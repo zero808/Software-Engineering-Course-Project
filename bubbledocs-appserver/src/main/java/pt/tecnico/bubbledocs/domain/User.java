@@ -77,7 +77,6 @@ public class User extends User_Base {
 		setPassword(userElement.getAttribute("pass").getValue());
 		Element spreadsheets = userElement.getChild("spreadsheets");
 
-		//Maybe missing permissions on this side too.
 		for (Element spreadsheetElement : spreadsheets.getChildren("spreadsheet")) {
 			if(getSpreadsheetByName(spreadsheetElement.getAttribute("name").getValue()) == null) {
 				Spreadsheet s = new Spreadsheet();
@@ -233,5 +232,4 @@ public class User extends User_Base {
 	public String toString() {
 		return "Nome: " + getName() + " " + "Username: " + getUsername() + " " + "Password: " + getPassword() + "\n";
 	}
-
-}// End User Class
+}// End User class

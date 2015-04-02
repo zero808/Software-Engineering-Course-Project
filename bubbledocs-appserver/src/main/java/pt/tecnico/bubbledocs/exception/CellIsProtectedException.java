@@ -26,4 +26,4 @@ public class CellIsProtectedException extends BubbleDocsException {
 	public String toString() {
 		return "Cell at " + "(" + getRow() + ", " + getCollumn() + ")" + "is protected.\n"; 
 	}
-}// End of CellIsProtectedException class.
+}// End CellIsProtectedException class

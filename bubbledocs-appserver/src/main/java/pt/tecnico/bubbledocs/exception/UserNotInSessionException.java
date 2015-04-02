@@ -20,4 +20,4 @@ public class UserNotInSessionException extends BubbleDocsException {
 	public String toString() {
 		return "The user " + getUsername() + " does not currently have a valid session.\n";
 	}
-}// End UserNotInSessionException class.
+}// End UserNotInSessionException class

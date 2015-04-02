@@ -14,4 +14,4 @@ public class InvalidPasswordException extends BubbleDocsException {
 	public String toString() {
 		return "Password given is invalid.\n";
 	}
-}//End InvalidPasswordException class.
+}// End InvalidPasswordException class

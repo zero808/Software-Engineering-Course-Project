@@ -26,4 +26,4 @@ public class OutofBoundsException extends BubbleDocsException {
 	public String toString() {
 		return "Out of spreadsheet bonds -> " + "(" + getRows() + ", " + getCollumns() + ")";
 	}
-}// End OutofBoundsException class.
+}// End OutofBoundsException class

@@ -234,4 +234,4 @@ public class Spreadsheet extends Spreadsheet_Base {
 		return "Nome: " + getName() + " " + "Data Criacao: " + getDate().toString() + " " + "N-Linhas: " + getNRows() + " " + "N-Colunas: " + getNCols() + "\n";
 	}
 
-}// End Spreadsheet Class
+}// End Spreadsheet class

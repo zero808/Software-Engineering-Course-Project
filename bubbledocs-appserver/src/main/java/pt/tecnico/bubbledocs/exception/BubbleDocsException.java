@@ -7,4 +7,4 @@ public abstract class BubbleDocsException extends RuntimeException {
 	public BubbleDocsException() {
 		//Just needs to exist.
 	}
-}// End BubbleDocsException class.
+}// End BubbleDocsException class

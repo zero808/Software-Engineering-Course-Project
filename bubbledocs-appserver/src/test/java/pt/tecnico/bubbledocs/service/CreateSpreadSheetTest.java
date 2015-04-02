@@ -11,10 +11,12 @@ import pt.tecnico.bubbledocs.exception.InvalidSpreadsheetNameException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
+	
 	private String userNoSpredToken;
 	private String userWithSpredToken;
 	private static final String notInSessionToken = "antonio6";
 	private static final String legalCharTestName = "Az1 9_+-";
+	
 	@Override
 	public void populate4Test() {
 		getBubbleDocs();

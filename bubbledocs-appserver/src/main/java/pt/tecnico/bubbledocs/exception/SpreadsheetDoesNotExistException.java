@@ -7,11 +7,11 @@ public class SpreadsheetDoesNotExistException extends BubbleDocsException {
 	private static final long serialVersionUID = 1L;
 
 	public SpreadsheetDoesNotExistException() {
-		//Just Needs to Exist.
+		//Just needs to exist.
 	}
 	
 	@Override
 	public String toString() {
 		return "The spreadsheet requested does not exist.\n";
 	}
-}// End SpreadsheetDoesNotExistException class.
+}// End SpreadsheetDoesNotExistException class

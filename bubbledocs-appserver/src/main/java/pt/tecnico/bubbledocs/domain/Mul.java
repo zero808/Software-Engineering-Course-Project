@@ -28,7 +28,6 @@ public class Mul extends Mul_Base {
 		if (getArg1().toString().equals("#VALUE")) throw new InvalidArgumentsException();
 		if (getArg2().toString().equals("#VALUE")) throw new InvalidArgumentsException();
 		return super.getArg1().getValue()*super.getArg2().getValue();
-		// TODO Needs to check for #VALUES
 	}
 
 	@Override
@@ -67,13 +66,6 @@ public class Mul extends Mul_Base {
 				if(count==2) this.setArg2(r);
 			}
 			count++;
-		}
-		
+		}	
 	}
-
-	@Override
-	public String toString() {
-		return "Funcao Mul";
-		// TODO Make it print the arguments and the value also.
-	}
-}
+}// End Mul class

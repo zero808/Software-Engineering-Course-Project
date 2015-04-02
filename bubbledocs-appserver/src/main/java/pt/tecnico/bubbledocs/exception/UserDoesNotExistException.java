@@ -14,4 +14,4 @@ public class UserDoesNotExistException extends BubbleDocsException {
 	public String toString() {
 		return "The requested user does not exist in BubbleDocs.\n";
 	}
-}// End UserDoesNotExistException class.
+}// End UserDoesNotExistException class

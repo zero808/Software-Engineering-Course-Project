@@ -31,7 +31,6 @@ public class Div extends Div_Base {
 		if (getArg2().toString().equals("#VALUE")) throw new InvalidArgumentsException();
 		if (getArg2().getValue()==0) throw new DivByZeroException();
 		return super.getArg1().getValue()/super.getArg2().getValue();
-
 	}
 
 	@Override
@@ -71,11 +70,5 @@ public class Div extends Div_Base {
 			}
 			count++;
 		}
-		
 	}
-	
-	@Override
-	public String toString() {
-		return "Funcao Div";
-	}
-}
+}// End Div class

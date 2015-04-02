@@ -20,4 +20,4 @@ public class ExportDocumentException extends BubbleDocsException {
 	public String toString() {
 		return "Error exporting document of " + getDesc() + ".\n"; 
 	}
-}//End ExportDocumentException class.
+}// End ExportDocumentException class

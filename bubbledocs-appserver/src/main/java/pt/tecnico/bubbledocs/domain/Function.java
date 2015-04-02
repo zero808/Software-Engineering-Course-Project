@@ -15,4 +15,4 @@ public abstract class Function extends Function_Base {
 	public abstract void importFromXML(Element cellElement);
 	
 	public abstract void delete();
-}
+}// End Function class

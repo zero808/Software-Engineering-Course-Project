@@ -10,12 +10,12 @@ import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class CreateUser extends BubbleDocsService {
 	
-	String userToken;
-	String newUsername;
-	String password;
-	String name;
-	BubbleDocs bd;
-	User user;
+	private String userToken;
+	private String newUsername;
+	private String password;
+	private String name;
+	private BubbleDocs bd;
+	private User user;
 
 	public CreateUser(String userToken, String newUsername, String password, String name) {
 		this.userToken = userToken;

@@ -16,7 +16,6 @@ public abstract class BubbleDocsService {
 	}
 	
 	protected static BubbleDocs getBubbleDocs() {
-		//return FenixFramework.getDomainRoot().getBubbledocs();
 		return BubbleDocs.getInstance();
 	}
 	

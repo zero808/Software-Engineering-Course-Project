@@ -20,4 +20,4 @@ public class InvalidPermissionException extends BubbleDocsException {
 	public String toString() {
 		return "This username " + getUsername() + " does not have permissions to perform this action.\n";
 	}
-}// End InvalidPermissionException class.
+}// End InvalidPermissionException class

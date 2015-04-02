@@ -20,7 +20,6 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	private static final String USERNAME_DOES_NOT_EXIST = "no-one";
 	private static final String SPREADSHEET_NAME = "spread";
 
-	// the tokens for user root
 	private String root;
 
 	@Override

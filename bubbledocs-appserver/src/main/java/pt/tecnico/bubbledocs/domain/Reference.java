@@ -31,11 +31,9 @@ public class Reference extends Reference_Base implements Argument{
 	public void delete() {
 		
 		if(super.getReferencedCell() != null) {
-			//deletes the connection from the cell to this reference
 			super.getReferencedCell().removeReference(this);
 		}
-	
-		//and deletes the connection between this reference and the cell
+		
 		super.setCell(null);
 		deleteDomainObject();
 	}
@@ -75,4 +73,4 @@ public class Reference extends Reference_Base implements Argument{
 	public Content retrieveContent() {
 		return this;
 	}
-}
+}// End Reference class

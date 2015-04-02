@@ -87,24 +87,23 @@ public class Cell extends Cell_Base {
 
 						} else {
 							if ((functionType = subcontent.getChild("unary_function")) != null) {
-								// TODO Second Delivery
+								Element functionName;
+								if ((functionName = functionType.getChild("avg")) != null) {
+									Avg avg = new Avg();
+									avg.setCell(this);
+									avg.importFromXML(functionName);
+								} else {
+									if ((functionName = functionType.getChild("prd")) != null) {
+										Prd prd = new Prd();
+										prd.setCell(this);
+										prd.importFromXML(functionName);
+									} 
+								}
 							}
 						}
 					}
 				}
 			}
-		}
-	}
-
-	@Override
-	public String toString() {
-		String _cont;
-		if (this.getContent() == null) {
-			_cont = null;
-			return "row: " + this.getRow() + "\ncol: " + this.getCollumn() + "\n#VALUE\n";
-		} else {
-			_cont = this.getContent().toString();
-			return "row: " + super.getRow() + "\ncol: " + super.getCollumn() + "\n" + _cont; // OCD beware.
 		}
 	}
 
@@ -128,4 +127,4 @@ public class Cell extends Cell_Base {
 		
 		deleteDomainObject();
 	}
-}
+}// End Cell class

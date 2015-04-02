@@ -20,4 +20,4 @@ public class ImportDocumentException extends BubbleDocsException {
 	public String toString() {
 		return "Error importing document of " + getDesc() + ".\n"; 
 	}
-}// End ImportDocumentException class.
+}// End ImportDocumentException class

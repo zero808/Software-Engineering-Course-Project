@@ -63,5 +63,4 @@ public class Permission extends Permission_Base {
 			throw new ImportDocumentException("permission");
 		}
 	}
-
-}// End of Permission Class
+}// End Permission class

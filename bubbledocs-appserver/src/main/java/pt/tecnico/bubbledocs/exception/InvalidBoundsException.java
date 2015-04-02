@@ -18,4 +18,4 @@ public class InvalidBoundsException extends BubbleDocsException {
 	public String toString() {
 		return "Invalid bounds passed. Must be between 1 and MAX_INT. Received Row: " + row + " Col: " + col + "\n";
 	}
-}// End InvalidBoundsException class.
+}// End InvalidBoundsException class

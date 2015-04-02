@@ -26,4 +26,4 @@ public class CellAlreadyExistsException extends BubbleDocsException {
 	public String toString() {
 		return "Cell at " + "(" + getRow() + ", " + getCollumn() + ")" + "already exists.\n"; 
 	}
-}//End of CellAlreadyExistsException class.
+}// End CellAlreadyExistsException class

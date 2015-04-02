@@ -20,4 +20,4 @@ public class UserAlreadyExistsException extends BubbleDocsException {
 	public String toString() {
 		return "The username " + getUsername() + " already exists in BubbleDocs.\n";
 	}
-}
+}// End UserAlreadyExistsException class

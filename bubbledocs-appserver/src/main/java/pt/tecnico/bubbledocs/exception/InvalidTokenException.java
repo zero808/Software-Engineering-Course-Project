@@ -14,4 +14,4 @@ public class InvalidTokenException extends BubbleDocsException {
 	public String toString() {
 		return "Token given is invalid.\n";
 	}
-}//End InvalidTokenException class.
+}// End InvalidTokenException class

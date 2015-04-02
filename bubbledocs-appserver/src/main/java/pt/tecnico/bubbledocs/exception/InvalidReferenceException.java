@@ -26,4 +26,4 @@ public class InvalidReferenceException extends BubbleDocsException {
 	public String toString() {
 		return "Reference is pointing to an invalid location at " + "(" + getRow() + ", " + getCollumn() + ").\n";
 	}
-}
+}// End InvalidReferenceException class

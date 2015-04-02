@@ -11,7 +11,8 @@ import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 
 public class CreateSpreadSheet extends BubbleDocsService {
-	private int sheetId;  // id of the new sheet
+	
+	private int sheetId;
 	private String userToken;
 	private String name;
 	private int nrow;

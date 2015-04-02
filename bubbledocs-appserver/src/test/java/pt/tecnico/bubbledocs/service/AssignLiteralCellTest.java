@@ -58,12 +58,10 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	@Test(expected = OutofBoundsException.class)
 	public void cellIsOutOfBonds() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
-		String cell = "11;11"; // Is an invalid position since the spreadsheet
-								// is 10x10.
+		String cell = "11;11"; // Is an invalid position since the spreadsheet is 10x10.
 		String literal = "3";
 
-		AssignLiteralCell service = new AssignLiteralCell(ownerToken,
-				testSpreadsheet.getId(), cell, literal);
+		AssignLiteralCell service = new AssignLiteralCell(ownerToken, testSpreadsheet.getId(), cell, literal);
 		service.execute();
 	}
 
@@ -75,8 +73,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 
 		protectCell("teste", 1, 1);
 
-		AssignLiteralCell service = new AssignLiteralCell(ownerToken,
-				testSpreadsheet.getId(), cell, literal);
+		AssignLiteralCell service = new AssignLiteralCell(ownerToken, testSpreadsheet.getId(), cell, literal);
 		service.execute();
 	}
 
@@ -85,8 +82,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		String cell = "1;1";
 		String literal = "3";
 
-		AssignLiteralCell service = new AssignLiteralCell(ownerToken, -1, cell,
-				literal); // No spreadsheet should ever have -1 Id.
+		AssignLiteralCell service = new AssignLiteralCell(ownerToken, -1, cell, literal); // No spreadsheet should ever have -1 Id.
 		service.execute();
 	}
 
@@ -96,8 +92,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		String cell = "1;1";
 		String literal = "3";
 
-		AssignLiteralCell service = new AssignLiteralCell(notInSessionToken,
-				testSpreadsheet.getId(), cell, literal); 
+		AssignLiteralCell service = new AssignLiteralCell(notInSessionToken, testSpreadsheet.getId(), cell, literal); 
 		service.execute();
 	}
 
@@ -107,8 +102,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		String cell = "1;1";
 		String literal = "3";
 
-		AssignLiteralCell service = new AssignLiteralCell("",
-				testSpreadsheet.getId(), cell, literal); 
+		AssignLiteralCell service = new AssignLiteralCell("", testSpreadsheet.getId(), cell, literal); 
 		service.execute();
 	}
 
@@ -122,8 +116,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 
 		leoUser.removePermissionfrom(testSpreadsheet, zeUser);
 
-		AssignLiteralCell service = new AssignLiteralCell(notOwnerToken,
-				testSpreadsheet.getId(), cell, literal);
+		AssignLiteralCell service = new AssignLiteralCell(notOwnerToken, testSpreadsheet.getId(), cell, literal);
 		service.execute();
 	}
 
@@ -137,8 +130,7 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 
 		leoUser.removePermissionfrom(testSpreadsheet, zeUser);
 
-		AssignLiteralCell service = new AssignLiteralCell(notOwnerToken,
-				testSpreadsheet.getId(), cell, literal);
+		AssignLiteralCell service = new AssignLiteralCell(notOwnerToken, testSpreadsheet.getId(), cell, literal);
 		service.execute();
 	}
-}// End AssignLiteralCellTest Class
+}// End AssignLiteralCellTest class

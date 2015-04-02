@@ -66,13 +66,6 @@ public class Add extends Add_Base {
 				if(count==2) this.setArg2(r);
 			}
 			count++;
-		}
-		
+		}	
 	}
-	
-	@Override
-	public String toString() {
-		return "Funcao Add";
-		//TODO Make it print the arguments and the value also.
-	}
-}
+}// End Add class

@@ -20,4 +20,4 @@ public class InvalidUsernameException extends BubbleDocsException {
 	public String toString() {
 		return "Invalid Username because " + getDesc() + "\n";
 	}
-}// End InvalidUsernameException class.
+}// End InvalidUsernameException class

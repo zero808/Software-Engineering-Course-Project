@@ -83,16 +83,15 @@ public class Root extends Root_Base {
 
 		super.removeSpreadsheets(toRemove);
 		toRemove.delete();
-
 	}
 	
 	@Override
 	public void removePermissionfrom(Spreadsheet s, User u) {
-			if(s.getPermissionOfUser(u) == null) {
-				throw new InvalidPermissionException(u.getName());
-			} else {
-				s.getPermissionOfUser(u).setRw(false);
-			}
+		if(s.getPermissionOfUser(u) == null) {
+			throw new InvalidPermissionException(u.getName());
+		} else {
+			s.getPermissionOfUser(u).setRw(false);
+		}
 	}
 	
 	@Override
@@ -105,4 +104,4 @@ public class Root extends Root_Base {
 		return true;
 	}
 		
-}// End of Root Class
+}// End Root class

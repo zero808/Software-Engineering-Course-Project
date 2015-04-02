@@ -5,8 +5,6 @@ import org.jdom2.Element;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
-//import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
-
 public class Sub extends Sub_Base {
 
 	public Sub() {
@@ -28,7 +26,6 @@ public class Sub extends Sub_Base {
 		if (getArg1().toString().equals("#VALUE")) throw new InvalidArgumentsException();
 		if (getArg2().toString().equals("#VALUE")) throw new InvalidArgumentsException();
 		return super.getArg1().getValue()-super.getArg2().getValue();
-		// TODO Needs to check for #VALUES and the order of the arguments.
 	}
 
 	@Override
@@ -67,13 +64,6 @@ public class Sub extends Sub_Base {
 				if(count==2) this.setArg2(r);
 			}
 			count++;
-		}
-		
+		}	
 	}
-	
-	@Override
-	public String toString() {
-		return "Funcao Sub";
-		//TODO Make it print the arguments and the value also.
-	}
-}
+}// End Sub class

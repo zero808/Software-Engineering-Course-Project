@@ -38,5 +38,4 @@ public class Avg extends Avg_Base {
 
 		return f;
 	}
-
-}
+}//End Avg class

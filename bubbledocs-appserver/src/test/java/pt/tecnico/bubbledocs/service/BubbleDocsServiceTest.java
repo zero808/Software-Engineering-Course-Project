@@ -48,7 +48,6 @@ public abstract class BubbleDocsServiceTest {
 	// Auxiliary methods that access the domain layer and are needed in the test classes.
 	// For defining the initial state and checking that the service has the expected behavior.
 	protected static BubbleDocs getBubbleDocs() {
-		//return FenixFramework.getDomainRoot().getBubbledocs();
 		return BubbleDocs.getInstance();
 	}
 	
@@ -112,7 +111,6 @@ public abstract class BubbleDocsServiceTest {
 	}
 
 	// returns the user registered in the application whose username is equal to username
-	//TODO Change to return null and not throw exception? -> Requires changes in tests
 	protected User getUserFromUsername(String username) throws UserDoesNotExistException {
 		BubbleDocs bd = getBubbleDocs();
 		User u = bd.getUserByUsername(username);
@@ -141,4 +139,4 @@ public abstract class BubbleDocsServiceTest {
 		BubbleDocs bd = getBubbleDocs();
 		return bd.getUserByUsername(bd.getUsernameByToken(token));
 	}
-}// End BubbleDocsServiceTest class.
+}// End BubbleDocsServiceTest class

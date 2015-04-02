@@ -200,4 +200,4 @@ public class BubbleDocs extends BubbleDocs_Base {
 	public void changeUserTokenExpirationDate(String userToken, LocalTime newExpirationDate) {
 		_tokenTimeMap.replace(userToken, newExpirationDate);		
 	}
-}// End BubbleDocs Class
+}// End BubbleDocs class
