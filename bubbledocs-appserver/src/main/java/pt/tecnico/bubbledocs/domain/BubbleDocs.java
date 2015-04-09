@@ -135,6 +135,12 @@ public class BubbleDocs extends BubbleDocs_Base {
 		return null;
 	}
 	
+	public void invalidateUserPassword(String username) {
+		//IDRemoteServices invalidates current user password.
+		//When the user tries to login, it has to use IDRemoteServices, which, if the password is different then the local copy, it should update it.
+		getUserByUsername(username).setPassword(null);
+	}
+	
 	public String login(String username, String password) {
 		
 		LocalTime currentTime = new LocalTime();				//Creates Actual Date
