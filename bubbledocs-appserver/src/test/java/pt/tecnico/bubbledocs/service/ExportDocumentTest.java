@@ -98,6 +98,13 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		service.execute();
 
 		byte[] serviceDocBytes = service.getDocXML();
+		
+		new Expectations() {
+			{
+				StoreRemoteServices storeRemote = new StoreRemoteServices();
+				storeRemote.storeDocument(spreadsheetSucessTest.getUser().getUsername(), spreadsheetSucessTest.getName(), service.getDocXML());
+			}
+		};
 
 		org.jdom2.Document serviceDoc = new org.jdom2.Document();
 
