@@ -17,6 +17,7 @@ import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.CannotStoreDocumentException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
+import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
@@ -188,6 +189,14 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		
 		ExportDocument service = new ExportDocument(ownerToken, spreadsheetTest.getId());
 		service.execute();
+		
+		new Expectations() {
+			{
+				StoreRemoteServices storeRemote = new StoreRemoteServices();
+				storeRemote.storeDocument(withNotNull(), withNotNull(), withNotNull());
+				result = new RemoteInvocationException();
+			}
+		};
 	}
 	
 	@Test(expected = CannotStoreDocumentException.class)
@@ -197,5 +206,13 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		
 		ExportDocument service = new ExportDocument(ownerToken, spreadsheetTest.getId());
 		service.execute();
+		
+		new Expectations() {
+			{
+				StoreRemoteServices storeRemote = new StoreRemoteServices();
+				storeRemote.storeDocument(withNotNull(), withNotNull(), withNotNull());
+				result = new CannotStoreDocumentException();
+			}
+		};
 	}
 }// End ExportDocumentTest class
