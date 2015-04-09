@@ -8,6 +8,7 @@ import org.junit.Test;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
+import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
@@ -69,7 +70,7 @@ public class RenewPasswordTest extends BubbleDocsServiceTest {
 			{
 				IDRemoteServices idRemote = new IDRemoteServices();
 				idRemote.renewPassword(withNotNull());
-				result = new UnavailableServiceException();
+				result = new RemoteInvocationException();
 			}
 		};
 	}
