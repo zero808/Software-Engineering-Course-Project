@@ -5,8 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-//import mockit.Expectations;
-import mockit.Mocked;
+import mockit.Expectations;
 
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -15,17 +14,16 @@ import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.exception.CannotStoreDocumentException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
+import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
 public class ExportDocumentTest extends BubbleDocsServiceTest {
-	
-	@Mocked
-	StoreRemoteServices storeRemote;
 	
 	private String ownerToken;
 	private String notOwnerToken;
@@ -56,11 +54,12 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		
 		byte[] serviceDocBytes = service.getDocXML();
 		
-//		new Expectations() {
-//			{
-//				storeRemote.storeDocument("lf", "teste", serviceDocBytes);
-//			}
-//		};
+		new Expectations() {
+			{
+				StoreRemoteServices storeRemote = new StoreRemoteServices();
+				storeRemote.storeDocument(spreadsheetSucessTest.getUser().getUsername(), spreadsheetSucessTest.getName(), service.getDocXML());
+			}
+		};
 		
 		org.jdom2.Document serviceDoc = new org.jdom2.Document();
 		
@@ -172,6 +171,24 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		luisUser.removePermissionfrom(spreadsheetTest, zeUser);
 
 		ExportDocument service = new ExportDocument(notOwnerToken, spreadsheetTest.getId());
+		service.execute();
+	}
+	
+	@Test(expected = UnavailableServiceException.class)
+	public void remoteInvocationFailure() {
+		User luisUser = getUserFromUsername("lf");
+		Spreadsheet spreadsheetTest = createSpreadSheet(luisUser, "Remote invocation failure", 10, 10);
+		
+		ExportDocument service = new ExportDocument(ownerToken, spreadsheetTest.getId());
+		service.execute();
+	}
+	
+	@Test(expected = CannotStoreDocumentException.class)
+	public void storeFailure() {
+		User luisUser = getUserFromUsername("lf");
+		Spreadsheet spreadsheetTest = createSpreadSheet(luisUser, "Store failure", 10, 10);
+		
+		ExportDocument service = new ExportDocument(ownerToken, spreadsheetTest.getId());
 		service.execute();
 	}
 }// End ExportDocumentTest class

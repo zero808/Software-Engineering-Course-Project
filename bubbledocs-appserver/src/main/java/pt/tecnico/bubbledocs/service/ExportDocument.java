@@ -32,7 +32,7 @@ public class ExportDocument extends BubbleDocsService {
 	protected void dispatch() throws ExportDocumentException, UnavailableServiceException, SpreadsheetDoesNotExistException, InvalidPermissionException, UserNotInSessionException, InvalidTokenException {
 		BubbleDocs bd = getBubbleDocs();
 		org.jdom2.Document jdomDoc = new org.jdom2.Document();
-
+		
 		Spreadsheet spreadsheet = getSpreadsheet(docId);
 		
 		String spreadsheetName = spreadsheet.getName();
@@ -50,7 +50,7 @@ public class ExportDocument extends BubbleDocsService {
 		User user = bd.getUserByUsername(username); //Not my responsibility to test if its null, it shouldn't.
 		
 		if(user.hasOwnerPermission(spreadsheet)) {
-
+			
 			jdomDoc.setRootElement(spreadsheet.exportToXML());
 
 			XMLOutputter xml = new XMLOutputter();
@@ -59,6 +59,15 @@ public class ExportDocument extends BubbleDocsService {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				throw new ExportDocumentException(spreadsheet.getName());
+			} finally {
+				
+				//New functionality for 3ª Delivery
+
+				try {
+					storeRemote.storeDocument(username, spreadsheetName, docXML);
+				} catch (RemoteInvocationException e) {
+					throw new UnavailableServiceException();
+				}
 			}
 		}else {
 			if(user.hasPermission(spreadsheet)) {
@@ -66,22 +75,23 @@ public class ExportDocument extends BubbleDocsService {
 
 				XMLOutputter xml = new XMLOutputter();
 				try {
-					this.docXML = xml.outputString(jdomDoc).getBytes("UTF-8");
+					this.docXML = xml.outputString(jdomDoc).getBytes("UTF-8");				
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 					throw new ExportDocumentException(spreadsheet.getName());
+				} finally {
+					
+					//New functionality for 3ª Delivery
+					
+					try {
+						storeRemote.storeDocument(username, spreadsheetName, docXML);
+					} catch (RemoteInvocationException e) {
+						throw new UnavailableServiceException();
+					}
 				}
 			}else {
 				throw new InvalidPermissionException(username);
 			}
-		}
-		
-		//New functionality for 3ª Delivery
-		
-		try {
-			storeRemote.storeDocument(username, spreadsheetName, docXML);
-		} catch (RemoteInvocationException e) {
-			throw new UnavailableServiceException();
 		}
 	}	
 	
