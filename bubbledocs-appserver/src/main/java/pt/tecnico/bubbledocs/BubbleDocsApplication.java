@@ -53,10 +53,10 @@ public class BubbleDocsApplication {
 			
 			LoginUser service_login = new LoginUser("root", "rootroot");
 			service_login.execute();
-			LoginUser service_login_pf = new LoginUser("pf", "sub");
+			LoginUser service_login_pf = new LoginUser("pff", "sub");
 			service_login_pf.execute();
 			String pfToken = service_login_pf.getUserToken();
-			LoginUser service_login_ra = new LoginUser("ra", "cor");
+			LoginUser service_login_ra = new LoginUser("raa", "cor");
 			service_login_ra.execute();
 			
 			org.jdom2.Document wholeDoc = new org.jdom2.Document();
@@ -76,14 +76,14 @@ public class BubbleDocsApplication {
 			} 
 			
 			try {
-				listSpreadsheetsOf("pf");
+				listSpreadsheetsOf("pff");
 			} catch (BubbleDocsException exception) {
 				exception.printStackTrace();
 				System.out.println(exception.toString());
 			} 
 			
 			try {
-				listSpreadsheetsOf("ra");
+				listSpreadsheetsOf("raa");
 			} catch (BubbleDocsException exception) {
 				exception.printStackTrace();
 				System.out.println(exception.toString());
@@ -102,14 +102,14 @@ public class BubbleDocsApplication {
 			}
 			
 			try {
-				deleteSpreadsheetOf("pf", "Notas ES");
+				deleteSpreadsheetOf("pff", "Notas ES");
 			} catch (BubbleDocsException exception) {
 				exception.printStackTrace();
 				System.out.println(exception.toString());
 			}
 			
 			try {
-				listSpreadsheetsOf("pf");
+				listSpreadsheetsOf("pff");
 			} catch (BubbleDocsException exception) {
 				exception.printStackTrace();
 				System.out.println(exception.toString());
@@ -123,7 +123,7 @@ public class BubbleDocsApplication {
 			}
 			
 			try {
-				listSpreadsheetsOf("pf");
+				listSpreadsheetsOf("pff");
 			} catch (BubbleDocsException exception) {
 				exception.printStackTrace();
 				System.out.println(exception.toString());
@@ -171,13 +171,13 @@ public class BubbleDocsApplication {
 		service_login.execute();
 		String rootToken = service_login.getUserToken();
 		
-		CreateUser service_pf = new CreateUser(rootToken, "pf", "sub", "Paul Door");
+		CreateUser service_pf = new CreateUser(rootToken, "pff", "sub", "Paul Door");
 		service_pf.execute();
 		
-		CreateUser service_ra = new CreateUser(rootToken, "ra", "cor", "Step Rabbit");
+		CreateUser service_ra = new CreateUser(rootToken, "raa", "cor", "Step Rabbit");
 		service_ra.execute();
 		
-		LoginUser service_login_pf = new LoginUser("pf", "sub");
+		LoginUser service_login_pf = new LoginUser("pff", "sub");
 		service_login_pf.execute();
 		String pfToken = service_login_pf.getUserToken();
 		
@@ -186,7 +186,7 @@ public class BubbleDocsApplication {
 		
 		int docId = bd.getSpreadsheetByName("Notas ES").getId();
 		Spreadsheet notas = bd.getSpreadsheetByName("Notas ES");
-		User pf = bd.getUserByUsername("pf");
+		User pf = bd.getUserByUsername("pff");
 		
 		//Literal 5 on position (3,4).
 		AssignLiteralCell service_literal1 = new AssignLiteralCell(pfToken, docId, "3;4", "5");
