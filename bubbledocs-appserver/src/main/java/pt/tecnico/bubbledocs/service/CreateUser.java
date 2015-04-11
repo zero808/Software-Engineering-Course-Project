@@ -40,8 +40,8 @@ public class CreateUser extends BubbleDocsService {
 		if(!bd.isRoot(this.userToken))
 			throw new InvalidPermissionException(this.newUsername);
 		
-		//make sure the username is not the empty string
-		if(this.newUsername.equals(""))
+		//make sure the username length is between 3 and 8 characters
+		if(this.newUsername.length()<3||this.newUsername.length()>8)
 			throw new InvalidUsernameException(this.newUsername);
 		
 		user = new User(this.newUsername, this.name, this.password);
