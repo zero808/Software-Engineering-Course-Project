@@ -2,6 +2,8 @@ package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import mockit.Expectations;
+import mockit.Mocked;
 
 import org.junit.Test;
 
@@ -9,7 +11,10 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
+import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
+import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
+import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 public class DeleteUserTest extends BubbleDocsServiceTest {
 
@@ -22,12 +27,21 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 
 	private String root;
 
+	@Mocked
+	private IDRemoteServices idRemoteService;
+
 	@Override
 	public void populate4Test() {
 		getBubbleDocs();
 		createUser(USERNAME, PASSWORD, "António Rito Silva");
 		User smf = createUser(USERNAME_TO_DELETE, "smf", "Sérgio Fernandes");
 		createSpreadSheet(smf, USERNAME_TO_DELETE, 20, 20);
+
+		new Expectations() {
+			{
+				idRemoteService.removeUser(anyString);
+			}
+		};
 
 		root = addUserToSession(ROOT_USERNAME);
 	}
@@ -36,6 +50,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	public void success() {
 		BubbleDocs bd = getBubbleDocs();
 		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
+		service.setIdRemoteService(idRemoteService);
 		service.execute();
 		
 		boolean deleted = false;
@@ -58,6 +73,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	public void successToDeleteIsNotInSession() {
 		BubbleDocs bd = getBubbleDocs();
 		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
+		service.setIdRemoteService(idRemoteService);
 		service.execute();
 		
 		boolean deleted = false;
@@ -81,6 +97,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		BubbleDocs bd = getBubbleDocs();
 		String token = addUserToSession(USERNAME_TO_DELETE);
 		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
+		service.setIdRemoteService(idRemoteService);
 		service.execute();
 		
 		boolean deleted = false;
@@ -98,20 +115,25 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 
 	@Test(expected = LoginBubbleDocsException.class)
 	public void userToDeleteDoesNotExist() {
-		new DeleteUser(root, USERNAME_DOES_NOT_EXIST).execute();
+		DeleteUser service = new DeleteUser(root, USERNAME_DOES_NOT_EXIST);
+		service.setIdRemoteService(idRemoteService);
+		service.execute();
 	}
 
 	@Test(expected = InvalidPermissionException.class)
 	public void notRootUser() {
 		String ars = addUserToSession(USERNAME);
-		new DeleteUser(ars, USERNAME_TO_DELETE).execute();
+		DeleteUser service = new DeleteUser(ars, USERNAME_TO_DELETE);
+		service.setIdRemoteService(idRemoteService);
+		service.execute();
 	}
 
 	@Test(expected = UserNotInSessionException.class)
 	public void rootNotInSession() {
 		removeUserFromSession(root);
-
-		new DeleteUser(root, USERNAME_TO_DELETE).execute();
+		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
+		service.setIdRemoteService(idRemoteService);
+		service.execute();
 	}
 
 	@Test(expected = UserNotInSessionException.class)
@@ -119,11 +141,39 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		String ars = addUserToSession(USERNAME);
 		removeUserFromSession(ars);
 
-		new DeleteUser(ars, USERNAME_TO_DELETE).execute();
+		DeleteUser service = new DeleteUser(ars, USERNAME_TO_DELETE);
+		service.setIdRemoteService(idRemoteService);
+		service.execute();
 	}
 
 	@Test(expected = UserNotInSessionException.class)
 	public void accessUserDoesNotExist() {
-		new DeleteUser(USERNAME_DOES_NOT_EXIST, USERNAME_TO_DELETE).execute();
+		DeleteUser service = new DeleteUser(USERNAME_DOES_NOT_EXIST, USERNAME_TO_DELETE);
+		service.setIdRemoteService(idRemoteService);
+		service.execute();
 	}
+	
+	@Test(expected = LoginBubbleDocsException.class)
+	public void invalidPairUserPassword() {
+		new Expectations() {
+			{
+				idRemoteService.removeUser(anyString);
+				result = new LoginBubbleDocsException("anyString");
+			}
+		};
+		success();
+	}
+	
+	@Test(expected = UnavailableServiceException.class)
+	public void idServiceUnavailable() {
+		
+		new Expectations() {
+			{
+				idRemoteService.removeUser(anyString);
+				result = new RemoteInvocationException();
+			}
+		};
+		success();
+	}
+	
 }// End DeleteUserTest class
