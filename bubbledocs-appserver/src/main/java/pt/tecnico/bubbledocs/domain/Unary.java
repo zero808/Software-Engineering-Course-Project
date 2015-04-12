@@ -35,5 +35,7 @@ public abstract class Unary extends Unary_Base {
 		setRange(null);
 		r.setUnary(null);
 		r.delete();
+		setCell(null);
+		deleteDomainObject();
 	}
 }// End Unary class

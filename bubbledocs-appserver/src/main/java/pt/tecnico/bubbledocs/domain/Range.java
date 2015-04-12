@@ -30,6 +30,7 @@ public class Range extends Range_Base {
 			cellType.setAttribute("collumn",
 					Integer.toString(cell.getCollumn()));
 			element.addContent(cellType);
+			count++;
 		}
 		return element;
 	}
@@ -50,7 +51,9 @@ public class Range extends Range_Base {
 	}
 
 	public void delete() {
-		set$cells(null);
+		for (Cell cell : super.getCellsSet()) {
+			super.removeCells(cell);
+		}
 		deleteDomainObject();
 	}
 }// End Range class

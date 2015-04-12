@@ -31,7 +31,7 @@ public class Prd extends Prd_Base {
 		Element uf = new Element("unary_function");
 		Element prd = new Element("prd");
 
-		getRange().exportToXML();
+		prd.addContent(getRange().exportToXML());
 
 		uf.addContent(prd);
 		f.addContent(uf);

@@ -31,7 +31,7 @@ public class Avg extends Avg_Base {
 		Element uf = new Element("unary_function");
 		Element avg = new Element("avg");
 
-		getRange().exportToXML();
+		avg.addContent(getRange().exportToXML());
 
 		uf.addContent(avg);
 		f.addContent(uf);

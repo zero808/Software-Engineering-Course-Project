@@ -8,10 +8,12 @@ import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
 import pt.tecnico.bubbledocs.domain.Add;
+import pt.tecnico.bubbledocs.domain.Avg;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Div;
 import pt.tecnico.bubbledocs.domain.Literal;
+import pt.tecnico.bubbledocs.domain.Range;
 import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
@@ -210,6 +212,36 @@ public class BubbleDocsApplication {
 		Reference r4 = new Reference(c4);
 		Div div = new Div(r3, r4);
 		pf.addFunctiontoCell(div, notas, 2, 2);
+		
+		//Literal 5 on position (10,10), (10,11), (11,10), (11,11).
+		AssignLiteralCell service_literal2 = new AssignLiteralCell(pfToken, docId, "10;10", "5");
+		service_literal2.execute();
+		AssignLiteralCell service_literal3 = new AssignLiteralCell(pfToken, docId, "10;11", "5");
+		service_literal3.execute();
+		AssignLiteralCell service_literal4 = new AssignLiteralCell(pfToken, docId, "11;10", "5");
+		service_literal4.execute();
+		AssignLiteralCell service_literal5 = new AssignLiteralCell(pfToken, docId, "11;11", "5");
+		service_literal5.execute();
+		
+		//Avg between (10,10) and (11,11) on (12,12)
+		Avg avg = new Avg(new Range(notas.getCellByCoords(10, 10), notas.getCellByCoords(11, 11)));
+		pf.addFunctiontoCell(avg, notas, 12, 12);	
+		
+		//Literal 5 on position (15,15), (15,16)
+		//Reference to literal 5 on position (16,15)
+		//#Value on position (16,16).
+		AssignLiteralCell service_literal6 = new AssignLiteralCell(pfToken, docId, "15;16", "5");
+		service_literal6.execute();
+		AssignLiteralCell service_literal7 = new AssignLiteralCell(pfToken, docId, "15;15", "5");
+		service_literal7.execute();
+		AssignReferenceCell service_reference2 = new AssignReferenceCell(pfToken, docId, "16;15", "15;15");
+		service_reference2.execute();
+		AssignReferenceCell service_reference3 = new AssignReferenceCell(pfToken, docId, "16;16", "18;18");
+		service_reference3.execute();
+		
+		//Avg between (15,15) and (16,16) on (17,17)
+		Avg avg2 = new Avg(new Range(notas.getCellByCoords(15, 15), notas.getCellByCoords(16, 16)));
+		pf.addFunctiontoCell(avg2, notas, 17, 17);	
 	}
 
 	@Atomic
