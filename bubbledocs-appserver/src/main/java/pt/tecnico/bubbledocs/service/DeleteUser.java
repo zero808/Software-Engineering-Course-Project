@@ -15,11 +15,12 @@ public class DeleteUser extends BubbleDocsService {
 	private String userToken;
 	private String toDeleteUsername;
 
-	private IDRemoteServices idRemoteService = new IDRemoteServices();
+	private IDRemoteServices idRemoteService;
 
 	public DeleteUser(String userToken, String toDeleteUsername) {
 		this.userToken = userToken;
 		this.toDeleteUsername = toDeleteUsername;
+		this.idRemoteService = new IDRemoteServices();
 	}
 
 	@Override
