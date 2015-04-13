@@ -21,6 +21,7 @@ public class ExportDocument extends BubbleDocsService {
 	private byte[] docXML;
 	private String userToken;
 	private int docId;
+	
 	private StoreRemoteServices storeRemote = new StoreRemoteServices();
 	
 	public ExportDocument(String userToken, int docId) {
@@ -59,15 +60,14 @@ public class ExportDocument extends BubbleDocsService {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				throw new ExportDocumentException(spreadsheet.getName());
-			} finally {
-				
-				//New functionality for 3ª Delivery
+			}
+			
+			//New functionality for 3ª Delivery
 
-				try {
-					storeRemote.storeDocument(username, spreadsheetName, docXML);
-				} catch (RemoteInvocationException e) {
-					throw new UnavailableServiceException();
-				}
+			try {
+				storeRemote.storeDocument(username, spreadsheetName, docXML);
+			} catch (RemoteInvocationException e) {
+				throw new UnavailableServiceException();
 			}
 		}else {
 			if(user.hasPermission(spreadsheet)) {
@@ -79,21 +79,25 @@ public class ExportDocument extends BubbleDocsService {
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 					throw new ExportDocumentException(spreadsheet.getName());
-				} finally {
-					
-					//New functionality for 3ª Delivery
-					
-					try {
-						storeRemote.storeDocument(username, spreadsheetName, docXML);
-					} catch (RemoteInvocationException e) {
-						throw new UnavailableServiceException();
-					}
+				}
+				
+				//New functionality for 3ª Delivery
+				
+				try {
+					storeRemote.storeDocument(username, spreadsheetName, docXML);
+				} catch (RemoteInvocationException e) {
+					throw new UnavailableServiceException();
 				}
 			}else {
 				throw new InvalidPermissionException(username);
 			}
 		}
-	}	
+		
+	}
+
+	public void setStoreRemoteService(StoreRemoteServices storeRemote) {
+		this.storeRemote = storeRemote;
+	}
 	
 	public byte[] getDocXML() {
 		return docXML;

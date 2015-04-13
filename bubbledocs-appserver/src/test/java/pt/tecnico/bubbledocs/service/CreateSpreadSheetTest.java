@@ -22,12 +22,12 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 		getBubbleDocs();
 		
 		//this user has no previous spreadsheet
-		User luis = createUser("lf", "woot", "Luis");
-		this.userNoSpredToken = addUserToSession("lf");
+		User luis = createUser("lff", "woot", "Luis");
+		this.userNoSpredToken = addUserToSession("lff");
 		
 		//this user already has spreadsheet and wants another
-		User ze = createUser("zz", "pass", "Jose");
-		this.userWithSpredToken = addUserToSession("zz");
+		User ze = createUser("zzz", "pass", "Jose");
+		this.userWithSpredToken = addUserToSession("zzz");
 		
 		Spreadsheet teste = createSpreadSheet(ze, "teste", 10, 10);
 		luis.addSpreadsheets(teste);

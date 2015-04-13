@@ -10,6 +10,7 @@ import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 public class RenewPassword extends BubbleDocsService {
 	
 	private String userToken;
+	
 	private IDRemoteServices idRemote = new IDRemoteServices();
 	
 	public RenewPassword(String userToken) {
@@ -39,5 +40,9 @@ public class RenewPassword extends BubbleDocsService {
 		}
 		
 		bd.invalidateUserPassword(username);
-	}	
+	}
+	
+	public void setIDRemoteService(IDRemoteServices idRemote) {
+		this.idRemote = idRemote;
+	}
 }// End of RenewPassword class

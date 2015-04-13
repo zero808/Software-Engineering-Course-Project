@@ -1,11 +1,6 @@
 package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
-//import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
-
-
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;

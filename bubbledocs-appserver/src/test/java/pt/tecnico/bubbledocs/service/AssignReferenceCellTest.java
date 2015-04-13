@@ -27,11 +27,11 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 	public void populate4Test() {
 		getBubbleDocs();
 		
-		User luis = createUser("lf", "woot", "Luis");
-		this.ownerToken = addUserToSession("lf");
+		User luis = createUser("lff", "woot", "Luis");
+		this.ownerToken = addUserToSession("lff");
 		
-		User ze = createUser("zz", "pass", "Jose");
-		this.notOwnerToken = addUserToSession("zz");
+		User ze = createUser("zzz", "pass", "Jose");
+		this.notOwnerToken = addUserToSession("zzz");
 		
 		Spreadsheet teste = createSpreadSheet(luis, "teste", 10, 10);
 		luis.addSpreadsheets(teste);
@@ -149,8 +149,8 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;1";
 		String reference = "1;2";
-		User luisUser = getUserFromUsername("lf");
-		User zeUser = getUserFromUsername("zz");
+		User luisUser = getUserFromUsername("lff");
+		User zeUser = getUserFromUsername("zzz");
 		
 		luisUser.removePermissionfrom(testSpreadsheet, zeUser);
 		
@@ -161,8 +161,8 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 	@Test(expected = InvalidPermissionException.class)
 	public void userWithoutPermission() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
-		User luisUser = getUserFromUsername("lf");
-		User zeUser = getUserFromUsername("zz");
+		User luisUser = getUserFromUsername("lff");
+		User zeUser = getUserFromUsername("zzz");
 		String cell = "1;1";
 		String reference = "1;2";
 

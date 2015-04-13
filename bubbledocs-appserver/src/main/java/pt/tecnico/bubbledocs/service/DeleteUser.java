@@ -15,12 +15,11 @@ public class DeleteUser extends BubbleDocsService {
 	private String userToken;
 	private String toDeleteUsername;
 
-	private IDRemoteServices idRemoteService;
+	private IDRemoteServices idRemoteService = new IDRemoteServices();
 
 	public DeleteUser(String userToken, String toDeleteUsername) {
 		this.userToken = userToken;
 		this.toDeleteUsername = toDeleteUsername;
-		idRemoteService = new IDRemoteServices();
 	}
 
 	@Override
@@ -61,13 +60,8 @@ public class DeleteUser extends BubbleDocsService {
 			bd.removeUserFromSession(tok);
 		}
 	}
-
-	public IDRemoteServices getIdRemoteService() {
-		return idRemoteService;
+	
+	public void setIDRemoteService(IDRemoteServices idRemote) {
+		this.idRemoteService = idRemote;
 	}
-
-	public void setIdRemoteService(IDRemoteServices idRemoteService) {
-		this.idRemoteService = idRemoteService;
-	}
-
 }// End DeleteUser Class
