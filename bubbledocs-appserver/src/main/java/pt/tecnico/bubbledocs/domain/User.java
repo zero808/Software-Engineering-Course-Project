@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.jdom2.Element;
 
-import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exception.CellIsProtectedException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
@@ -20,35 +19,20 @@ public class User extends User_Base {
 		super(); //Root needs this.
 	}
 
-	public User(String username, String name, String pass) {
+	public User(String username, String name, String email) {
 		setUsername(username);
 		setName(name);
-		setPassword(pass);
+		setPassword(""); //Initialize it to something
+		setEmail(email);
 	}
 	
 	@Override
 	public void setUsername(String username) throws InvalidUsernameException, UserAlreadyExistsException {
-		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
 		
 		if(username == null) {
 			throw new InvalidUsernameException("Null passed as username.");
 		}
-		
-		if(username.equals("")) {
-			throw new InvalidUsernameException("Username cannot be empty.");
-		}
-		
-		if(username.equals("root") && isRoot()) {
-			super.setUsername(username);
-			return;
-		}
-		
-		for(User u : bd.getUsersSet()) {
-			if(u.getUsername().equals(username)) {
-				throw new UserAlreadyExistsException(username);
-			}
-		}
-		
+
 		super.setUsername(username); //If its exactly the same, its allowed.	
 	}
 	
@@ -58,6 +42,7 @@ public class User extends User_Base {
 		element.setAttribute("username", getUsername());
 		element.setAttribute("name", getName());
 		element.setAttribute("pass", getPassword());
+		element.setAttribute("email", getEmail());
 
 		Element spreadsheetsElement = new Element("spreadsheets");
 		element.addContent(spreadsheetsElement);
@@ -75,6 +60,7 @@ public class User extends User_Base {
 		setUsername(userElement.getAttribute("username").getValue());
 		setName(userElement.getAttribute("name").getValue());
 		setPassword(userElement.getAttribute("pass").getValue());
+		setEmail(userElement.getAttribute("email").getValue());
 		Element spreadsheets = userElement.getChild("spreadsheets");
 
 		for (Element spreadsheetElement : spreadsheets.getChildren("spreadsheet")) {
@@ -230,6 +216,6 @@ public class User extends User_Base {
 	
 	@Override
 	public String toString() {
-		return "Nome: " + getName() + " " + "Username: " + getUsername() + " " + "Password: " + getPassword() + "\n";
+		return "Nome: " + getName() + " " + "Username: " + getUsername() + " " + "Password: " + getPassword() + " " + "Email: " + getEmail() + "\n";
 	}
 }// End User class

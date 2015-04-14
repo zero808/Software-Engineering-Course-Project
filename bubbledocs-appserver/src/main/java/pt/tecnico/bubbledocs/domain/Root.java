@@ -25,6 +25,7 @@ public class Root extends Root_Base {
 		setUsername("root");
 		setName("Super User");
 		setPassword("rootroot"); // So that it doesn't have null.
+		setEmail("root@root.pt");
 		
 		bd.addUsers(this);
 	}

@@ -55,10 +55,10 @@ public class BubbleDocsApplication {
 			
 			LoginUser service_login = new LoginUser("root", "rootroot");
 			service_login.execute();
-			LoginUser service_login_pf = new LoginUser("pff", "sub");
+			LoginUser service_login_pf = new LoginUser("pff", "");
 			service_login_pf.execute();
 			String pfToken = service_login_pf.getUserToken();
-			LoginUser service_login_ra = new LoginUser("raa", "cor");
+			LoginUser service_login_ra = new LoginUser("raa", "");
 			service_login_ra.execute();
 			
 			org.jdom2.Document wholeDoc = new org.jdom2.Document();
@@ -179,7 +179,7 @@ public class BubbleDocsApplication {
 		CreateUser service_ra = new CreateUser(rootToken, "raa", "cor", "Step Rabbit");
 		service_ra.execute();
 		
-		LoginUser service_login_pf = new LoginUser("pff", "sub");
+		LoginUser service_login_pf = new LoginUser("pff", "");
 		service_login_pf.execute();
 		String pfToken = service_login_pf.getUserToken();
 		

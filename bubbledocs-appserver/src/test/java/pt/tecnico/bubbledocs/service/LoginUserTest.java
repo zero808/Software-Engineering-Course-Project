@@ -16,9 +16,9 @@ import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 public class LoginUserTest extends BubbleDocsServiceTest {
 
 	private static final String USERNAME = "jpp";
-	private static final String PASSWORD = "jp#";
+	private static final String PASSWORD = "";
 	private static final String USERNAME2 = "xpp";
-	private static final String PASSWORD2 = "xp#";
+	private static final String PASSWORD2 = "";
 	private static final String USERNAME_NONEXISTENT = "ABC";
 	private static final String INCORRECT_PASSWORD = "ABC#";
 
