@@ -39,22 +39,6 @@ public class Root extends Root_Base {
 		return null;
 	}
 
-	public void removeUser(String username) throws LoginBubbleDocsException {
-		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
-		User toRemove = bd.getUserByUsername(username);
-
-		if (toRemove == null)
-			throw new LoginBubbleDocsException("username");
-
-		bd.removeUsers(toRemove);
-		for(Spreadsheet s : toRemove.getSpreadsheetsSet()) {
-			for(Permission p : s.getPermissionsSet()) {
-				p.delete();
-			}
-		}
-		toRemove.delete();
-	}
-
 	@Override
 	public void addUser(User u) throws UserAlreadyExistsException, InvalidArgumentsException {
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();

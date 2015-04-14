@@ -32,28 +32,13 @@ public class DeleteUser extends BubbleDocsService {
 		} catch (RemoteInvocationException e) {
 			throw new UnavailableServiceException();
 		}
-
-		// root is not in session
-		if (!bd.isInSession(userToken))
-			throw new UserNotInSessionException(
-					bd.getUsernameByToken(userToken));
-
-		// user (root) does not exist
-		if (bd.getUserByUsername(bd.getUsernameByToken(userToken)) == null)
-			throw new LoginBubbleDocsException("username");
-
-		// Only root can delete users
-		if (!bd.isRoot(userToken))
-			throw new InvalidPermissionException(
-					bd.getUsernameByToken(userToken));
-
-		// user does not exist
-		if (bd.getUserByUsername(toDeleteUsername) == null)
-			throw new LoginBubbleDocsException("username");
-
 		User userToDelete = bd.getUserByUsername(toDeleteUsername);
 
-		userToDelete.delete();
+		// user does not exist
+		if (userToDelete == null)
+			throw new LoginBubbleDocsException(toDeleteUsername);
+		
+		userToDelete.delete(userToken, toDeleteUsername);
 
 		// toDeleteUser is in session,so we need to remove it.
 		String tok = bd.getTokenByUsername(toDeleteUsername);
@@ -61,7 +46,7 @@ public class DeleteUser extends BubbleDocsService {
 			bd.removeUserFromSession(tok);
 		}
 	}
-	
+
 	public void setIDRemoteService(IDRemoteServices idRemote) {
 		this.idRemoteService = idRemote;
 	}

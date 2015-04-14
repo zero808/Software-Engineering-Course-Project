@@ -15,7 +15,7 @@ public abstract class BubbleDocsService {
 		dispatch();
 	}
 	
-	protected static BubbleDocs getBubbleDocs() {
+	public static BubbleDocs getBubbleDocs() {
 		return BubbleDocs.getInstance();
 	}
 	
