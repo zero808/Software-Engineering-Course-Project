@@ -4,12 +4,8 @@ import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.exception.DuplicateEmailException;
-import pt.tecnico.bubbledocs.exception.DuplicateUsernameException;
-import pt.tecnico.bubbledocs.exception.InvalidEmailException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
-import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
@@ -43,8 +39,6 @@ public class CreateUser extends BubbleDocsService {
 			throw new UnavailableServiceException();
 		}
 
-//InvalidUsernameException, DuplicateUsernameException,
-//DuplicateEmailException, InvalidEmailException, RemoteInvocationException {
 		//the user is not logged in
 		if(!bd.isInSession(this.userToken))
 			throw new UserNotInSessionException(this.newUsername);
