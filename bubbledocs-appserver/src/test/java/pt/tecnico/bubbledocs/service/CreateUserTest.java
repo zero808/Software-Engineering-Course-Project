@@ -6,7 +6,6 @@ import mockit.Mocked;
 
 import org.junit.Test;
 
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
@@ -39,7 +38,6 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 
 	@Test
 	public void success() {
-	//	BubbleDocs bd = getBubbleDocs();
 		CreateUser service = new CreateUser(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
 		
 		new Expectations() {
@@ -95,7 +93,5 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 		};
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
-	}
-	
-	
+	}	
 }// End CreateUserTest class
