@@ -2,7 +2,11 @@ package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.User;
+import pt.tecnico.bubbledocs.exception.DuplicateEmailException;
+import pt.tecnico.bubbledocs.exception.DuplicateUsernameException;
+import pt.tecnico.bubbledocs.exception.InvalidEmailException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
@@ -38,14 +42,13 @@ public class CreateUser extends BubbleDocsService {
 		} catch (RemoteInvocationException e) {
 			throw new UnavailableServiceException();
 		}
-		
+
+//InvalidUsernameException, DuplicateUsernameException,
+//DuplicateEmailException, InvalidEmailException, RemoteInvocationException {
 		//the user is not logged in
 		if(!bd.isInSession(this.userToken))
 			throw new UserNotInSessionException(this.newUsername);
 		
-		//the username is already being used
-		if(this.bd.getUserByUsername(this.newUsername) != null)
-			throw new UserAlreadyExistsException(this.newUsername);
 		
 		//only root can create new users
 		if(!bd.isRoot(this.userToken))
@@ -56,7 +59,9 @@ public class CreateUser extends BubbleDocsService {
 			throw new InvalidUsernameException(this.newUsername);
 		
 		user = new User(this.newUsername, this.name, this.email);
-		this.bd.addUsers(user);
+		Root r = Root.getInstance();
+		r.addUser(user);
+		
 	}
 	
 	public void setIDRemoteService(IDRemoteServices idRemote) {

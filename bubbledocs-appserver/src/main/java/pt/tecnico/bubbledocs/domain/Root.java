@@ -62,7 +62,7 @@ public class Root extends Root_Base {
 				throw new UserAlreadyExistsException(u.getUsername());
 			}
 			
-			if(u.getName() != null && u.getPassword() != null && u.getUsername() != null) {
+			if(u.getName() != null && u.getEmail() != null && u.getUsername() != null) {
 				bd.addUsers(u);
 			} else {
 				throw new InvalidArgumentsException();

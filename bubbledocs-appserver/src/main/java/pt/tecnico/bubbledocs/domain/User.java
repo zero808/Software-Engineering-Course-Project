@@ -33,8 +33,9 @@ public class User extends User_Base {
 		if (username == null) {
 			throw new InvalidUsernameException("Null passed as username.");
 		}
-
-		super.setUsername(username); // If its exactly the same, its allowed.
+		
+		if(username.length() >= 3 && username.length() <= 8)
+			super.setUsername(username); // If its exactly the same, its allowed.
 	}
 
 	public Element exportToXML() {
