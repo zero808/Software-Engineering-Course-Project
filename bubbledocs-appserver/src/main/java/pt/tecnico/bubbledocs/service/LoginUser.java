@@ -2,7 +2,6 @@ package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 
 public class LoginUser extends BubbleDocsService {
@@ -17,7 +16,7 @@ public class LoginUser extends BubbleDocsService {
 	}
 
 	@Override
-	protected void dispatch() throws LoginBubbleDocsException, InvalidTokenException {
+	protected void dispatch() throws LoginBubbleDocsException {
 		
 		BubbleDocs bd = getBubbleDocs();
 		User user = bd.getUserByUsername(this.username);
@@ -32,9 +31,6 @@ public class LoginUser extends BubbleDocsService {
 		}
 		
 		this.userToken = bd.login(this.username, this.password);
-		if (this.userToken == null || this.userToken.equals("")) {
-			throw new InvalidTokenException();
-		}
 	}
 
 	public final String getUserToken() {
