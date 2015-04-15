@@ -180,8 +180,10 @@ public class Spreadsheet extends Spreadsheet_Base {
 		int _rowIterator = 1, _collumnIterator = 1, count = 1;
 		
 		for (Cell cell : r.getCellsSet()){ //Should only have 2 cells in the set.
-			if (count == 1) _startingCell = cell;
-			if (count == 2) _endingCell = cell;
+			if (count == 1) 
+				_startingCell = cell;
+			if (count == 2) 
+				_endingCell = cell;
 			count++;
 		}
 		

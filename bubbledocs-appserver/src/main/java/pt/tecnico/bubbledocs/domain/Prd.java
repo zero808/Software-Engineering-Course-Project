@@ -2,6 +2,7 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
 
+import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
 public class Prd extends Prd_Base {
@@ -16,7 +17,7 @@ public class Prd extends Prd_Base {
 	}
 
 	@Override
-	public int getValue() throws InvalidArgumentsException {
+	public int getValue() throws BubbleDocsException {
 		int total = 1;
 		for (Cell cell : getCell().getSpreadsheet().getCellsInRange(getRange())) {
 			if (cell.hasValidResult())
