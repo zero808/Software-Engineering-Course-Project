@@ -1,7 +1,6 @@
 package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
-import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Literal;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
@@ -46,12 +45,6 @@ public class AssignLiteralCell extends BubbleDocsService {
 		String cell_parts[] = _cellId.split(";");
 		int cellRow = Integer.parseInt(cell_parts[0]);
 		int cellCol = Integer.parseInt(cell_parts[1]);
-		
-		Cell c = getCellByCoords(s, cellRow, cellCol);
-		
-		if(c.getWProtected()) {
-			throw new CellIsProtectedException(c.getRow(), c.getCollumn());
-		}
 		
 		Literal l = new Literal(_literal);
 		

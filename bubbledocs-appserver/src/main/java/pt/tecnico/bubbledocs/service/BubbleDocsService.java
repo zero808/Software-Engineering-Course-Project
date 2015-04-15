@@ -5,6 +5,7 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 
@@ -30,8 +31,13 @@ public abstract class BubbleDocsService {
 		return s;
 	}
 	
-	protected static Cell getCellByCoords(Spreadsheet s, int row, int collumn) throws OutofBoundsException {
+	protected static Cell getCellByCoords(Spreadsheet s, int row, int collumn) throws OutofBoundsException, InvalidArgumentsException {
 		Cell c = s.getCellByCoords(row, collumn);
+		
+		if(row < 1 || collumn < 1) {
+			throw new InvalidArgumentsException();
+		}
+		
 		if(c == null) {
 			throw new OutofBoundsException(row, collumn);
 		}

@@ -4,14 +4,12 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-//import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Literal;
-//import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.CellIsProtectedException;
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
-//import pt.tecnico.bubbledocs.exception.InvalidReferenceException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
@@ -54,11 +52,57 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 
 		assertEquals(expected_literal.toString(), result);
 	}
+	
+	@Test
+	public void successNotOwner() {
+		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
+		String cell = "1;1";
+		String literal = "3";
+		
+		Literal expected_literal = new Literal(Integer.parseInt(literal));
+
+		AssignLiteralCell service = new AssignLiteralCell(notOwnerToken, sucessTestSpreadsheet.getId(), cell, literal);
+		service.execute();
+
+		String result = service.getResult();
+
+		assertEquals(expected_literal.toString(), result);
+	}
 
 	@Test(expected = OutofBoundsException.class)
-	public void cellIsOutOfBonds() {
+	public void cellRowIsOutOfBonds() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
-		String cell = "11;11"; // Is an invalid position since the spreadsheet is 10x10.
+		String cell = "11;1"; // Is an invalid position since the spreadsheet is 10x10.
+		String literal = "3";
+
+		AssignLiteralCell service = new AssignLiteralCell(ownerToken, testSpreadsheet.getId(), cell, literal);
+		service.execute();
+	}
+	
+	@Test(expected = OutofBoundsException.class)
+	public void cellCollumnIsOutOfBonds() {
+		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
+		String cell = "1;11"; // Is an invalid position since the spreadsheet is 10x10.
+		String literal = "3";
+
+		AssignLiteralCell service = new AssignLiteralCell(ownerToken, testSpreadsheet.getId(), cell, literal);
+		service.execute();
+	}
+	
+	@Test(expected = InvalidArgumentsException.class)
+	public void cellRowIsInvalid() {
+		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
+		String cell = "-1;1"; // Is an invalid position since the spreadsheet is 10x10.
+		String literal = "3";
+
+		AssignLiteralCell service = new AssignLiteralCell(ownerToken, testSpreadsheet.getId(), cell, literal);
+		service.execute();
+	}
+	
+	@Test(expected = InvalidArgumentsException.class)
+	public void cellCollumnIsInvalid() {
+		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
+		String cell = "1;-1"; // Is an invalid position since the spreadsheet is 10x10.
 		String literal = "3";
 
 		AssignLiteralCell service = new AssignLiteralCell(ownerToken, testSpreadsheet.getId(), cell, literal);
@@ -113,20 +157,6 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 		String literal = "3";
 		User leoUser = getUserFromUsername("leo");
 		User zeUser = getUserFromUsername("zeze");
-
-		leoUser.removePermissionfrom(testSpreadsheet, zeUser);
-
-		AssignLiteralCell service = new AssignLiteralCell(notOwnerToken, testSpreadsheet.getId(), cell, literal);
-		service.execute();
-	}
-
-	@Test(expected = InvalidPermissionException.class)
-	public void userWithoutPermission() {
-		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
-		User leoUser = getUserFromUsername("leo");
-		User zeUser = getUserFromUsername("zeze");
-		String cell = "1;1";
-		String literal = "3";
 
 		leoUser.removePermissionfrom(testSpreadsheet, zeUser);
 

@@ -6,6 +6,7 @@ import java.util.List;
 import org.jdom2.Element;
 
 import pt.tecnico.bubbledocs.exception.CellIsProtectedException;
+import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exception.OutofBoundsException;
@@ -132,9 +133,12 @@ public class User extends User_Base {
 		deleteDomainObject();
 	}
 
-	public void addLiteraltoCell(Literal l, Spreadsheet s, int row, int collumn) throws OutofBoundsException, CellIsProtectedException {
-		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
+	public void addLiteraltoCell(Literal l, Spreadsheet s, int row, int collumn) throws OutofBoundsException, CellIsProtectedException, InvalidArgumentsException {
+		if (row > s.getNRows() || collumn > s.getNCols())
 			throw new OutofBoundsException(s.getNRows(), s.getNCols());
+		
+		if(row < 1 || collumn < 1)
+			throw new InvalidArgumentsException();
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {
@@ -148,9 +152,15 @@ public class User extends User_Base {
 		}
 	}
 
-	public void addReferencetoCell(Reference r, Spreadsheet s, int row, int collumn) throws OutofBoundsException, InvalidReferenceException, CellIsProtectedException {
-		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
+	public void addReferencetoCell(Reference r, Spreadsheet s, int row, int collumn) throws OutofBoundsException, InvalidReferenceException, CellIsProtectedException, InvalidArgumentsException {
+		if (row > s.getNRows() || collumn > s.getNCols())
 			throw new OutofBoundsException(s.getNRows(), s.getNCols());
+		
+		if(row < 1 || collumn < 1)
+			throw new InvalidArgumentsException();
+		
+		if(r.getReferencedCell().getRow() < 1 || r.getReferencedCell().getCollumn() < 1)
+			throw new InvalidArgumentsException();
 
 		if (r.getReferencedCell().getRow() > s.getNRows() || r.getReferencedCell().getCollumn() > s.getNCols())
 			throw new InvalidReferenceException(r.getReferencedCell().getRow(), r.getReferencedCell().getCollumn());
@@ -170,9 +180,12 @@ public class User extends User_Base {
 		}
 	}
 
-	public void addFunctiontoCell(Function f, Spreadsheet s, int row, int collumn) throws OutofBoundsException, CellIsProtectedException {
-		if (row > s.getNRows() || collumn > s.getNCols() || row < 1 || collumn < 1)
+	public void addFunctiontoCell(Function f, Spreadsheet s, int row, int collumn) throws OutofBoundsException, CellIsProtectedException, InvalidArgumentsException {
+		if (row > s.getNRows() || collumn > s.getNCols())
 			throw new OutofBoundsException(s.getNRows(), s.getNCols());
+		
+		if(row < 1 || collumn < 1)
+			throw new InvalidArgumentsException();
 
 		for (Cell cell : s.getCellsSet()) {
 			if (cell.getRow() == row && cell.getCollumn() == collumn) {

@@ -74,29 +74,79 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 	}
 	
 	@Test(expected = InvalidArgumentsException.class)
-	public void invalidArguments() {
+	public void invalidCellRowArgument() {
 		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
-		String cell = "-1;-1";
-		String reference = "-1;-1";
+		String cell = "-1;1";
+		String reference = "1;1";
+		
+		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
+		service.execute();
+	}
+	
+	@Test(expected = InvalidArgumentsException.class)
+	public void invalidCellCollumnArgument() {
+		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
+		String cell = "1;-1";
+		String reference = "1;1";
+		
+		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
+		service.execute();
+	}
+	
+	@Test(expected = InvalidArgumentsException.class)
+	public void invalidReferenceRowArgument() {
+		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
+		String cell = "1;1";
+		String reference = "-1;1";
+		
+		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
+		service.execute();
+	}
+	
+	@Test(expected = InvalidArgumentsException.class)
+	public void invalidReferenceCollumnArgument() {
+		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
+		String cell = "1;1";
+		String reference = "1;-1";
 		
 		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
 	
 	@Test(expected = InvalidReferenceException.class)
-	public void referenceIsInvalid() {
+	public void referenceRowIsInvalid() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;1";
-		String reference = "11;11"; //Pointing to an invalid position since the spreadsheet is 10x10.
+		String reference = "11;1"; //Pointing to an invalid position since the spreadsheet is 10x10.
+		
+		AssignReferenceCell service = new AssignReferenceCell(ownerToken, testSpreadsheet.getId(), cell, reference);
+		service.execute();
+	}
+	
+	@Test(expected = InvalidReferenceException.class)
+	public void referenceCollumnIsInvalid() {
+		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
+		String cell = "1;1";
+		String reference = "1;11"; //Pointing to an invalid position since the spreadsheet is 10x10.
 		
 		AssignReferenceCell service = new AssignReferenceCell(ownerToken, testSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
 	
 	@Test(expected = OutofBoundsException.class)
-	public void cellIsOutOfBonds() {
+	public void cellRowIsOutOfBonds() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
-		String cell = "11;11"; //Is an invalid position since the spreadsheet is 10x10.
+		String cell = "11;1"; //Is an invalid position since the spreadsheet is 10x10.
+		String reference = "1;2";
+		
+		AssignReferenceCell service = new AssignReferenceCell(ownerToken, testSpreadsheet.getId(), cell, reference);
+		service.execute();
+	}
+	
+	@Test(expected = OutofBoundsException.class)
+	public void cellCollumnIsOutOfBonds() {
+		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
+		String cell = "1;11"; //Is an invalid position since the spreadsheet is 10x10.
 		String reference = "1;2";
 		
 		AssignReferenceCell service = new AssignReferenceCell(ownerToken, testSpreadsheet.getId(), cell, reference);
@@ -152,20 +202,6 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		User luisUser = getUserFromUsername("lff");
 		User zeUser = getUserFromUsername("zzz");
 		
-		luisUser.removePermissionfrom(testSpreadsheet, zeUser);
-		
-		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, testSpreadsheet.getId(), cell, reference);
-		service.execute();
-	}
-	
-	@Test(expected = InvalidPermissionException.class)
-	public void userWithoutPermission() {
-		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
-		User luisUser = getUserFromUsername("lff");
-		User zeUser = getUserFromUsername("zzz");
-		String cell = "1;1";
-		String reference = "1;2";
-
 		luisUser.removePermissionfrom(testSpreadsheet, zeUser);
 		
 		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, testSpreadsheet.getId(), cell, reference);

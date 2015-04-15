@@ -51,10 +51,6 @@ public class AssignReferenceCell extends BubbleDocsService {
 		Spreadsheet spreadsheet = getSpreadsheet(docId);
 		String username = bd.getUsernameByToken(tokenUser);
 		
-		if(cell_row < 1 || cell_collumn < 1 || reference_row < 1 || reference_collumn < 1) {
-			throw new InvalidArgumentsException();
-		}
-		
 		if(tokenUser.equals("")) {
 			throw new InvalidTokenException();
 		}
@@ -65,22 +61,8 @@ public class AssignReferenceCell extends BubbleDocsService {
 		
 		User user = bd.getUserByUsername(username); //Not my responsibility to test if its null, it shouldn't.
 		
-		if(cell_row > spreadsheet.getNRows() || cell_collumn > spreadsheet.getNCols()) {
-			throw new OutofBoundsException(cell_row, cell_collumn);
-		}
-		
-		Cell cell = getCellByCoords(spreadsheet, cell_row, cell_collumn);
-		
-		if(reference_row > spreadsheet.getNRows() || reference_collumn > spreadsheet.getNCols()) {
-			throw new InvalidReferenceException(reference_row, reference_collumn);
-		}
-		
-		Cell referenced_cell = getCellByCoords(spreadsheet, reference_row, reference_collumn);
+		Cell referenced_cell = new Cell(reference_row, reference_collumn, false);
 		Reference reference = new Reference(referenced_cell);
-		
-		if(cell.getWProtected()) {
-			throw new CellIsProtectedException(cell.getRow(), cell.getCollumn());
-		}
 
 		if(user.hasOwnerPermission(spreadsheet)) {
 			user.addReferencetoCell(reference, spreadsheet, cell_row, cell_collumn);
