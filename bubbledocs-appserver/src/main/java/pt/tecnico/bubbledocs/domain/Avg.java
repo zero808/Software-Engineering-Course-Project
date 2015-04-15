@@ -18,11 +18,13 @@ public class Avg extends Avg_Base {
 	@Override
 	public int getValue() throws InvalidArgumentsException {
 		int total = 0;
-		for (Cell cell : super.getRange().getCellsSet()) {
+		for (Cell cell : getCell().getSpreadsheet().getCellsInRange(getRange())) {
 			if (cell.hasValidResult())
 				total += cell.getContent().getValue();
+			else
+				throw new InvalidArgumentsException();
 		}
-		return total / super.getRange().getCellsSet().size();
+		return total / getCell().getSpreadsheet().getCellsInRange(getRange()).size();
 	}
 
 	@Override

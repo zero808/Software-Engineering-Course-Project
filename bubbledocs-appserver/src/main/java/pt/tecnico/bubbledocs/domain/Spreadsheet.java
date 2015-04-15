@@ -177,16 +177,12 @@ public class Spreadsheet extends Spreadsheet_Base {
 		List<Cell> _requestedCells = new ArrayList<Cell>();
 		Cell _startingCell = null;
 		Cell _endingCell = null;
-		int _rowIterator = 1;
-		int _collumnIterator = 1;
+		int _rowIterator = 1, _collumnIterator = 1, count = 1;
 		
-		for(Cell c : r.getCellsSet()) { //Should only have 2 cells in the set.
-			if(_startingCell == null) {
-				_startingCell = c; //Get the first cell.
-			}
-			if(_endingCell == null) {
-				_endingCell = c; //Get the last cell.
-			}
+		for (Cell cell : r.getCellsSet()){ //Should only have 2 cells in the set.
+			if (count == 1) _startingCell = cell;
+			if (count == 2) _endingCell = cell;
+			count++;
 		}
 		
 		_rowIterator = _startingCell.getRow(); //Get starting row value.

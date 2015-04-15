@@ -18,9 +18,11 @@ public class Prd extends Prd_Base {
 	@Override
 	public int getValue() throws InvalidArgumentsException {
 		int total = 1;
-		for (Cell cell : super.getRange().getCellsSet()) {
+		for (Cell cell : getCell().getSpreadsheet().getCellsInRange(getRange())) {
 			if (cell.hasValidResult())
 				total *= cell.getContent().getValue();
+			else
+				throw new InvalidArgumentsException();
 		}
 		return total;
 	}
