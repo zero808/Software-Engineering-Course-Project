@@ -24,7 +24,6 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 	private String ars;
 
 	private static final String USERNAME = "ars";
-	//private static final String PASSWORD = "ars";
 	private static final String USERNAME_DOES_NOT_EXIST = "no-one";
 	private static final String EMAIL = "cenas@cenas.pt";
 	

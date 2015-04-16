@@ -51,11 +51,12 @@ public abstract class BubbleDocsServiceTest {
 		return BubbleDocs.getInstance();
 	}
 	
-	protected User createUser(String username, String password, String name) throws UserAlreadyExistsException, InvalidArgumentsException {
+	protected User createUser(String username, String email, String name) throws UserAlreadyExistsException, InvalidArgumentsException {
 		Root r = Root.getInstance();
-		User user = new User(username, name, password);
+		User user = new User(username, name, email);
 		
-		r.addUser(user);
+		if((r != null) && (user != null))
+			r.addUser(user);
 		
 		return user;
 	}
