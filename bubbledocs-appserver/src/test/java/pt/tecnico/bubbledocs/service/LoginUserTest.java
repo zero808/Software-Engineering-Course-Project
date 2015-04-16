@@ -130,7 +130,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	}
 
 	@Test(expected = LoginBubbleDocsException.class)
-	public void loginUserWithinWrongPassword() {
+	public void loginUserWithWrongPassword() {
 		LoginUser service = new LoginUser(USERNAME, INCORRECT_PASSWORD);
 		service.execute();
 	}
