@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import mockit.Expectations;
+import mockit.Mocked;
 
 import org.junit.Test;
 import org.joda.time.LocalTime;
@@ -12,9 +14,14 @@ import org.joda.time.Seconds;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
+import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
+import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 public class LoginUserTest extends BubbleDocsServiceTest {
-
+	@Mocked
+	private IDRemoteServices idRemote;
+	
+	
 	private static final String USERNAME = "jpp";
 	private static final String PASSWORD = "";
 	private static final String USERNAME2 = "xpp";
@@ -132,6 +139,32 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	@Test(expected = LoginBubbleDocsException.class)
 	public void loginUserWithWrongPassword() {
 		LoginUser service = new LoginUser(USERNAME, INCORRECT_PASSWORD);
+		
+		new Expectations() {
+			{
+				idRemote.loginUser(USERNAME, INCORRECT_PASSWORD);
+				result = new LoginBubbleDocsException("username");
+			}
+		};
+		service.setIDRemoteService(idRemote);
 		service.execute();
 	}
+	
+	@Test(expected = UnavailableServiceException.class)
+	public void remoteIDServerFailure(){
+		LoginUser service = new LoginUser(USERNAME, PASSWORD);
+		service.execute();
+		
+		LoginUser service2 = new LoginUser(USERNAME, PASSWORD);
+		new Expectations() {
+			{
+				idRemote.loginUser(USERNAME, PASSWORD);
+				result = new UnavailableServiceException();
+			}
+		};
+		service2.setIDRemoteService(idRemote);
+		service2.execute();
+	}
+	
+	
 }// End LoginUserTest class
