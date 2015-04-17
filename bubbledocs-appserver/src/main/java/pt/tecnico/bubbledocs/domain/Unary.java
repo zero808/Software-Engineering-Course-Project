@@ -18,12 +18,11 @@ public abstract class Unary extends Unary_Base {
 	public abstract Element exportToXML();
 	
 	public void importFromXML(Element cellElement) {
-		// create range(void)
 		Range r = new Range();
-		// set unary
+		
 		r.setUnary(this);
 		this.setRange(r);
-		// range.import
+		
 		Element element;
 		if ((element = cellElement.getChild("range")) != null)
 			r.importFromXML(element);
@@ -33,9 +32,12 @@ public abstract class Unary extends Unary_Base {
 	public void delete() {
 		Range r = getRange();
 		setRange(null);
+		
 		r.setUnary(null);
 		r.delete();
+		
 		setCell(null);
+		
 		deleteDomainObject();
 	}
 }// End Unary class

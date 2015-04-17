@@ -8,7 +8,7 @@ public class Range extends Range_Base {
 		super();
 	}
 	
-	public Range(Cell startCell, Cell endCell){
+	public Range(Cell startCell, Cell endCell) {
 		super();
 		addCells(startCell);
 		addCells(endCell);
@@ -27,8 +27,7 @@ public class Range extends Range_Base {
 
 			Element cellType = new Element(text);
 			cellType.setAttribute("row", Integer.toString(cell.getRow()));
-			cellType.setAttribute("collumn",
-					Integer.toString(cell.getCollumn()));
+			cellType.setAttribute("collumn", Integer.toString(cell.getCollumn()));
 			element.addContent(cellType);
 			count++;
 		}
@@ -37,14 +36,13 @@ public class Range extends Range_Base {
 
 	public void importFromXML(Element cellElement) {
 		for (Element element : cellElement.getChildren()) {
-			if (element.getName().equals("startCell")
-					|| element.getName().equals("endCell")) {
-				int row = Integer.parseInt(element.getAttribute("row")
-						.getValue());
-				int col = Integer.parseInt(element.getAttribute("collumn")
-						.getValue());
+			if (element.getName().equals("startCell") || element.getName().equals("endCell")) {
+				int row = Integer.parseInt(element.getAttribute("row").getValue());
+				int col = Integer.parseInt(element.getAttribute("collumn").getValue());
+				
 				Spreadsheet s = getUnary().getCell().getSpreadsheet();
 				Cell cell = s.getCellByCoords(row, col);
+				
 				super.addCells(cell);
 			}
 		}

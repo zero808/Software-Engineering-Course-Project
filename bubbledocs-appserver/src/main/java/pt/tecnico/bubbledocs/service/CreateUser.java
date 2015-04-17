@@ -5,7 +5,6 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
-import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
@@ -43,19 +42,13 @@ public class CreateUser extends BubbleDocsService {
 		if(!bd.isInSession(this.userToken))
 			throw new UserNotInSessionException(this.newUsername);
 		
-		
 		//only root can create new users
 		if(!bd.isRoot(this.userToken))
 			throw new InvalidPermissionException(this.newUsername);
 		
-		//make sure the username length is between 3 and 8 characters
-		if(this.newUsername.length()<3||this.newUsername.length()>8)
-			throw new InvalidUsernameException(this.newUsername);
-		
 		user = new User(this.newUsername, this.name, this.email);
 		Root r = Root.getInstance();
-		r.addUser(user);
-		
+		r.addUser(user);		
 	}
 	
 	public void setIDRemoteService(IDRemoteServices idRemote) {

@@ -2,7 +2,7 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
 
-public class Reference extends Reference_Base implements Argument{
+public class Reference extends Reference_Base implements Argument {
 
 	public Reference() {
 		super();
@@ -63,8 +63,12 @@ public class Reference extends Reference_Base implements Argument{
 		int collumn = Integer.parseInt(element.getAttribute("collumn").getValue());
 		
 		Spreadsheet ss;
-		if(getBinary1()!=null) ss = getBinary1().getCell().getSpreadsheet();
-		else ss = getCell().getSpreadsheet();
+		
+		if(getBinary1()!=null) {
+			ss = getBinary1().getCell().getSpreadsheet();
+		} else {
+			ss = getCell().getSpreadsheet();
+		} 
 		
 		setReferencedCell(ss.getCellByCoords(row, collumn));	
 	}

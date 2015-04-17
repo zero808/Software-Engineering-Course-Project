@@ -132,8 +132,7 @@ public class Spreadsheet extends Spreadsheet_Base {
 		Iterator<Cell> it = getCellsSet().iterator();
 		for (Element cellElement : cells.getChildren("cell")) {
 			Cell c = it.next();
-			c.importFromXML(cellElement);
-			
+			c.importFromXML(cellElement);	
 		}
 		
 		Element permissions = spreadsheetElement.getChild("permissions");
@@ -231,5 +230,4 @@ public class Spreadsheet extends Spreadsheet_Base {
 	public String toString() {
 		return "Nome: " + getName() + " " + "Data Criacao: " + getDate().toString() + " " + "N-Linhas: " + getNRows() + " " + "N-Colunas: " + getNCols() + "\n";
 	}
-
 }// End Spreadsheet class

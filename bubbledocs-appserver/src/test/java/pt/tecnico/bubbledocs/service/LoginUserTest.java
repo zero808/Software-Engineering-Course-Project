@@ -14,26 +14,29 @@ import org.joda.time.Seconds;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
+import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 public class LoginUserTest extends BubbleDocsServiceTest {
+	
 	@Mocked
 	private IDRemoteServices idRemote;
 	
-	
 	private static final String USERNAME = "jpp";
-	private static final String PASSWORD = "";
+	private static final String EMAIL = "jpp@tecnico.pt";
+	private static final String PASSWORD = "jpppass";
 	private static final String USERNAME2 = "xpp";
-	private static final String PASSWORD2 = "";
+	private static final String EMAIL2 = "xpp@tecnico.pt";
+	private static final String PASSWORD2 = "xpppass";
 	private static final String USERNAME_NONEXISTENT = "ABC";
 	private static final String INCORRECT_PASSWORD = "ABC#";
 
 	@Override
 	public void populate4Test() {
 		getBubbleDocs();
-		createUser(USERNAME, PASSWORD, "João Pereira");
-		createUser(USERNAME2, PASSWORD2, "XPTO");
+		createUser(USERNAME, EMAIL, "João Pereira");
+		createUser(USERNAME2, EMAIL2, "XPTO");
 	}
 
 	// returns the time of the last access for the user with token userToken.
@@ -56,13 +59,22 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	@Test
 	public void success() {
 		LoginUser service = new LoginUser(USERNAME, PASSWORD);
+		
+		new Expectations() {
+			{
+				idRemote.loginUser(USERNAME, PASSWORD);
+			}
+		};
+		service.setIDRemoteService(idRemote);
 		service.execute();
+		
 		String token = service.getUserToken();
 		LocalTime currentTime = new LocalTime();
 
 		User user = getUserFromSession(token);
 		assertTrue("User not in session", isInSession(token));
 		assertEquals(USERNAME, user.getUsername());
+		assertEquals(EMAIL, user.getEmail());
 		assertEquals(PASSWORD, user.getPassword());
 
 		int difference = Seconds.secondsBetween(getLastAccessTimeInSession(token), currentTime).getSeconds();
@@ -73,8 +85,16 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	@Test
 	public void successLoginTwice() {
 		LoginUser service = new LoginUser(USERNAME, PASSWORD);
-
+		
+		new Expectations() {
+			{
+				idRemote.loginUser(USERNAME, PASSWORD);
+				idRemote.loginUser(USERNAME, PASSWORD);
+			}
+		};
+		service.setIDRemoteService(idRemote);
 		service.execute();
+		
 		String token1 = service.getUserToken();
 
 		service.execute();
@@ -89,18 +109,26 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		user = getUserFromSession(token2);
 		assertTrue("User not in session", isInSession(token2));
 		assertEquals(USERNAME, user.getUsername());
+		assertEquals(EMAIL, user.getEmail());
 		assertEquals(PASSWORD, user.getPassword());
 	}
 	
 	@Test
 	public void successExpiredDateUserRemoved() {
 		LoginUser service = new LoginUser(USERNAME, PASSWORD);
+		
+		new Expectations() {
+			{
+				idRemote.loginUser(USERNAME, PASSWORD);
+			}
+		};
+		service.setIDRemoteService(idRemote);
 		service.execute();
+		
 		String token = service.getUserToken();
 		
 		LocalTime newTime = new LocalTime().minusSeconds(1);
 		changeUserTokenExpirationDate(token, newTime);
-		//boolean inSession = isInSession(token); //To force check for expired date users
 		assertFalse("User with expired date not removed from session", isInSession(token));
 		
 		User user = getUserFromSession(token);
@@ -110,7 +138,16 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	@Test
 	public void successOtherExpiredDateUserRemoved() {
 		LoginUser service = new LoginUser(USERNAME, PASSWORD);
+		
+		new Expectations() {
+			{
+				idRemote.loginUser(USERNAME, PASSWORD);
+				idRemote.loginUser(USERNAME2, PASSWORD2);
+			}
+		};
+		service.setIDRemoteService(idRemote);
 		service.execute();
+		
 		String token = service.getUserToken();
 		
 		LocalTime newTime = new LocalTime().minusSeconds(1);
@@ -118,6 +155,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		
 		LoginUser service2 = new LoginUser(USERNAME2, PASSWORD2);
 		service2.execute();
+		
 		String token2 = service2.getUserToken();
 		
 		User user = getUserFromSession(token);
@@ -143,7 +181,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		new Expectations() {
 			{
 				idRemote.loginUser(USERNAME, INCORRECT_PASSWORD);
-				result = new LoginBubbleDocsException("username");
+				result = new LoginBubbleDocsException("password");
 			}
 		};
 		service.setIDRemoteService(idRemote);
@@ -153,18 +191,14 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	@Test(expected = UnavailableServiceException.class)
 	public void remoteIDServerFailure(){
 		LoginUser service = new LoginUser(USERNAME, PASSWORD);
-		service.execute();
 		
-		LoginUser service2 = new LoginUser(USERNAME, PASSWORD);
 		new Expectations() {
 			{
 				idRemote.loginUser(USERNAME, PASSWORD);
-				result = new UnavailableServiceException();
+				result = new RemoteInvocationException();
 			}
 		};
-		service2.setIDRemoteService(idRemote);
-		service2.execute();
-	}
-	
-	
+		service.setIDRemoteService(idRemote);
+		service.execute();
+	}	
 }// End LoginUserTest class

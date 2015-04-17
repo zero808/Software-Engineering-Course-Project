@@ -91,8 +91,7 @@ public class ExportDocument extends BubbleDocsService {
 			}else {
 				throw new InvalidPermissionException(username);
 			}
-		}
-		
+		}	
 	}
 
 	public void setStoreRemoteService(StoreRemoteServices storeRemote) {

@@ -15,6 +15,7 @@ import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
+import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
@@ -51,12 +52,11 @@ public abstract class BubbleDocsServiceTest {
 		return BubbleDocs.getInstance();
 	}
 	
-	protected User createUser(String username, String email, String name) throws UserAlreadyExistsException, InvalidArgumentsException {
+	protected User createUser(String username, String email, String name) throws UserAlreadyExistsException, InvalidArgumentsException, InvalidUsernameException {
 		Root r = Root.getInstance();
 		User user = new User(username, name, email);
 		
-		if((r != null) && (user != null))
-			r.addUser(user);
+		r.addUser(user);
 		
 		return user;
 	}

@@ -12,7 +12,6 @@ import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.InvalidReferenceException;
-import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
 
 public class User extends User_Base {
 
@@ -23,19 +22,22 @@ public class User extends User_Base {
 	public User(String username, String name, String email) {
 		setUsername(username);
 		setName(name);
-		setPassword(""); // Initialize it to something
+		setPassword(null);
 		setEmail(email);
 	}
 
 	@Override
-	public void setUsername(String username) throws InvalidUsernameException, UserAlreadyExistsException {
+	public void setUsername(String username) throws InvalidUsernameException {
 
 		if (username == null) {
 			throw new InvalidUsernameException("Null passed as username.");
 		}
 		
-		if(username.length() >= 3 && username.length() <= 8)
-			super.setUsername(username); // If its exactly the same, its allowed.
+		if(username.length() >= 3 && username.length() <= 8) {
+			super.setUsername(username);
+		} else {
+			throw new InvalidUsernameException("Username must have between 3 and 8 characters.");
+		}
 	}
 
 	public Element exportToXML() {

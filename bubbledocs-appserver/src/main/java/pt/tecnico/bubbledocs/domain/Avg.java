@@ -2,7 +2,6 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
 
-import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
 public class Avg extends Avg_Base {
@@ -17,7 +16,7 @@ public class Avg extends Avg_Base {
 	}
 
 	@Override
-	public int getValue() throws BubbleDocsException {
+	public int getValue() throws InvalidArgumentsException {
 		int total = 0;
 		for (Cell cell : getCell().getSpreadsheet().getCellsInRange(getRange())) {
 			if (cell.hasValidResult())

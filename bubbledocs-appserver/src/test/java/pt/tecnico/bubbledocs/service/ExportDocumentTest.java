@@ -18,7 +18,6 @@ import org.junit.Test;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
-import pt.tecnico.bubbledocs.exception.CannotStoreDocumentException;
 import pt.tecnico.bubbledocs.exception.ExportDocumentException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
@@ -233,23 +232,6 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 			{
 				storeRemote.storeDocument(withNotNull(), withNotNull(), withNotNull());
 				result = new RemoteInvocationException();
-			}
-		};
-		service.setStoreRemoteService(storeRemote);
-		service.execute();
-	}
-	
-	@Test(expected = CannotStoreDocumentException.class)
-	public void storeFailure() {
-		User luisUser = getUserFromUsername("lff");
-		Spreadsheet spreadsheetTest = createSpreadSheet(luisUser, "Store failure", 10, 10);
-		
-		ExportDocument service = new ExportDocument(ownerToken, spreadsheetTest.getId());
-		
-		new Expectations() {
-			{
-				storeRemote.storeDocument(withNotNull(), withNotNull(), withNotNull());
-				result = new CannotStoreDocumentException();
 			}
 		};
 		service.setStoreRemoteService(storeRemote);

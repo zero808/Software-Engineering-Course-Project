@@ -53,10 +53,13 @@ public class Permission extends Permission_Base {
 	
 	public void importFromXML(Element permissionElement) {
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		
 		Spreadsheet s = bd.getSpreadsheetByName(permissionElement.getAttribute("spreadsheet").getValue());
 		setSpreadsheet(s);
+		
 		User u = bd.getUserByUsername(permissionElement.getAttribute("user").getValue());
 		setUser(u);
+		
 		try {
 			setRw(permissionElement.getAttribute("type").getBooleanValue());
 		} catch (DataConversionException e) {

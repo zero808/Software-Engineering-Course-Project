@@ -26,6 +26,7 @@ public class LoginUser extends BubbleDocsService {
 		BubbleDocs bd = getBubbleDocs();
 		
 		User user = bd.getUserByUsername(this.username);
+		
 		if (user == null) {
 			throw new LoginBubbleDocsException("username");
 		}
@@ -33,29 +34,23 @@ public class LoginUser extends BubbleDocsService {
 		String pass = user.getPassword();
 		
 		try {
-			
 			this.idRemoteService.loginUser(this.username, this.password);
-			
-			if (pass != null) {
-				if (!(pass.equals(this.password))) {
+
+			if (pass != null) { // Means that user already has a password.
+				if (!(pass.equals(this.password))) { // If the password is different then the one stored locally.
 					user.setPassword(this.password);
 				}
 			} 
 			else {
-				user.setPassword(this.password);
+				user.setPassword(this.password); // Means this is the first time the user logs in, so he gets a new password.
 			}
-			
-			
-		} catch (RemoteInvocationException e) {
-			
-			if (pass == null || !(pass.equals(this.password))) {
+		} catch (RemoteInvocationException e) { // Means the service is down.
+			if (pass == null || !(pass.equals(this.password))) { // If the password is null or it doesn't match the local copy.
 				throw new UnavailableServiceException();
 			}
-			
 		}
 		
-		this.userToken = bd.login(this.username, this.password);
-		
+		this.userToken = bd.login(this.username, this.password);	
 	}
 
 	public final String getUserToken() {

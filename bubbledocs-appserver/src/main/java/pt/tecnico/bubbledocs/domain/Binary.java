@@ -8,7 +8,7 @@ public abstract class Binary extends Binary_Base {
 		super();
 	}
 
-	public Binary(Argument arg1, Argument arg2){
+	public Binary(Argument arg1, Argument arg2) {
 		Content a1 = (Content)arg1;
 		Content a2 = (Content)arg2;
 		a1.setBinary1(this);

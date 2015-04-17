@@ -107,9 +107,12 @@ public class Cell extends Cell_Base {
 		}
 	}
 
-	public boolean hasValidResult() throws InvalidArgumentsException{
-		if (getContent() == null) throw new InvalidArgumentsException();
-		if (getContent().toString().equals("#VALUE")) throw new InvalidArgumentsException();
+	public boolean hasValidResult() throws InvalidArgumentsException {
+		if (getContent() == null) 
+			throw new InvalidArgumentsException();
+		if (getContent().toString().equals("#VALUE")) 
+			throw new InvalidArgumentsException();
+		
 		return true;
 	}
 	

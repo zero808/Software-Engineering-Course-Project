@@ -1,6 +1,7 @@
 package pt.tecnico.bubbledocs.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import mockit.Expectations;
 import mockit.Mocked;
 
@@ -50,7 +51,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 		User user = getUserFromUsername(USERNAME_DOES_NOT_EXIST);
 		
 		assertEquals(USERNAME_DOES_NOT_EXIST, user.getUsername());
-		assertEquals("", user.getPassword());
+		assertNull("Password is not null", user.getPassword());
 		assertEquals(EMAIL, user.getEmail());
 		assertEquals("José Ferreira", user.getName());
 	}
@@ -58,18 +59,39 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 	@Test(expected = UserAlreadyExistsException.class)
 	public void usernameExists() {
 		CreateUser service = new CreateUser(root, USERNAME, EMAIL, "José Ferreira");
+		
+		new Expectations() {
+			{
+				idRemoteService.createUser(anyString, anyString, anyString);
+			}
+		};
+		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
 
 	@Test(expected = InvalidUsernameException.class)
 	public void emptyUsername() {
 		CreateUser service = new CreateUser(root, "", EMAIL, "José Ferreira");
+		
+		new Expectations() {
+			{
+				idRemoteService.createUser(anyString, anyString, anyString);
+			}
+		};
+		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
 
 	@Test(expected = InvalidPermissionException.class)
 	public void unauthorizedUserCreation() {
 		CreateUser service = new CreateUser(ars, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
+		
+		new Expectations() {
+			{
+				idRemoteService.createUser(anyString, anyString, anyString);
+			}
+		};
+		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
 
@@ -77,6 +99,13 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 	public void accessUsernameNotExist() {
 		removeUserFromSession(root);
 		CreateUser service = new CreateUser(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
+		
+		new Expectations() {
+			{
+				idRemoteService.createUser(anyString, anyString, anyString);
+			}
+		};
+		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
 	

@@ -1,11 +1,7 @@
 package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
-//import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
-
-
-import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
 public class Mul extends Mul_Base {
@@ -14,7 +10,7 @@ public class Mul extends Mul_Base {
 		super();
 	}
 	
-	public Mul(Argument arg1, Argument arg2){
+	public Mul(Argument arg1, Argument arg2) {
 		Content a1 = arg1.retrieveContent();
 		Content a2 = arg2.retrieveContent();
 		a1.setBinary1(this);
@@ -25,9 +21,14 @@ public class Mul extends Mul_Base {
 	}
 
 	@Override
-	public int getValue() throws BubbleDocsException{
-		if (getArg1().toString().equals("#VALUE")) throw new InvalidArgumentsException();
-		if (getArg2().toString().equals("#VALUE")) throw new InvalidArgumentsException();
+	public int getValue() throws InvalidArgumentsException {
+		
+		if (getArg1().toString().equals("#VALUE")) 
+			throw new InvalidArgumentsException();
+		
+		if (getArg2().toString().equals("#VALUE")) 
+			throw new InvalidArgumentsException();
+		
 		return super.getArg1().getValue()*super.getArg2().getValue();
 	}
 
@@ -53,15 +54,15 @@ public class Mul extends Mul_Base {
 		Content a1 = null;
 		Content a2 = null;
 		
-		for (Element argElement : MulElement.getChildren()){
-			if (argElement.getName().equals("literal")){
+		for (Element argElement : MulElement.getChildren()) {
+			if (argElement.getName().equals("literal")) {
 				Literal l = new Literal();
 				l.setBinary1(this);
 				l.importFromXML(argElement);
 				if(count==1) a1=l.retrieveContent();
 				if(count==2) a2=l.retrieveContent();
 			}
-			if (argElement.getName().equals("reference")){
+			if (argElement.getName().equals("reference")) {
 				Reference r = new Reference();
 				r.setBinary1(this);
 				r.importFromXML(argElement);
@@ -71,7 +72,6 @@ public class Mul extends Mul_Base {
 			count++;
 		}
 		setArg1(a1);
-		setArg2(a2);
-		
+		setArg2(a2);	
 	}
 }// End Mul class

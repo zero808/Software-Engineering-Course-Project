@@ -166,7 +166,6 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	
 	@Test(expected = UnavailableServiceException.class)
 	public void idServiceUnavailable() {
-		
 		new Expectations() {
 			{
 				idRemoteService.removeUser(anyString);
@@ -174,6 +173,5 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 			}
 		};
 		success();
-	}
-	
+	}	
 }// End DeleteUserTest class
