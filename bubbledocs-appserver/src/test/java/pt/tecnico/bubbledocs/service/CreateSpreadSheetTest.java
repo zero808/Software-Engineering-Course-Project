@@ -52,7 +52,7 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 	}
 	
 	@Test
-	public void success2() {
+	public void successNonEmptySpredlist() {
 		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,legalCharTestName,10,10);
 		service.execute();
 		
@@ -75,27 +75,27 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 	}
 	
 	@Test(expected = InvalidSpreadsheetNameException.class)
-	public void invalidName2() {
+	public void emptyName() {
 		
 		CreateSpreadSheet service = new CreateSpreadSheet(userNoSpredToken,"",10,10);
 		service.execute();
 	}
 	
 	@Test(expected = InvalidBoundsException.class)
-	public void outofBonds1() {
+	public void invalidSpreadsheetRows() {
 		
 		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,"teste",-10,10);
 		service.execute();
 	}
 	
 	@Test(expected = InvalidBoundsException.class)
-	public void outofBonds2() {
+	public void invalidSpreadsheetCollumns() {
 		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,"teste",10,-10);
 		service.execute();
 	}
 	
 	@Test(expected = InvalidBoundsException.class)
-	public void outofBonds3() {
+	public void invalidArguments() {
 		
 		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,"teste",0,0);
 		service.execute();
