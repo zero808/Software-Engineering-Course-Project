@@ -31,4 +31,4 @@ public class CreateUserIntegrator extends BubbleDocsIntegrator {
 	public void setIDRemoteService(IDRemoteServices idRemote) {
 		this.idRemoteService = idRemote;
 	}
-}// End CreateUser class
+}// End CreateUserIntegrator class
