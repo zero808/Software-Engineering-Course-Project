@@ -2,22 +2,21 @@ package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Root;
+import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
-import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
-public class DeleteUser extends BubbleDocsService {
+public class DeleteUserService extends BubbleDocsService {
 
-	private String userToken;
 	private String toDeleteUsername;
 
 	private IDRemoteServices idRemoteService;
 
-	public DeleteUser(String userToken, String toDeleteUsername) {
-		this.userToken = userToken;
+	public DeleteUserService(String userToken, String toDeleteUsername) {
+		this.token = userToken;
 		this.toDeleteUsername = toDeleteUsername;
 		this.idRemoteService = new IDRemoteServices();
 	}
@@ -32,14 +31,6 @@ public class DeleteUser extends BubbleDocsService {
 			throw new UnavailableServiceException();
 		}
 		
-		//Check if the user invoking the service is in session.
-		if (!bd.isInSession(userToken))
-			throw new UserNotInSessionException(bd.getUsernameByToken(userToken));
-		
-		// Check if root is the one invoking the service.
-		if (!bd.isRoot(userToken))
-			throw new InvalidPermissionException(bd.getUsernameByToken(userToken));
-		
 		Root r = Root.getInstance(); //After checking that it is root that is calling the service.
 		
 		r.removeUser(toDeleteUsername); //Root checks if user exists and then tells BubbleDocs to remove it.
@@ -53,5 +44,16 @@ public class DeleteUser extends BubbleDocsService {
 
 	public void setIDRemoteService(IDRemoteServices idRemote) {
 		this.idRemoteService = idRemote;
+	}
+
+	@Override
+	protected void checkAccess() {
+		BubbleDocs bd = getBubbleDocs();
+		
+		User user = bd.getUserByUsername(bd.getUsernameByToken(token));
+		
+		if(!(user.isRoot())) {
+			throw new InvalidPermissionException(user.getUsername());
+		}	
 	}
 }// End DeleteUser Class

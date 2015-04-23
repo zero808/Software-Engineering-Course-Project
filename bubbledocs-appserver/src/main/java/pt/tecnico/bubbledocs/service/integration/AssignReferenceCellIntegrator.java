@@ -8,7 +8,7 @@ import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
-import pt.tecnico.bubbledocs.service.AssignReferenceCell;
+import pt.tecnico.bubbledocs.service.AssignReferenceCellService;
 
 public class AssignReferenceCellIntegrator extends BubbleDocsIntegrator {
 	
@@ -26,7 +26,7 @@ public class AssignReferenceCellIntegrator extends BubbleDocsIntegrator {
 
 	@Override
 	protected void dispatch() throws InvalidReferenceException, InvalidTokenException, OutofBoundsException, InvalidArgumentsException, InvalidPermissionException, CellIsProtectedException, UserNotInSessionException, SpreadsheetDoesNotExistException {
-		AssignReferenceCell assignReferenceCellService = new AssignReferenceCell(tokenUser, docId, cellId, reference);
+		AssignReferenceCellService assignReferenceCellService = new AssignReferenceCellService(tokenUser, docId, cellId, reference);
 		assignReferenceCellService.execute();
 	}
 }// End AssignReferenceCellIntegrator class

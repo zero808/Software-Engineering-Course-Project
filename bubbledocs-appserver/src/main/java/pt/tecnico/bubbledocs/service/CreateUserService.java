@@ -5,28 +5,24 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
-import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
 
-public class CreateUser extends BubbleDocsService {
+public class CreateUserService extends BubbleDocsService {
 	
-	private String userToken;
 	private String newUsername;
 	private String email;
 	private String name;
-	private BubbleDocs bd;
 	private User user;
 	
 	private IDRemoteServices idRemoteService = new IDRemoteServices();
 
-	public CreateUser(String userToken, String newUsername, String email, String name) {
-		this.userToken = userToken;
+	public CreateUserService(String userToken, String newUsername, String email, String name) {
+		this.token = userToken;
 		this.newUsername = newUsername;
 		this.email = email;
 		this.name = name;
-		this.bd = getBubbleDocs();
 	}
 
 	@Override
@@ -37,21 +33,25 @@ public class CreateUser extends BubbleDocsService {
 		} catch (RemoteInvocationException e) {
 			throw new UnavailableServiceException();
 		}
-
-		//the user is not logged in
-		if(!bd.isInSession(this.userToken))
-			throw new UserNotInSessionException(this.newUsername);
-		
-		//only root can create new users
-		if(!bd.isRoot(this.userToken))
-			throw new InvalidPermissionException(this.newUsername);
 		
 		user = new User(this.newUsername, this.name, this.email);
+		
 		Root r = Root.getInstance();
 		r.addUser(user);		
 	}
 	
 	public void setIDRemoteService(IDRemoteServices idRemote) {
 		this.idRemoteService = idRemote;
+	}
+
+	@Override
+	protected void checkAccess() {
+		BubbleDocs bd = getBubbleDocs();
+
+		User user = bd.getUserByUsername(bd.getUsernameByToken(token));
+
+		if(!(user.isRoot())) {
+			throw new InvalidPermissionException(user.getUsername());
+		}		
 	}
 }// End CreateUser class

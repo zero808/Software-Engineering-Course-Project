@@ -1,37 +1,24 @@
 package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
-import pt.tecnico.bubbledocs.exception.InvalidTokenException;
+import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
-import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
-public class RenewPassword extends BubbleDocsService {
-	
-	private String userToken;
+public class RenewPasswordService extends BubbleDocsService {
 	
 	private IDRemoteServices idRemote = new IDRemoteServices();
 	
-	public RenewPassword(String userToken) {
-		this.userToken = userToken;
+	public RenewPasswordService(String userToken) {
+		token = userToken;
 	}
 
 	@Override
-	protected void dispatch() throws InvalidTokenException, UserNotInSessionException, UnavailableServiceException {
+	protected void dispatch() throws BubbleDocsException {
 		BubbleDocs bd = getBubbleDocs();
 
-		String username = bd.getUsernameByToken(userToken);
-		
-		if(userToken.equals("")) {
-			throw new InvalidTokenException();
-		}
-		
-		if(!(bd.isInSession(userToken))) {
-			throw new UserNotInSessionException(username);
-		}
-		
-		//New functionality for 3ª Delivery
+		String username = bd.getUsernameByToken(token);
 
 		try {
 			idRemote.renewPassword(username);
@@ -44,5 +31,10 @@ public class RenewPassword extends BubbleDocsService {
 	
 	public void setIDRemoteService(IDRemoteServices idRemote) {
 		this.idRemote = idRemote;
+	}
+
+	@Override
+	protected void checkAccess() {
+		return;	
 	}
 }// End of RenewPassword class

@@ -4,7 +4,7 @@ import pt.tecnico.bubbledocs.exception.InvalidBoundsException;
 import pt.tecnico.bubbledocs.exception.InvalidSpreadsheetNameException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
-import pt.tecnico.bubbledocs.service.CreateSpreadSheet;
+import pt.tecnico.bubbledocs.service.CreateSpreadSheetService;
 
 public class CreateSpreadSheetIntegrator extends BubbleDocsIntegrator {
 	
@@ -22,7 +22,7 @@ public class CreateSpreadSheetIntegrator extends BubbleDocsIntegrator {
 
 	@Override
 	protected void dispatch() throws InvalidTokenException, UserNotInSessionException, InvalidBoundsException, InvalidSpreadsheetNameException {
-		CreateSpreadSheet createSpreadSheetService = new CreateSpreadSheet(userToken, name, rows, columns);
+		CreateSpreadSheetService createSpreadSheetService = new CreateSpreadSheetService(userToken, name, rows, columns);
 		createSpreadSheetService.execute();
 	}
 }// End CreateSpreadSheetIntegrator class

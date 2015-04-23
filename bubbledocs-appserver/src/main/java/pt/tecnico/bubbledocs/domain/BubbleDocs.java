@@ -83,6 +83,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 				return user;
 			}
 		}
+		
 		return null;
 	}
 	

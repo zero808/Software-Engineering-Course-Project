@@ -38,7 +38,7 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 
 	@Test
 	public void success() {
-		CreateUser service = new CreateUser(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
+		CreateUserService service = new CreateUserService(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
 		
 		new Expectations() {
 			{
@@ -58,20 +58,15 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 
 	@Test(expected = UserAlreadyExistsException.class)
 	public void usernameExists() {
-		CreateUser service = new CreateUser(root, USERNAME, EMAIL, "José Ferreira");
+		CreateUserService service = new CreateUserService(root, USERNAME, EMAIL, "José Ferreira");
 		
-		new Expectations() {
-			{
-				idRemoteService.createUser(anyString, anyString, anyString);
-			}
-		};
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
 
 	@Test(expected = InvalidUsernameException.class)
 	public void emptyUsername() {
-		CreateUser service = new CreateUser(root, "", EMAIL, "José Ferreira");
+		CreateUserService service = new CreateUserService(root, "", EMAIL, "José Ferreira");
 		
 		new Expectations() {
 			{
@@ -84,13 +79,8 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 
 	@Test(expected = InvalidPermissionException.class)
 	public void unauthorizedUserCreation() {
-		CreateUser service = new CreateUser(ars, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
+		CreateUserService service = new CreateUserService(ars, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
 		
-		new Expectations() {
-			{
-				idRemoteService.createUser(anyString, anyString, anyString);
-			}
-		};
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
@@ -98,20 +88,15 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 	@Test(expected = UserNotInSessionException.class)
 	public void accessUsernameNotExist() {
 		removeUserFromSession(root);
-		CreateUser service = new CreateUser(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
 		
-		new Expectations() {
-			{
-				idRemoteService.createUser(anyString, anyString, anyString);
-			}
-		};
+		CreateUserService service = new CreateUserService(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
 	
 	@Test(expected = UnavailableServiceException.class)
 	public void idServiceUnavailable() {
-		CreateUser service = new CreateUser(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
+		CreateUserService service = new CreateUserService(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
 		
 		new Expectations() {
 			{

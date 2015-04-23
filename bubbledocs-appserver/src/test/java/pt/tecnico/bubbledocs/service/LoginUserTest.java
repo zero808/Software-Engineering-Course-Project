@@ -58,7 +58,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	@Test
 	public void success() {
-		LoginUser service = new LoginUser(USERNAME, PASSWORD);
+		LoginUserService service = new LoginUserService(USERNAME, PASSWORD);
 		
 		new Expectations() {
 			{
@@ -84,7 +84,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	@Test
 	public void successLoginTwice() {
-		LoginUser service = new LoginUser(USERNAME, PASSWORD);
+		LoginUserService service = new LoginUserService(USERNAME, PASSWORD);
 		
 		new Expectations() {
 			{
@@ -115,7 +115,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void successExpiredDateUserRemoved() {
-		LoginUser service = new LoginUser(USERNAME, PASSWORD);
+		LoginUserService service = new LoginUserService(USERNAME, PASSWORD);
 		
 		new Expectations() {
 			{
@@ -137,7 +137,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void successOtherExpiredDateUserRemoved() {
-		LoginUser service = new LoginUser(USERNAME, PASSWORD);
+		LoginUserService service = new LoginUserService(USERNAME, PASSWORD);
 		
 		new Expectations() {
 			{
@@ -153,7 +153,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		LocalTime newTime = new LocalTime().minusSeconds(1);
 		changeUserTokenExpirationDate(token, newTime);
 		
-		LoginUser service2 = new LoginUser(USERNAME2, PASSWORD2);
+		LoginUserService service2 = new LoginUserService(USERNAME2, PASSWORD2);
 		service2.execute();
 		
 		String token2 = service2.getUserToken();
@@ -170,13 +170,13 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	@Test(expected = LoginBubbleDocsException.class)
 	public void loginUnknownUser() {
-		LoginUser service = new LoginUser(USERNAME_NONEXISTENT, PASSWORD);
+		LoginUserService service = new LoginUserService(USERNAME_NONEXISTENT, PASSWORD);
 		service.execute();
 	}
 
 	@Test(expected = LoginBubbleDocsException.class)
 	public void loginUserWithWrongPassword() {
-		LoginUser service = new LoginUser(USERNAME, INCORRECT_PASSWORD);
+		LoginUserService service = new LoginUserService(USERNAME, INCORRECT_PASSWORD);
 		
 		new Expectations() {
 			{
@@ -190,7 +190,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	
 	@Test(expected = UnavailableServiceException.class)
 	public void remoteIDServerFailure(){
-		LoginUser service = new LoginUser(USERNAME, PASSWORD);
+		LoginUserService service = new LoginUserService(USERNAME, PASSWORD);
 		
 		new Expectations() {
 			{

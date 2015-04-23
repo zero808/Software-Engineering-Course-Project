@@ -37,19 +37,20 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		User smf = createUser(USERNAME_TO_DELETE, "smf", "Sérgio Fernandes");
 		createSpreadSheet(smf, USERNAME_TO_DELETE, 20, 20);
 
-		new Expectations() {
-			{
-				idRemoteService.removeUser(anyString);
-			}
-		};
-
 		root = addUserToSession(ROOT_USERNAME);
 	}
 	
 	@Test
 	public void success() {
 		BubbleDocs bd = getBubbleDocs();
-		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
+		
+		DeleteUserService service = new DeleteUserService(root, USERNAME_TO_DELETE);
+		
+		new Expectations() {
+			{
+				idRemoteService.removeUser(USERNAME_TO_DELETE);
+			}
+		};
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 		
@@ -72,7 +73,13 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	@Test
 	public void successToDeleteIsNotInSession() {
 		BubbleDocs bd = getBubbleDocs();
-		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
+		DeleteUserService service = new DeleteUserService(root, USERNAME_TO_DELETE);
+		
+		new Expectations() {
+			{
+				idRemoteService.removeUser(USERNAME_TO_DELETE);
+			}
+		};
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 		
@@ -96,7 +103,14 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	public void successToDeleteIsInSession() {
 		BubbleDocs bd = getBubbleDocs();
 		String token = addUserToSession(USERNAME_TO_DELETE);
-		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
+		
+		DeleteUserService service = new DeleteUserService(root, USERNAME_TO_DELETE);
+		
+		new Expectations() {
+			{
+				idRemoteService.removeUser(USERNAME_TO_DELETE);
+			}
+		};
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 		
@@ -115,7 +129,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 
 	@Test(expected = LoginBubbleDocsException.class)
 	public void userToDeleteDoesNotExist() {
-		DeleteUser service = new DeleteUser(root, USERNAME_DOES_NOT_EXIST);
+		DeleteUserService service = new DeleteUserService(root, USERNAME_DOES_NOT_EXIST);
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
@@ -123,7 +137,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	@Test(expected = InvalidPermissionException.class)
 	public void notRootUser() {
 		String ars = addUserToSession(USERNAME);
-		DeleteUser service = new DeleteUser(ars, USERNAME_TO_DELETE);
+		DeleteUserService service = new DeleteUserService(ars, USERNAME_TO_DELETE);
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
@@ -131,7 +145,7 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	@Test(expected = UserNotInSessionException.class)
 	public void rootNotInSession() {
 		removeUserFromSession(root);
-		DeleteUser service = new DeleteUser(root, USERNAME_TO_DELETE);
+		DeleteUserService service = new DeleteUserService(root, USERNAME_TO_DELETE);
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
@@ -141,37 +155,45 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		String ars = addUserToSession(USERNAME);
 		removeUserFromSession(ars);
 
-		DeleteUser service = new DeleteUser(ars, USERNAME_TO_DELETE);
+		DeleteUserService service = new DeleteUserService(ars, USERNAME_TO_DELETE);
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
 
 	@Test(expected = UserNotInSessionException.class)
 	public void accessUserDoesNotExist() {
-		DeleteUser service = new DeleteUser(USERNAME_DOES_NOT_EXIST, USERNAME_TO_DELETE);
+		DeleteUserService service = new DeleteUserService(USERNAME_DOES_NOT_EXIST, USERNAME_TO_DELETE);
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
 	
 	@Test(expected = LoginBubbleDocsException.class)
 	public void invalidPairUserPassword() {
+		
+		DeleteUserService service = new DeleteUserService(root, USERNAME_TO_DELETE);
+		
 		new Expectations() {
 			{
-				idRemoteService.removeUser(anyString);
-				result = new LoginBubbleDocsException("anyString");
+				idRemoteService.removeUser(USERNAME_TO_DELETE);
+				result = new LoginBubbleDocsException("username");
 			}
 		};
-		success();
+		service.setIDRemoteService(idRemoteService);
+		service.execute();
 	}
 	
 	@Test(expected = UnavailableServiceException.class)
 	public void idServiceUnavailable() {
+		
+		DeleteUserService service = new DeleteUserService(root, USERNAME_TO_DELETE);
+		
 		new Expectations() {
 			{
-				idRemoteService.removeUser(anyString);
+				idRemoteService.removeUser(USERNAME_TO_DELETE);
 				result = new RemoteInvocationException();
 			}
 		};
-		success();
+		service.setIDRemoteService(idRemoteService);
+		service.execute();
 	}	
 }// End DeleteUserTest class

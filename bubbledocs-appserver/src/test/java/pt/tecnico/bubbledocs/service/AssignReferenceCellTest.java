@@ -48,7 +48,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		Cell expected_cell = new Cell(1, 1, false);
 		Reference expected_reference = new Reference(expected_cell);
 		
-		AssignReferenceCell service = new AssignReferenceCell(ownerToken, sucessTestSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService(ownerToken, sucessTestSpreadsheet.getId(), cell, reference);
 		service.execute();
 		
 		String result = service.getResult();
@@ -65,7 +65,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		Cell expected_cell = new Cell(1, 1, false);
 		Reference expected_reference = new Reference(expected_cell);
 		
-		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
 		service.execute();
 		
 		String result = service.getResult();
@@ -79,7 +79,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String cell = "-1;1";
 		String reference = "1;1";
 		
-		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
 	
@@ -89,7 +89,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String cell = "1;-1";
 		String reference = "1;1";
 		
-		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
 	
@@ -99,7 +99,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String cell = "1;1";
 		String reference = "-1;1";
 		
-		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
 	
@@ -109,7 +109,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String cell = "1;1";
 		String reference = "1;-1";
 		
-		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
 	
@@ -119,7 +119,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String cell = "1;1";
 		String reference = "11;1"; //Pointing to an invalid position since the spreadsheet is 10x10.
 		
-		AssignReferenceCell service = new AssignReferenceCell(ownerToken, testSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService(ownerToken, testSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
 	
@@ -129,7 +129,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String cell = "1;1";
 		String reference = "1;11"; //Pointing to an invalid position since the spreadsheet is 10x10.
 		
-		AssignReferenceCell service = new AssignReferenceCell(ownerToken, testSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService(ownerToken, testSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
 	
@@ -139,7 +139,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String cell = "11;1"; //Is an invalid position since the spreadsheet is 10x10.
 		String reference = "1;2";
 		
-		AssignReferenceCell service = new AssignReferenceCell(ownerToken, testSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService(ownerToken, testSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
 	
@@ -149,7 +149,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String cell = "1;11"; //Is an invalid position since the spreadsheet is 10x10.
 		String reference = "1;2";
 		
-		AssignReferenceCell service = new AssignReferenceCell(ownerToken, testSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService(ownerToken, testSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
 	
@@ -161,7 +161,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		
 		protectCell("teste", 1, 1);
 		
-		AssignReferenceCell service = new AssignReferenceCell(ownerToken, testSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService(ownerToken, testSpreadsheet.getId(), cell, reference);
 		service.execute();	
 	}
 
@@ -170,7 +170,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String cell = "1;1";
 		String reference = "1;2";
 		
-		AssignReferenceCell service = new AssignReferenceCell(ownerToken, -1, cell, reference); //No spreadsheet should ever have -1 Id.
+		AssignReferenceCellService service = new AssignReferenceCellService(ownerToken, -1, cell, reference); //No spreadsheet should ever have -1 Id.
 		service.execute();	
 	}
 	
@@ -180,7 +180,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String cell = "1;1";
 		String reference = "1;2";
 		
-		AssignReferenceCell service = new AssignReferenceCell(notInSessionToken, testSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService(notInSessionToken, testSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
 	
@@ -190,7 +190,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		String cell = "1;1";
 		String reference = "1;2";
 		
-		AssignReferenceCell service = new AssignReferenceCell("", testSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService("", testSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
 	
@@ -204,7 +204,7 @@ public class AssignReferenceCellTest extends BubbleDocsServiceTest {
 		
 		luisUser.removePermissionfrom(testSpreadsheet, zeUser);
 		
-		AssignReferenceCell service = new AssignReferenceCell(notOwnerToken, testSpreadsheet.getId(), cell, reference);
+		AssignReferenceCellService service = new AssignReferenceCellService(notOwnerToken, testSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
 }// End AssignReferenceCellTest class

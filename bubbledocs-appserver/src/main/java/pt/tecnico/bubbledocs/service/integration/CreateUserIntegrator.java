@@ -1,7 +1,7 @@
 package pt.tecnico.bubbledocs.service.integration;
 
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
-import pt.tecnico.bubbledocs.service.CreateUser;
+import pt.tecnico.bubbledocs.service.CreateUserService;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 public class CreateUserIntegrator extends BubbleDocsIntegrator {
@@ -24,7 +24,7 @@ public class CreateUserIntegrator extends BubbleDocsIntegrator {
 
 	@Override
 	protected void dispatch() throws BubbleDocsException {
-		CreateUser createUserService = new CreateUser(userToken, newUsername, email, name);
+		CreateUserService createUserService = new CreateUserService(userToken, newUsername, email, name);
 		createUserService.execute();
 	}
 

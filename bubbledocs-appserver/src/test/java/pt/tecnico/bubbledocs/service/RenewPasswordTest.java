@@ -35,7 +35,7 @@ public class RenewPasswordTest extends BubbleDocsServiceTest {
 		BubbleDocs bd = getBubbleDocs();
 		String username = bd.getUsernameByToken(userToken);
 		
-		RenewPassword service = new RenewPassword(userToken);
+		RenewPasswordService service = new RenewPasswordService(userToken);
 		
 		new Expectations() {
 			{
@@ -50,21 +50,21 @@ public class RenewPasswordTest extends BubbleDocsServiceTest {
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void userNotInSession() {
-		RenewPassword service = new RenewPassword(notInSessionToken);
+		RenewPasswordService service = new RenewPasswordService(notInSessionToken);
 		service.setIDRemoteService(idRemote);
 		service.execute();
 	}
 	
 	@Test(expected = InvalidTokenException.class)
 	public void invalidToken() {
-		RenewPassword service = new RenewPassword("");
+		RenewPasswordService service = new RenewPasswordService("");
 		service.setIDRemoteService(idRemote);
 		service.execute();
 	}
 	
 	@Test(expected = UnavailableServiceException.class)
 	public void remoteInvocationFailure() {
-		RenewPassword service = new RenewPassword(userToken);
+		RenewPasswordService service = new RenewPasswordService(userToken);
 		
 		new Expectations() {
 			{
@@ -78,7 +78,7 @@ public class RenewPasswordTest extends BubbleDocsServiceTest {
 	
 	@Test(expected = LoginBubbleDocsException.class)
 	public void loginFailure() {
-		RenewPassword service = new RenewPassword(userToken);
+		RenewPasswordService service = new RenewPasswordService(userToken);
 		
 		new Expectations() {
 			{

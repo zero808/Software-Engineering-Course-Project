@@ -2,7 +2,7 @@ package pt.tecnico.bubbledocs.service.integration;
 
 import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
-import pt.tecnico.bubbledocs.service.LoginUser;
+import pt.tecnico.bubbledocs.service.LoginUserService;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 public class LoginUserIntegrator extends BubbleDocsIntegrator {
@@ -19,7 +19,7 @@ public class LoginUserIntegrator extends BubbleDocsIntegrator {
 
 	@Override
 	protected void dispatch() throws LoginBubbleDocsException, UnavailableServiceException {
-		LoginUser loginUserService = new LoginUser(username, password);
+		LoginUserService loginUserService = new LoginUserService(username, password);
 		loginUserService.execute();
 	}
 

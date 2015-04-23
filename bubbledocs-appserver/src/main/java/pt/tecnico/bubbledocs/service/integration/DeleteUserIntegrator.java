@@ -1,7 +1,7 @@
 package pt.tecnico.bubbledocs.service.integration;
 
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
-import pt.tecnico.bubbledocs.service.DeleteUser;
+import pt.tecnico.bubbledocs.service.DeleteUserService;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 public class DeleteUserIntegrator extends BubbleDocsIntegrator {
@@ -19,7 +19,7 @@ public class DeleteUserIntegrator extends BubbleDocsIntegrator {
 
 	@Override
 	protected void dispatch() throws BubbleDocsException {
-		DeleteUser deleteUserService = new DeleteUser(userToken,toDeleteUsername);
+		DeleteUserService deleteUserService = new DeleteUserService(userToken,toDeleteUsername);
 		deleteUserService.execute();
 	}
 

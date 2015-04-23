@@ -4,7 +4,7 @@ import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 
 public abstract class BubbleDocsIntegrator {
 
-	public final void execute() throws BubbleDocsException {
+	public void execute() throws BubbleDocsException {
 		dispatch();
 	}
 

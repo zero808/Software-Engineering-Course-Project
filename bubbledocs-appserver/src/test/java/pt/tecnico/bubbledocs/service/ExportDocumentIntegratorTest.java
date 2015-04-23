@@ -26,10 +26,11 @@ import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
+import pt.tecnico.bubbledocs.service.integration.ExportDocumentIntegrator;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
-public class ExportDocumentTest extends BubbleDocsServiceTest {
-	
+public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
+
 	@Mocked
 	private StoreRemoteServices storeRemote;
 	
@@ -38,6 +39,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	private String notInSessionToken = "antonio6";
 	private byte[] expectationsByte;
 
+	@Override
 	public void populate4Test() {
 		getBubbleDocs();
 		
@@ -57,10 +59,13 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	public void success() {
 		Spreadsheet spreadsheetSucessTest = getSpreadSheet("teste");
 		
+		String docId = Integer.toString(spreadsheetSucessTest.getId());
+		String username = spreadsheetSucessTest.getUser().getUsername();
+		
 		org.jdom2.Document jdomDoc = new org.jdom2.Document();
-
+		
 		jdomDoc.setRootElement(spreadsheetSucessTest.exportToXML());
-
+		
 		XMLOutputter xml = new XMLOutputter();	
 		try {
 			this.expectationsByte = xml.outputString(jdomDoc).getBytes("UTF-8");
@@ -69,11 +74,11 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 			throw new ExportDocumentException(spreadsheetSucessTest.getName());
 		}
 		
-		ExportDocument service = new ExportDocument(ownerToken, spreadsheetSucessTest.getId());
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(ownerToken, spreadsheetSucessTest.getId());
 		
 		new Expectations() {
 			{
-				storeRemote.storeDocument(spreadsheetSucessTest.getUser().getUsername(), spreadsheetSucessTest.getName(), expectationsByte);
+				storeRemote.storeDocument(username, docId, expectationsByte);
 			}
 		};
 		service.setStoreRemoteService(storeRemote);
@@ -117,6 +122,8 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		Spreadsheet spreadsheetSucessTest = getSpreadSheet("teste");
 		String notOwnerUsername = bd.getUsernameByToken(notOwnerToken);
 		
+		String docId = Integer.toString(spreadsheetSucessTest.getId());
+		
 		org.jdom2.Document jdomDoc = new org.jdom2.Document();
 		
 		jdomDoc.setRootElement(spreadsheetSucessTest.exportToXML());
@@ -129,11 +136,11 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 			throw new ExportDocumentException(spreadsheetSucessTest.getName());
 		}
 		
-		ExportDocument service = new ExportDocument(notOwnerToken, spreadsheetSucessTest.getId());
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(notOwnerToken, spreadsheetSucessTest.getId());
 		
 		new Expectations() {
 			{
-				storeRemote.storeDocument(notOwnerUsername, spreadsheetSucessTest.getName(), expectationsByte);
+				storeRemote.storeDocument(notOwnerUsername, docId, expectationsByte);
 			}
 		};
 		service.setStoreRemoteService(storeRemote);
@@ -172,7 +179,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 
 	@Test(expected = SpreadsheetDoesNotExistException.class)
 	public void spreadsheetDoesNotExist() {
-		ExportDocument service = new ExportDocument(ownerToken, -1); //No spreadsheet should ever have -1 Id.
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(ownerToken, -1); //No spreadsheet should ever have -1 Id.
 		service.setStoreRemoteService(storeRemote);
 		service.execute();
 	}
@@ -181,7 +188,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	public void userNotInSession() {
 		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
 		
-		ExportDocument service = new ExportDocument(notInSessionToken, spreadsheetTest.getId());
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(notInSessionToken, spreadsheetTest.getId());
 		service.setStoreRemoteService(storeRemote);
 		service.execute();
 	}
@@ -190,7 +197,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 	public void invalidToken() {
 		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
 		
-		ExportDocument service = new ExportDocument("", spreadsheetTest.getId());
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator("", spreadsheetTest.getId());
 		service.setStoreRemoteService(storeRemote);
 		service.execute();
 	}
@@ -203,7 +210,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 
 		luisUser.removePermissionfrom(spreadsheetTest, zeUser);
 		
-		ExportDocument service = new ExportDocument(notOwnerToken, spreadsheetTest.getId());
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(notOwnerToken, spreadsheetTest.getId());
 		service.setStoreRemoteService(storeRemote);
 		service.execute();
 	}
@@ -216,7 +223,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 
 		luisUser.removePermissionfrom(spreadsheetTest, zeUser);
 
-		ExportDocument service = new ExportDocument(notOwnerToken, spreadsheetTest.getId());
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(notOwnerToken, spreadsheetTest.getId());
 		service.setStoreRemoteService(storeRemote);
 		service.execute();
 	}
@@ -226,7 +233,7 @@ public class ExportDocumentTest extends BubbleDocsServiceTest {
 		User luisUser = getUserFromUsername("lff");
 		Spreadsheet spreadsheetTest = createSpreadSheet(luisUser, "Remote invocation failure", 10, 10);
 		
-		ExportDocument service = new ExportDocument(ownerToken, spreadsheetTest.getId());
+		ExportDocumentIntegrator service = new ExportDocumentIntegrator(ownerToken, spreadsheetTest.getId());
 		
 		new Expectations() {
 			{

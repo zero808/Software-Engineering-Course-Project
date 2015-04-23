@@ -6,7 +6,7 @@ import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
-import pt.tecnico.bubbledocs.service.AssignLiteralCell;
+import pt.tecnico.bubbledocs.service.AssignLiteralCellService;
 
 public class AssignLiteralCellIntegrator extends BubbleDocsIntegrator {
 	
@@ -24,8 +24,7 @@ public class AssignLiteralCellIntegrator extends BubbleDocsIntegrator {
 
 	@Override
 	protected void dispatch() throws OutofBoundsException, CellIsProtectedException, SpreadsheetDoesNotExistException, UserNotInSessionException, InvalidTokenException, InvalidPermissionException {
-		AssignLiteralCell assignLiteralCellService = new AssignLiteralCell(tokenUser, docId, cellId, literal);
+		AssignLiteralCellService assignLiteralCellService = new AssignLiteralCellService(tokenUser, docId, cellId, literal);
 		assignLiteralCellService.execute();
 	}
-
 }// End AssignLiteralCellIntegrator class

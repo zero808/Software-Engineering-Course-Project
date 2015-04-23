@@ -37,7 +37,7 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void success() {
-		CreateSpreadSheet service = new CreateSpreadSheet(userNoSpredToken,"teste",10,10);
+		CreateSpreadSheetService service = new CreateSpreadSheetService(userNoSpredToken,"teste",10,10);
 		service.execute();
 		
 		int expected_id = 1;
@@ -53,7 +53,7 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void successNonEmptySpredlist() {
-		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,legalCharTestName,10,10);
+		CreateSpreadSheetService service = new CreateSpreadSheetService(userWithSpredToken,legalCharTestName,10,10);
 		service.execute();
 		
 		int expected_id = 1;
@@ -70,41 +70,41 @@ public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
 	@Test(expected = InvalidSpreadsheetNameException.class)
 	public void invalidName() {
 		
-		CreateSpreadSheet service = new CreateSpreadSheet(userNoSpredToken,"%&/()ççç",10,10);
+		CreateSpreadSheetService service = new CreateSpreadSheetService(userNoSpredToken,"%&/()ççç",10,10);
 		service.execute();
 	}
 	
 	@Test(expected = InvalidSpreadsheetNameException.class)
 	public void emptyName() {
 		
-		CreateSpreadSheet service = new CreateSpreadSheet(userNoSpredToken,"",10,10);
+		CreateSpreadSheetService service = new CreateSpreadSheetService(userNoSpredToken,"",10,10);
 		service.execute();
 	}
 	
 	@Test(expected = InvalidBoundsException.class)
 	public void invalidSpreadsheetRows() {
 		
-		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,"teste",-10,10);
+		CreateSpreadSheetService service = new CreateSpreadSheetService(userWithSpredToken,"teste",-10,10);
 		service.execute();
 	}
 	
 	@Test(expected = InvalidBoundsException.class)
 	public void invalidSpreadsheetCollumns() {
-		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,"teste",10,-10);
+		CreateSpreadSheetService service = new CreateSpreadSheetService(userWithSpredToken,"teste",10,-10);
 		service.execute();
 	}
 	
 	@Test(expected = InvalidBoundsException.class)
 	public void invalidArguments() {
 		
-		CreateSpreadSheet service = new CreateSpreadSheet(userWithSpredToken,"teste",0,0);
+		CreateSpreadSheetService service = new CreateSpreadSheetService(userWithSpredToken,"teste",0,0);
 		service.execute();
 	}
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void userNotInSession() {
 		
-		CreateSpreadSheet service = new CreateSpreadSheet(notInSessionToken,"teste",10,10);
+		CreateSpreadSheetService service = new CreateSpreadSheetService(notInSessionToken,"teste",10,10);
 		service.execute();
 	}
 }// End CreateSpreadSheetTest class

@@ -11,6 +11,8 @@ import org.joda.time.DateTime;
 import pt.ist.fenixframework.FenixFramework;
 import pt.tecnico.bubbledocs.exception.CellAlreadyExistsException;
 import pt.tecnico.bubbledocs.exception.ImportDocumentException;
+import pt.tecnico.bubbledocs.exception.InvalidBoundsException;
+import pt.tecnico.bubbledocs.exception.InvalidSpreadsheetNameException;
 
 public class Spreadsheet extends Spreadsheet_Base {
 	
@@ -18,7 +20,7 @@ public class Spreadsheet extends Spreadsheet_Base {
 		super();
 	}
 
-	public Spreadsheet(String name, DateTime date, int nRows, int nCollumns) {
+	public Spreadsheet(String name, DateTime date, int nRows, int nCollumns) throws InvalidSpreadsheetNameException, InvalidBoundsException {
 		super();
 
 		int _idnext;
@@ -31,9 +33,16 @@ public class Spreadsheet extends Spreadsheet_Base {
 		_idnext = bd.getIdGlobal();
 		setId(_idnext);
 		bd.setIdGlobal(++_idnext);
+		
+		if(name.matches("(.*)[^ A-Za-z0-9_+-](.*)") || name.equals(""))
+			throw new InvalidSpreadsheetNameException();
 
 		setName(name);
 		setDate(date);
+		
+		if(nRows < 1 || nCollumns < 1) 
+			throw new InvalidBoundsException(nRows, nCollumns);
+		
 		setNRows(nRows);
 		setNCols(nCollumns);
 		

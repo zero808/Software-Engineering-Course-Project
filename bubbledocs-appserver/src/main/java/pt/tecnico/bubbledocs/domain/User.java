@@ -203,31 +203,38 @@ public class User extends User_Base {
 	}
 
 	public void givePermissionto(Spreadsheet s, User u, boolean b) {
-		if (hasOwnerPermission(s)) {
-			new Permission(s, u, b);
-		}
+		hasOwnerPermission(s);
+		new Permission(s, u, b);
 	}
 
 	public void removePermissionfrom(Spreadsheet s, User u) throws InvalidPermissionException {
-		if (hasOwnerPermission(s) || hasPermission(s)) {
-			if (s.getPermissionOfUser(u) == null) {
-				throw new InvalidPermissionException(u.getUsername());
-			} else {
-				s.getPermissionOfUser(u).setRw(false);
-			}
+		hasOwnerPermission(s);
+		hasPermission(false, s);
+		if (s.getPermissionOfUser(u) == null) {
+			throw new InvalidPermissionException(u.getUsername());
+		} else {
+			s.getPermissionOfUser(u).setRw(false);
 		}
 	}
 
-	public boolean hasOwnerPermission(Spreadsheet s) {
-		if (s.getUser().getUsername().equals(getUsername()))
-			return true;
-		return false;
+	public void hasOwnerPermission(Spreadsheet s) throws InvalidPermissionException {
+		
+		if (!(s.getUser().getUsername().equals(getUsername()))) {
+			throw new InvalidPermissionException(getUsername());
+		}	
 	}
 
-	public boolean hasPermission(Spreadsheet s) {
+	public void hasPermission(boolean searchPermissions, Spreadsheet s) throws InvalidPermissionException {
 		BubbleDocs bd = BubbleDocs.getInstance();
-
-		return s.getPermissionOfUser(bd.getUserByUsername(getUsername())).getRw();
+		Permission permission = s.getPermissionOfUser(bd.getUserByUsername(getUsername()));
+		
+		if(permission == null) {
+			throw new InvalidPermissionException(getUsername());
+		}	
+		
+		if(searchPermissions && !(permission.getRw())) {
+			throw new InvalidPermissionException(getUsername());
+		}
 	}
 
 	@Override

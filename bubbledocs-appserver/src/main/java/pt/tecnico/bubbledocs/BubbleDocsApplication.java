@@ -20,12 +20,12 @@ import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
-import pt.tecnico.bubbledocs.service.AssignLiteralCell;
-import pt.tecnico.bubbledocs.service.AssignReferenceCell;
-import pt.tecnico.bubbledocs.service.CreateSpreadSheet;
-import pt.tecnico.bubbledocs.service.CreateUser;
-import pt.tecnico.bubbledocs.service.ExportDocument;
-import pt.tecnico.bubbledocs.service.LoginUser;
+import pt.tecnico.bubbledocs.service.AssignLiteralCellService;
+import pt.tecnico.bubbledocs.service.AssignReferenceCellService;
+import pt.tecnico.bubbledocs.service.CreateSpreadSheetService;
+import pt.tecnico.bubbledocs.service.CreateUserService;
+import pt.tecnico.bubbledocs.service.ExportDocumentService;
+import pt.tecnico.bubbledocs.service.LoginUserService;
 
 import javax.transaction.*;
 
@@ -53,12 +53,12 @@ public class BubbleDocsApplication {
 				populateDomain(bd, root);
 			}
 			
-			LoginUser service_login = new LoginUser("root", "rootroot");
+			LoginUserService service_login = new LoginUserService("root", "rootroot");
 			service_login.execute();
-			LoginUser service_login_pf = new LoginUser("pff", "");
+			LoginUserService service_login_pf = new LoginUserService("pff", "");
 			service_login_pf.execute();
 			String pfToken = service_login_pf.getUserToken();
-			LoginUser service_login_ra = new LoginUser("raa", "");
+			LoginUserService service_login_ra = new LoginUserService("raa", "");
 			service_login_ra.execute();
 			
 			org.jdom2.Document wholeDoc = new org.jdom2.Document();
@@ -169,21 +169,21 @@ public class BubbleDocsApplication {
 	@Atomic
 	static void populateDomain(BubbleDocs bd, Root root) {
 		
-		LoginUser service_login = new LoginUser("root", "rootroot");
+		LoginUserService service_login = new LoginUserService("root", "rootroot");
 		service_login.execute();
 		String rootToken = service_login.getUserToken();
 		
-		CreateUser service_pf = new CreateUser(rootToken, "pff", "sub", "Paul Door");
+		CreateUserService service_pf = new CreateUserService(rootToken, "pff", "sub", "Paul Door");
 		service_pf.execute();
 		
-		CreateUser service_ra = new CreateUser(rootToken, "raa", "cor", "Step Rabbit");
+		CreateUserService service_ra = new CreateUserService(rootToken, "raa", "cor", "Step Rabbit");
 		service_ra.execute();
 		
-		LoginUser service_login_pf = new LoginUser("pff", "");
+		LoginUserService service_login_pf = new LoginUserService("pff", "");
 		service_login_pf.execute();
 		String pfToken = service_login_pf.getUserToken();
 		
-		CreateSpreadSheet service_spreadsheet = new CreateSpreadSheet(pfToken, "Notas ES", 300, 20);
+		CreateSpreadSheetService service_spreadsheet = new CreateSpreadSheetService(pfToken, "Notas ES", 300, 20);
 		service_spreadsheet.execute();
 		
 		int docId = bd.getSpreadsheetByName("Notas ES").getId();
@@ -191,11 +191,11 @@ public class BubbleDocsApplication {
 		User pf = bd.getUserByUsername("pff");
 		
 		//Literal 5 on position (3,4).
-		AssignLiteralCell service_literal1 = new AssignLiteralCell(pfToken, docId, "3;4", "5");
+		AssignLiteralCellService service_literal1 = new AssignLiteralCellService(pfToken, docId, "3;4", "5");
 		service_literal1.execute();
 
 		//Reference to (5, 6) on (1, 1).
-		AssignReferenceCell service_reference1 = new AssignReferenceCell(pfToken, docId, "1;1", "5;6");
+		AssignReferenceCellService service_reference1 = new AssignReferenceCellService(pfToken, docId, "1;1", "5;6");
 		service_reference1.execute();
 
 		//Function Add with arguments Literal 2 and Reference to (3, 4) on (5, 6).
@@ -214,13 +214,13 @@ public class BubbleDocsApplication {
 		pf.addFunctiontoCell(div, notas, 2, 2);
 		
 		//Literal 5 on position (10,10), (10,11), (11,10), (11,11).
-		AssignLiteralCell service_literal2 = new AssignLiteralCell(pfToken, docId, "10;10", "5");
+		AssignLiteralCellService service_literal2 = new AssignLiteralCellService(pfToken, docId, "10;10", "5");
 		service_literal2.execute();
-		AssignLiteralCell service_literal3 = new AssignLiteralCell(pfToken, docId, "10;11", "5");
+		AssignLiteralCellService service_literal3 = new AssignLiteralCellService(pfToken, docId, "10;11", "5");
 		service_literal3.execute();
-		AssignLiteralCell service_literal4 = new AssignLiteralCell(pfToken, docId, "11;10", "5");
+		AssignLiteralCellService service_literal4 = new AssignLiteralCellService(pfToken, docId, "11;10", "5");
 		service_literal4.execute();
-		AssignLiteralCell service_literal5 = new AssignLiteralCell(pfToken, docId, "11;11", "5");
+		AssignLiteralCellService service_literal5 = new AssignLiteralCellService(pfToken, docId, "11;11", "5");
 		service_literal5.execute();
 		
 		//Avg between (10,10) and (11,11) on (12,12)
@@ -230,13 +230,13 @@ public class BubbleDocsApplication {
 		//Literal 5 on position (15,15), (15,16)
 		//Reference to literal 5 on position (16,15)
 		//#Value on position (16,16).
-		AssignLiteralCell service_literal6 = new AssignLiteralCell(pfToken, docId, "15;16", "5");
+		AssignLiteralCellService service_literal6 = new AssignLiteralCellService(pfToken, docId, "15;16", "5");
 		service_literal6.execute();
-		AssignLiteralCell service_literal7 = new AssignLiteralCell(pfToken, docId, "15;15", "5");
+		AssignLiteralCellService service_literal7 = new AssignLiteralCellService(pfToken, docId, "15;15", "5");
 		service_literal7.execute();
-		AssignReferenceCell service_reference2 = new AssignReferenceCell(pfToken, docId, "16;15", "15;15");
+		AssignReferenceCellService service_reference2 = new AssignReferenceCellService(pfToken, docId, "16;15", "15;15");
 		service_reference2.execute();
-		AssignReferenceCell service_reference3 = new AssignReferenceCell(pfToken, docId, "16;16", "18;18");
+		AssignReferenceCellService service_reference3 = new AssignReferenceCellService(pfToken, docId, "16;16", "18;18");
 		service_reference3.execute();
 		
 		//Avg between (15,15) and (16,16) on (17,17)
@@ -305,7 +305,7 @@ public class BubbleDocsApplication {
 		ArrayList<Document> documentsList = new ArrayList<org.jdom2.Document>();
 		
 		for(Spreadsheet s : user.getSpreadsheetsSet()) {
-			ExportDocument service = new ExportDocument(userToken, s.getId());
+			ExportDocumentService service = new ExportDocumentService(userToken, s.getId());
 			service.execute();
 			
 			byte[] serviceDocBytes = service.getDocXML();
