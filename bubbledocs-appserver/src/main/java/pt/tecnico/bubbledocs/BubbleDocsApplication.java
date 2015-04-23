@@ -24,8 +24,8 @@ import pt.tecnico.bubbledocs.service.AssignLiteralCellService;
 import pt.tecnico.bubbledocs.service.AssignReferenceCellService;
 import pt.tecnico.bubbledocs.service.CreateSpreadSheetService;
 import pt.tecnico.bubbledocs.service.CreateUserService;
-import pt.tecnico.bubbledocs.service.ExportDocumentService;
 import pt.tecnico.bubbledocs.service.LoginUserService;
+import pt.tecnico.bubbledocs.service.integration.ExportDocumentIntegrator;
 
 import javax.transaction.*;
 
@@ -305,7 +305,7 @@ public class BubbleDocsApplication {
 		ArrayList<Document> documentsList = new ArrayList<org.jdom2.Document>();
 		
 		for(Spreadsheet s : user.getSpreadsheetsSet()) {
-			ExportDocumentService service = new ExportDocumentService(userToken, s.getId());
+			ExportDocumentIntegrator service = new ExportDocumentIntegrator(userToken, s.getId());
 			service.execute();
 			
 			byte[] serviceDocBytes = service.getDocXML();

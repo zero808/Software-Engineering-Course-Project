@@ -82,8 +82,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 			if(user.getUsername().equals(username)) {
 				return user;
 			}
-		}
-		
+		}	
 		return null;
 	}
 	
