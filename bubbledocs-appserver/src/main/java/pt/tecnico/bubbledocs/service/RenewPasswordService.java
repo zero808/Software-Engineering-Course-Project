@@ -37,4 +37,4 @@ public class RenewPasswordService extends BubbleDocsService {
 	protected void checkAccess() {
 		return;	
 	}
-}// End of RenewPassword class
+}// End of RenewPasswordService class

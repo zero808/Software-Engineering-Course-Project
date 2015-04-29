@@ -16,9 +16,10 @@ import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
+import pt.tecnico.bubbledocs.service.integration.LoginUserIntegrator;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
-public class LoginUserTest extends BubbleDocsServiceTest {
+public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 	
 	@Mocked
 	private IDRemoteServices idRemote;
@@ -34,9 +35,13 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	@Override
 	public void populate4Test() {
-		getBubbleDocs();
+		BubbleDocs bd = getBubbleDocs();
+		
 		createUser(USERNAME, EMAIL, "João Pereira");
 		createUser(USERNAME2, EMAIL2, "XPTO");
+		
+		bd.getUserByUsername(USERNAME).setPassword(PASSWORD);
+		bd.getUserByUsername(USERNAME2).setPassword(PASSWORD2);
 	}
 
 	// returns the time of the last access for the user with token userToken.
@@ -58,7 +63,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	@Test
 	public void success() {
-		LoginUserService service = new LoginUserService(USERNAME, PASSWORD);
+		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME, PASSWORD);
 		
 		new Expectations() {
 			{
@@ -74,8 +79,55 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		User user = getUserFromSession(token);
 		assertTrue("User not in session", isInSession(token));
 		assertEquals(USERNAME, user.getUsername());
-		assertEquals(EMAIL, user.getEmail());
-		assertEquals(PASSWORD, user.getPassword());
+
+		int difference = Seconds.secondsBetween(getLastAccessTimeInSession(token), currentTime).getSeconds();
+		assertTrue("Access time in session not correctly set", difference >= 0);
+		assertTrue("diference in seconds greater than expected", difference < 2);
+	}
+	
+	@Test
+	public void successCorrectPassword() {
+		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME, PASSWORD);
+		
+		new Expectations() {
+			{
+				idRemote.loginUser(USERNAME, PASSWORD);
+				result = new RemoteInvocationException();
+			}
+		};
+		service.setIDRemoteService(idRemote);
+		service.execute();
+		
+		String token = service.getUserToken();
+		LocalTime currentTime = new LocalTime();
+
+		User user = getUserFromSession(token);
+		assertTrue("User not in session", isInSession(token));
+		assertEquals(USERNAME, user.getUsername());
+
+		int difference = Seconds.secondsBetween(getLastAccessTimeInSession(token), currentTime).getSeconds();
+		assertTrue("Access time in session not correctly set", difference >= 0);
+		assertTrue("diference in seconds greater than expected", difference < 2);
+	}
+	
+	@Test
+	public void successIncorrectPassword() {	
+		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME, INCORRECT_PASSWORD);
+		
+		new Expectations() {
+			{
+				idRemote.loginUser(USERNAME, INCORRECT_PASSWORD);
+			}
+		};
+		service.setIDRemoteService(idRemote);
+		service.execute();
+		
+		String token = service.getUserToken();
+		LocalTime currentTime = new LocalTime();
+
+		User user = getUserFromSession(token);
+		assertTrue("User not in session", isInSession(token));
+		assertEquals(USERNAME, user.getUsername());
 
 		int difference = Seconds.secondsBetween(getLastAccessTimeInSession(token), currentTime).getSeconds();
 		assertTrue("Access time in session not correctly set", difference >= 0);
@@ -84,7 +136,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 
 	@Test
 	public void successLoginTwice() {
-		LoginUserService service = new LoginUserService(USERNAME, PASSWORD);
+		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME, PASSWORD);
 		
 		new Expectations() {
 			{
@@ -109,13 +161,11 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		user = getUserFromSession(token2);
 		assertTrue("User not in session", isInSession(token2));
 		assertEquals(USERNAME, user.getUsername());
-		assertEquals(EMAIL, user.getEmail());
-		assertEquals(PASSWORD, user.getPassword());
 	}
 	
 	@Test
 	public void successExpiredDateUserRemoved() {
-		LoginUserService service = new LoginUserService(USERNAME, PASSWORD);
+		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME, PASSWORD);
 		
 		new Expectations() {
 			{
@@ -137,7 +187,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	
 	@Test
 	public void successOtherExpiredDateUserRemoved() {
-		LoginUserService service = new LoginUserService(USERNAME, PASSWORD);
+		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME, PASSWORD);
 		
 		new Expectations() {
 			{
@@ -153,7 +203,7 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		LocalTime newTime = new LocalTime().minusSeconds(1);
 		changeUserTokenExpirationDate(token, newTime);
 		
-		LoginUserService service2 = new LoginUserService(USERNAME2, PASSWORD2);
+		LoginUserIntegrator service2 = new LoginUserIntegrator(USERNAME2, PASSWORD2);
 		service2.execute();
 		
 		String token2 = service2.getUserToken();
@@ -165,18 +215,17 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 		User user2 = getUserFromSession(token2);
 		assertTrue("User not in session", isInSession(token2));
 		assertEquals(USERNAME2, user2.getUsername());
-		assertEquals(PASSWORD2, user2.getPassword());
 	}
 
 	@Test(expected = LoginBubbleDocsException.class)
 	public void loginUnknownUser() {
-		LoginUserService service = new LoginUserService(USERNAME_NONEXISTENT, PASSWORD);
+		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME_NONEXISTENT, PASSWORD);
 		service.execute();
 	}
 
 	@Test(expected = LoginBubbleDocsException.class)
 	public void loginUserWithWrongPassword() {
-		LoginUserService service = new LoginUserService(USERNAME, INCORRECT_PASSWORD);
+		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME, INCORRECT_PASSWORD);
 		
 		new Expectations() {
 			{
@@ -190,15 +239,15 @@ public class LoginUserTest extends BubbleDocsServiceTest {
 	
 	@Test(expected = UnavailableServiceException.class)
 	public void remoteIDServerFailure(){
-		LoginUserService service = new LoginUserService(USERNAME, PASSWORD);
+		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME, INCORRECT_PASSWORD);
 		
 		new Expectations() {
 			{
-				idRemote.loginUser(USERNAME, PASSWORD);
+				idRemote.loginUser(USERNAME, INCORRECT_PASSWORD);
 				result = new RemoteInvocationException();
 			}
 		};
 		service.setIDRemoteService(idRemote);
 		service.execute();
 	}	
-}// End LoginUserTest class
+}// End LoginUserIntegratorTest class

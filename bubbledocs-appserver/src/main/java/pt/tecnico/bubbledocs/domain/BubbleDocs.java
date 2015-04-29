@@ -7,6 +7,7 @@ import org.jdom2.Element;
 import org.joda.time.LocalTime;
 
 import pt.ist.fenixframework.FenixFramework;
+import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 
 public class BubbleDocs extends BubbleDocs_Base {
@@ -74,6 +75,20 @@ public class BubbleDocs extends BubbleDocs_Base {
 					}
 				}
 			}
+		}
+	}
+	
+	public void userExists(String username) throws LoginBubbleDocsException {
+		boolean found = false;
+
+		for(User u : getUsersSet()) {
+			if(u.getUsername() == username) {
+				found = true;
+			}
+		}
+
+		if(!(found)) {
+			throw new LoginBubbleDocsException(username);
 		}
 	}
 	

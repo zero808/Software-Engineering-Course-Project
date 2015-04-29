@@ -36,4 +36,4 @@ public class AssignLiteralCellService extends AccessService {
 	public String getResult() {
 		return result;
 	}
-}// End AssignLiteralCell class
+}// End AssignLiteralCellService class

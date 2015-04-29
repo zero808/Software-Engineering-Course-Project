@@ -49,4 +49,4 @@ public class CreateSpreadSheetService extends BubbleDocsService {
 	protected void checkAccess() {
 		return;
 	}
-}// End CreateSpreadSheet class
+}// End CreateSpreadSheetService class

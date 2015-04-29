@@ -49,4 +49,4 @@ public class AssignReferenceCellService extends AccessService {
 	public final String getResult() {
 		return result;
 	}
-}// End AssignReferenceCell class
+}// End AssignReferenceCellService class

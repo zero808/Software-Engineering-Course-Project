@@ -54,4 +54,4 @@ public class CreateUserService extends BubbleDocsService {
 			throw new InvalidPermissionException(user.getUsername());
 		}		
 	}
-}// End CreateUser class
+}// End CreateUserService class

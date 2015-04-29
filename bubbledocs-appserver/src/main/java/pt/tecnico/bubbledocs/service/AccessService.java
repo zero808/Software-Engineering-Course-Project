@@ -23,4 +23,4 @@ public abstract class AccessService extends BubbleDocsService {
 			user.hasPermission(writePermission, getSpreadsheet(docId));
 		}	
 	}
-}// End BubbleDocsService class
+}// End AccessService class

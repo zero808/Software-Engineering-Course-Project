@@ -54,4 +54,4 @@ public class ExportDocumentService extends AccessService {
 	public int getDocId() {
 		return docId;
 	}
-}// End of ExportDocument class
+}// End of ExportDocumentService class
