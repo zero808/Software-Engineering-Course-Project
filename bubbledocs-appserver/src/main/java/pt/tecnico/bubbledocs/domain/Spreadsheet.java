@@ -94,13 +94,6 @@ public class Spreadsheet extends Spreadsheet_Base {
 			}
 		}
 		
-		Element permissionsElement = new Element("permissions");
-		element.addContent(permissionsElement);
-		
-		for (Permission p : getPermissionsSet()) {
-			permissionsElement.addContent(p.exportToXML());
-		}
-		
 		return element;
 	}
 	
@@ -119,7 +112,7 @@ public class Spreadsheet extends Spreadsheet_Base {
 			setNRows(spreadsheetElement.getAttribute("rows").getIntValue());
 			setNCols(spreadsheetElement.getAttribute("collumns").getIntValue());
 		} catch (DataConversionException e) {
-			throw new ImportDocumentException(getName());
+			throw new ImportDocumentException(owner.getUsername());
 		}
 		
 		Element cells = spreadsheetElement.getChild("cells");
@@ -142,14 +135,6 @@ public class Spreadsheet extends Spreadsheet_Base {
 		for (Element cellElement : cells.getChildren("cell")) {
 			Cell c = it.next();
 			c.importFromXML(cellElement);	
-		}
-		
-		Element permissions = spreadsheetElement.getChild("permissions");
-		
-		for (Element permissionElement : permissions.getChildren("permission")) {
-			Permission p = new Permission();
-			p.importFromXML(permissionElement);
-			addPermissions(p);
 		}
 	}
 	

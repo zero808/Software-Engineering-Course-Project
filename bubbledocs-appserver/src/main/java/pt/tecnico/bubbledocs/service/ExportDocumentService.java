@@ -39,7 +39,7 @@ public class ExportDocumentService extends AccessService {
 			this.docXML = xml.outputString(jdomDoc).getBytes("UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			throw new ExportDocumentException(spreadsheet.getName());
+			throw new ExportDocumentException(username);
 		}
 	}
 	

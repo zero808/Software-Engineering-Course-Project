@@ -82,7 +82,6 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 				storeRemote.storeDocument(username, docId, expectationsByte);
 			}
 		};
-		service.setStoreRemoteService(storeRemote);
 		service.execute();
 		
 		byte[] serviceDocBytes = service.getDocXML();
@@ -144,7 +143,6 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 				storeRemote.storeDocument(notOwnerUsername, docId, expectationsByte);
 			}
 		};
-		service.setStoreRemoteService(storeRemote);
 		service.execute();
 
 		byte[] serviceDocBytes = service.getDocXML();
@@ -181,7 +179,6 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 	@Test(expected = SpreadsheetDoesNotExistException.class)
 	public void spreadsheetDoesNotExist() {
 		ExportDocumentIntegrator service = new ExportDocumentIntegrator(ownerToken, -1); //No spreadsheet should ever have -1 Id.
-		service.setStoreRemoteService(storeRemote);
 		service.execute();
 	}
 	
@@ -190,7 +187,6 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
 		
 		ExportDocumentIntegrator service = new ExportDocumentIntegrator(notInSessionToken, spreadsheetTest.getId());
-		service.setStoreRemoteService(storeRemote);
 		service.execute();
 	}
 	
@@ -199,7 +195,6 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
 		
 		ExportDocumentIntegrator service = new ExportDocumentIntegrator("", spreadsheetTest.getId());
-		service.setStoreRemoteService(storeRemote);
 		service.execute();
 	}
 	
@@ -212,7 +207,6 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		luisUser.removePermissionfrom(spreadsheetTest, zeUser);
 		
 		ExportDocumentIntegrator service = new ExportDocumentIntegrator(notOwnerToken, spreadsheetTest.getId());
-		service.setStoreRemoteService(storeRemote);
 		service.execute();
 	}
 	
@@ -225,7 +219,6 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		luisUser.removePermissionfrom(spreadsheetTest, zeUser);
 
 		ExportDocumentIntegrator service = new ExportDocumentIntegrator(notOwnerToken, spreadsheetTest.getId());
-		service.setStoreRemoteService(storeRemote);
 		service.execute();
 	}
 	
@@ -242,7 +235,6 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 				result = new RemoteInvocationException();
 			}
 		};
-		service.setStoreRemoteService(storeRemote);
 		service.execute();
 	}
 	
@@ -259,7 +251,6 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 				result = new CannotStoreDocumentException();
 			}
 		};
-		service.setStoreRemoteService(storeRemote);
 		service.execute();
 	}
 }// End ExportDocumentIntegratorTest class

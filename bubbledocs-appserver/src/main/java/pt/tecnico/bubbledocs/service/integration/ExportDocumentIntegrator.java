@@ -39,10 +39,6 @@ public class ExportDocumentIntegrator extends BubbleDocsIntegrator {
 			throw new UnavailableServiceException();
 		}
 	}
-
-	public void setStoreRemoteService(StoreRemoteServices storeRemote) {
-		this.storeRemote = storeRemote;
-	}
 	
 	public byte[] getDocXML() {
 		return docXML;

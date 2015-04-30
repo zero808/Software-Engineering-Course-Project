@@ -70,7 +70,6 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 				idRemote.loginUser(USERNAME, PASSWORD);
 			}
 		};
-		service.setIDRemoteService(idRemote);
 		service.execute();
 		
 		String token = service.getUserToken();
@@ -95,7 +94,6 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 				result = new RemoteInvocationException();
 			}
 		};
-		service.setIDRemoteService(idRemote);
 		service.execute();
 		
 		String token = service.getUserToken();
@@ -119,7 +117,6 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 				idRemote.loginUser(USERNAME, INCORRECT_PASSWORD);
 			}
 		};
-		service.setIDRemoteService(idRemote);
 		service.execute();
 		
 		String token = service.getUserToken();
@@ -144,7 +141,6 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 				idRemote.loginUser(USERNAME, PASSWORD);
 			}
 		};
-		service.setIDRemoteService(idRemote);
 		service.execute();
 		
 		String token1 = service.getUserToken();
@@ -172,7 +168,6 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 				idRemote.loginUser(USERNAME, PASSWORD);
 			}
 		};
-		service.setIDRemoteService(idRemote);
 		service.execute();
 		
 		String token = service.getUserToken();
@@ -195,7 +190,6 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 				idRemote.loginUser(USERNAME2, PASSWORD2);
 			}
 		};
-		service.setIDRemoteService(idRemote);
 		service.execute();
 		
 		String token = service.getUserToken();
@@ -233,7 +227,6 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 				result = new LoginBubbleDocsException("password");
 			}
 		};
-		service.setIDRemoteService(idRemote);
 		service.execute();
 	}
 	
@@ -247,7 +240,6 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 				result = new RemoteInvocationException();
 			}
 		};
-		service.setIDRemoteService(idRemote);
 		service.execute();
 	}	
 }// End LoginUserIntegratorTest class

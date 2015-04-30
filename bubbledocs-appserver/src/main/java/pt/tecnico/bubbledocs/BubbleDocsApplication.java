@@ -24,8 +24,8 @@ import pt.tecnico.bubbledocs.service.AssignLiteralCellService;
 import pt.tecnico.bubbledocs.service.AssignReferenceCellService;
 import pt.tecnico.bubbledocs.service.CreateSpreadSheetService;
 import pt.tecnico.bubbledocs.service.CreateUserService;
-import pt.tecnico.bubbledocs.service.LoginUserService;
 import pt.tecnico.bubbledocs.service.integration.ExportDocumentIntegrator;
+import pt.tecnico.bubbledocs.service.integration.LoginUserIntegrator;
 
 import javax.transaction.*;
 
@@ -53,12 +53,12 @@ public class BubbleDocsApplication {
 				populateDomain(bd, root);
 			}
 			
-			LoginUserService service_login = new LoginUserService("root", "rootroot");
+			LoginUserIntegrator service_login = new LoginUserIntegrator("root", "rootroot");
 			service_login.execute();
-			LoginUserService service_login_pf = new LoginUserService("pff", "");
+			LoginUserIntegrator service_login_pf = new LoginUserIntegrator("pff", "sub");
 			service_login_pf.execute();
 			String pfToken = service_login_pf.getUserToken();
-			LoginUserService service_login_ra = new LoginUserService("raa", "");
+			LoginUserIntegrator service_login_ra = new LoginUserIntegrator("raa", "cor");
 			service_login_ra.execute();
 			
 			org.jdom2.Document wholeDoc = new org.jdom2.Document();
@@ -169,17 +169,17 @@ public class BubbleDocsApplication {
 	@Atomic
 	static void populateDomain(BubbleDocs bd, Root root) {
 		
-		LoginUserService service_login = new LoginUserService("root", "rootroot");
+		LoginUserIntegrator service_login = new LoginUserIntegrator("root", "rootroot");
 		service_login.execute();
 		String rootToken = service_login.getUserToken();
 		
-		CreateUserService service_pf = new CreateUserService(rootToken, "pff", "sub", "Paul Door");
+		CreateUserService service_pf = new CreateUserService(rootToken, "pff", "pf@stuff", "Paul Door");
 		service_pf.execute();
 		
-		CreateUserService service_ra = new CreateUserService(rootToken, "raa", "cor", "Step Rabbit");
+		CreateUserService service_ra = new CreateUserService(rootToken, "raa", "ra@stuff", "Step Rabbit");
 		service_ra.execute();
 		
-		LoginUserService service_login_pf = new LoginUserService("pff", "");
+		LoginUserIntegrator service_login_pf = new LoginUserIntegrator("pff", "sub");
 		service_login_pf.execute();
 		String pfToken = service_login_pf.getUserToken();
 		
