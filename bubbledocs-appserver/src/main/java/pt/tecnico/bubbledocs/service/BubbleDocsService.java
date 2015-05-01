@@ -36,7 +36,7 @@ public abstract class BubbleDocsService {
 		return s;
 	}
 	
-	protected void validateAndAuthorize(String token) {
+	protected void validateAndAuthorize(String token) throws InvalidTokenException, UserNotInSessionException {
 		BubbleDocs bd = getBubbleDocs();
 		
 		if(token.equals("")) {
