@@ -13,24 +13,15 @@ public class DeleteUserService extends BubbleDocsService {
 
 	private String toDeleteUsername;
 
-	private IDRemoteServices idRemoteService;
-
 	public DeleteUserService(String userToken, String toDeleteUsername) {
 		this.token = userToken;
 		this.toDeleteUsername = toDeleteUsername;
-		this.idRemoteService = new IDRemoteServices();
 	}
 
 	@Override
 	protected void dispatch() throws BubbleDocsException {
 		BubbleDocs bd = getBubbleDocs();
-		
-		try {
-			idRemoteService.removeUser(toDeleteUsername);
-		} catch (RemoteInvocationException e) {
-			throw new UnavailableServiceException();
-		}
-		
+				
 		Root r = Root.getInstance(); //After checking that it is root that is calling the service.
 		
 		r.removeUser(toDeleteUsername); //Root checks if user exists and then tells BubbleDocs to remove it.
@@ -40,10 +31,6 @@ public class DeleteUserService extends BubbleDocsService {
 		if (tok != null) {
 			bd.removeUserFromSession(tok);
 		}
-	}
-
-	public void setIDRemoteService(IDRemoteServices idRemote) {
-		this.idRemoteService = idRemote;
 	}
 
 	@Override
