@@ -14,9 +14,10 @@ import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
+import pt.tecnico.bubbledocs.service.integration.DeleteUserIntegrator;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
-public class DeleteUserTest extends BubbleDocsServiceTest {
+public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 
 	private static final String USERNAME_TO_DELETE = "smf";
 	private static final String USERNAME = "ars";
@@ -39,13 +40,14 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 
 		root = addUserToSession(ROOT_USERNAME);
 	}
-	
+
 	@Test
 	public void success() {
 		BubbleDocs bd = getBubbleDocs();
-		
-		DeleteUserService service = new DeleteUserService(root, USERNAME_TO_DELETE);
-		
+
+		DeleteUserIntegrator service = new DeleteUserIntegrator(root,
+				USERNAME_TO_DELETE);
+
 		new Expectations() {
 			{
 				idRemoteService.removeUser(USERNAME_TO_DELETE);
@@ -53,17 +55,18 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		};
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
-		
+
 		boolean deleted = false;
-		
+
 		try {
 			getUserFromUsername(USERNAME_TO_DELETE);
 		} catch (LoginBubbleDocsException e) {
 			deleted = true;
 		}
-		
+
 		assertTrue("user was not deleted", deleted);
-		assertNull("Spreadsheet was not deleted", bd.getSpreadsheetByNameNoException(SPREADSHEET_NAME));
+		assertNull("Spreadsheet was not deleted",
+				bd.getSpreadsheetByNameNoException(SPREADSHEET_NAME));
 	}
 
 	/*
@@ -73,8 +76,9 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	@Test
 	public void successToDeleteIsNotInSession() {
 		BubbleDocs bd = getBubbleDocs();
-		DeleteUserService service = new DeleteUserService(root, USERNAME_TO_DELETE);
-		
+		DeleteUserIntegrator service = new DeleteUserIntegrator(root,
+				USERNAME_TO_DELETE);
+
 		new Expectations() {
 			{
 				idRemoteService.removeUser(USERNAME_TO_DELETE);
@@ -82,17 +86,18 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		};
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
-		
+
 		boolean deleted = false;
-		
+
 		try {
 			getUserFromUsername(USERNAME_TO_DELETE);
 		} catch (LoginBubbleDocsException e) {
 			deleted = true;
 		}
-		
+
 		assertTrue("user was not deleted", deleted);
-		assertNull("Spreadsheet was not deleted", bd.getSpreadsheetByNameNoException(SPREADSHEET_NAME));
+		assertNull("Spreadsheet was not deleted",
+				bd.getSpreadsheetByNameNoException(SPREADSHEET_NAME));
 	}
 
 	/*
@@ -103,9 +108,10 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	public void successToDeleteIsInSession() {
 		BubbleDocs bd = getBubbleDocs();
 		String token = addUserToSession(USERNAME_TO_DELETE);
-		
-		DeleteUserService service = new DeleteUserService(root, USERNAME_TO_DELETE);
-		
+
+		DeleteUserIntegrator service = new DeleteUserIntegrator(root,
+				USERNAME_TO_DELETE);
+
 		new Expectations() {
 			{
 				idRemoteService.removeUser(USERNAME_TO_DELETE);
@@ -113,23 +119,26 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		};
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
-		
+
 		boolean deleted = false;
-		
+
 		try {
 			getUserFromUsername(USERNAME_TO_DELETE);
 		} catch (LoginBubbleDocsException e) {
 			deleted = true;
 		}
-		
+
 		assertTrue("user was not deleted", deleted);
-		assertNull("Spreadsheet was not deleted", bd.getSpreadsheetByNameNoException(SPREADSHEET_NAME));
-		assertNull("Removed user but not removed from session", getUserFromSession(token));
+		assertNull("Spreadsheet was not deleted",
+				bd.getSpreadsheetByNameNoException(SPREADSHEET_NAME));
+		assertNull("Removed user but not removed from session",
+				getUserFromSession(token));
 	}
 
 	@Test(expected = LoginBubbleDocsException.class)
 	public void userToDeleteDoesNotExist() {
-		DeleteUserService service = new DeleteUserService(root, USERNAME_DOES_NOT_EXIST);
+		DeleteUserIntegrator service = new DeleteUserIntegrator(root,
+				USERNAME_DOES_NOT_EXIST);
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
@@ -137,7 +146,8 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	@Test(expected = InvalidPermissionException.class)
 	public void notRootUser() {
 		String ars = addUserToSession(USERNAME);
-		DeleteUserService service = new DeleteUserService(ars, USERNAME_TO_DELETE);
+		DeleteUserIntegrator service = new DeleteUserIntegrator(ars,
+				USERNAME_TO_DELETE);
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
@@ -145,7 +155,8 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 	@Test(expected = UserNotInSessionException.class)
 	public void rootNotInSession() {
 		removeUserFromSession(root);
-		DeleteUserService service = new DeleteUserService(root, USERNAME_TO_DELETE);
+		DeleteUserIntegrator service = new DeleteUserIntegrator(root,
+				USERNAME_TO_DELETE);
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
@@ -155,23 +166,26 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		String ars = addUserToSession(USERNAME);
 		removeUserFromSession(ars);
 
-		DeleteUserService service = new DeleteUserService(ars, USERNAME_TO_DELETE);
+		DeleteUserIntegrator service = new DeleteUserIntegrator(ars,
+				USERNAME_TO_DELETE);
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
 
 	@Test(expected = UserNotInSessionException.class)
 	public void accessUserDoesNotExist() {
-		DeleteUserService service = new DeleteUserService(USERNAME_DOES_NOT_EXIST, USERNAME_TO_DELETE);
+		DeleteUserIntegrator service = new DeleteUserIntegrator(
+				USERNAME_DOES_NOT_EXIST, USERNAME_TO_DELETE);
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
-	
+
 	@Test(expected = LoginBubbleDocsException.class)
 	public void invalidPairUserPassword() {
-		
-		DeleteUserService service = new DeleteUserService(root, USERNAME_TO_DELETE);
-		
+
+		DeleteUserIntegrator service = new DeleteUserIntegrator(root,
+				USERNAME_TO_DELETE);
+
 		new Expectations() {
 			{
 				idRemoteService.removeUser(USERNAME_TO_DELETE);
@@ -181,12 +195,13 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
-	
+
 	@Test(expected = UnavailableServiceException.class)
 	public void idServiceUnavailable() {
-		
-		DeleteUserService service = new DeleteUserService(root, USERNAME_TO_DELETE);
-		
+
+		DeleteUserIntegrator service = new DeleteUserIntegrator(root,
+				USERNAME_TO_DELETE);
+
 		new Expectations() {
 			{
 				idRemoteService.removeUser(USERNAME_TO_DELETE);
@@ -195,5 +210,5 @@ public class DeleteUserTest extends BubbleDocsServiceTest {
 		};
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
-	}	
+	}
 }// End DeleteUserTest class
