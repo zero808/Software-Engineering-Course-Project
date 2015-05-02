@@ -2,7 +2,7 @@
 |--------------  |----|----|----|----|----|----|----|-------------------------------------------------|-------------------------------------------------|
 | luis-github-13 |  0 |  0 |  2 |  6 |  0 |  0 |  0 |                     87,88,89                    |               121,122,123,87,88,89              |
 |    xistoso     |  3 |  3 |  5 |  0 |  0 |  2 |  4 |                   121,122,123                   |                   121,122,123                   |
-|   marcocunha   |  0 |  0 |  0 |  0 |  2 |  2 |  2 |                   116,117,118                   |                        -                        |
+|   marcocunha   |  0 |  0 |  0 |  0 |  2 |  2 |  2 |                   116,117,118                   |                81,82,116,117,118                |
 |    LeoVal      |  2 |  0 |  2 |  2 |  0 |  0 |  0 |                91,92,94,95,105,106              |                        -                        |
 |    zero808     |  0 |  0 |  0 |  0 |  0 |  0 |  0 |                      81,82                      |                        -                        |
 |   cmgalante    |  2 |  3 |  0 |  3 |  3 |  0 |  0 |                 84,85,126,127,128               |                        -                        | 
@@ -19,7 +19,9 @@ Previously on...
 
 [Pedro] - Soon
 
-[Marco] - Soon
+[Marco] - Para esta entrega do projeto fiquei com a responsabilidade de criar a estrutura necessária para esta 4a entrega(Integrator Services). 
+          Era por isso importante cumprir com os prazos planeados para que os restantes elementos começassem a trabalhar. E foi o que aconteceu
+          correndo tudo conforme previsto. 
 
 [Leo] - Soon
 
