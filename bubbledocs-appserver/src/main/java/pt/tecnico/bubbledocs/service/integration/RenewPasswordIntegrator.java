@@ -1,29 +1,40 @@
 package pt.tecnico.bubbledocs.service.integration;
 
-import pt.tecnico.bubbledocs.exception.InvalidTokenException;
-import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
-import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.RenewPasswordService;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
+import pt.tecnico.bubbledocs.service.GetUsername4TokenService;
+import pt.tecnico.bubbledocs.exception.BubbleDocsException;
+import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 
 public class RenewPasswordIntegrator extends BubbleDocsIntegrator {
 	
-	private String userToken;
-	
-	private IDRemoteServices idRemote;
+	private String token;
+	private GetUsername4TokenService getUsername4TokenService;
+	private IDRemoteServices idRemoteService;
 	
 	public RenewPasswordIntegrator(String userToken) {
-		this.userToken = userToken;
-		this.idRemote = new IDRemoteServices();
+		this.token = userToken;
+		this.getUsername4TokenService = new GetUsername4TokenService(userToken);
+		this.idRemoteService = new IDRemoteServices();
 	}
 
 	@Override
-	protected void dispatch() throws InvalidTokenException, UserNotInSessionException, UnavailableServiceException {
-		RenewPasswordService renewPasswordService = new RenewPasswordService(userToken);
-		renewPasswordService.execute();
+	protected void dispatch() throws BubbleDocsException {
+		getUsername4TokenService.execute();
+		String username = getUsername4TokenService.getUserUsername();
+		
+		try {
+			idRemoteService.renewPassword(username);
+			
+			RenewPasswordService renewPasswordService = new RenewPasswordService(token, true);
+			renewPasswordService.execute();
+			
+		} catch (RemoteInvocationException e) {
+			
+			RenewPasswordService renewPasswordService = new RenewPasswordService(token, false);
+			renewPasswordService.execute();
+		}
+		
 	}
 	
-	public void setIDRemoteService(IDRemoteServices idRemote) {
-		this.idRemote = idRemote;
-	}
 }// End of RenewPasswordIntegrator class
