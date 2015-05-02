@@ -35,7 +35,7 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 	public void populate4Test() {
 		getBubbleDocs();
 		createUser(USERNAME, PASSWORD, "António Rito Silva");
-		User smf = createUser(USERNAME_TO_DELETE, "smf", "Sérgio Fernandes");
+		User smf = createUser(USERNAME_TO_DELETE, "email", "Sérgio Fernandes");
 		createSpreadSheet(smf, USERNAME_TO_DELETE, 20, 20);
 
 		root = addUserToSession(ROOT_USERNAME);
@@ -70,8 +70,8 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 	}
 
 	/*
-	 * accessUsername exists, is in session and is root toDeleteUsername exists
-	 * and is not in session
+	 * accessUsername exists, is in session and is root 
+	 * toDeleteUsername exists and is not in session
 	 */
 	@Test
 	public void successToDeleteIsNotInSession() {
@@ -102,7 +102,8 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 
 	/*
 	 * accessUsername exists, is in session and is root toDeleteUsername exists
-	 * and is in session Test if user and session are both deleted
+	 * and is in session 
+	 * Test if user and session are both deleted
 	 */
 	@Test
 	public void successToDeleteIsInSession() {
@@ -211,4 +212,33 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
-}// End DeleteUserTest class
+	
+	@Test
+	public void idServiceUnavailableCompensation() {
+
+		DeleteUserIntegrator service = new DeleteUserIntegrator(root,
+				USERNAME_TO_DELETE);
+
+		new Expectations() {
+			{
+				idRemoteService.removeUser(USERNAME_TO_DELETE);
+				result = new RemoteInvocationException();
+			}
+		};
+		service.setIDRemoteService(idRemoteService);
+		try{
+			service.execute();
+		}catch(UnavailableServiceException ex){
+			boolean userExists = true;
+
+			try {
+				getUserFromUsername(USERNAME_TO_DELETE);
+			} catch (LoginBubbleDocsException e) {
+				userExists = false;
+			}
+
+			assertTrue("user was deleted", userExists);
+		}
+		
+	}
+}// End DeleteUserIntegratorTest class
