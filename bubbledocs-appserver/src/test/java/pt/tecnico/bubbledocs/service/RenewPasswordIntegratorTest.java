@@ -15,7 +15,7 @@ import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
-public class RenewPasswordTest extends BubbleDocsServiceTest {
+public class RenewPasswordIntegratorTest extends BubbleDocsServiceTest {
 	
 	@Mocked
 	private IDRemoteServices idRemote;
@@ -89,4 +89,4 @@ public class RenewPasswordTest extends BubbleDocsServiceTest {
 		service.setIDRemoteService(idRemote);
 		service.execute();
 	}
-}// End RenewPasswordTest class
+}// End RenewPasswordIntegratorTest class
