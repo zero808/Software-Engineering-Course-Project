@@ -1,6 +1,7 @@
 package pt.tecnico.bubbledocs.service;
 
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 
 public class GetUsername4TokenService extends BubbleDocsService {
@@ -14,7 +15,7 @@ public class GetUsername4TokenService extends BubbleDocsService {
 	}
 
 	@Override
-	protected void dispatch() throws InvalidTokenException {
+	protected void dispatch() throws BubbleDocsException {
 		this.username = bd.getUsernameByToken(this.token);
 		if (this.username == null) {
 			throw new InvalidTokenException();
