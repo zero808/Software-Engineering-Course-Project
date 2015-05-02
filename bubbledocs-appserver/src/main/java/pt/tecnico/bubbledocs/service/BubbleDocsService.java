@@ -17,7 +17,14 @@ public abstract class BubbleDocsService {
 
 	@Atomic
 	public final void execute() throws BubbleDocsException {
-		validateAndAuthorize(token);
+		
+		/*
+		 * There are some services that doesn't have tokens, 
+		 * such as GetUserInfoService
+		 *  
+		 */
+		
+		if(token!=null) validateAndAuthorize(token);
 		dispatch();
 	}
 	
