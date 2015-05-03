@@ -7,14 +7,7 @@ import java.util.ArrayList;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.TransactionManager;
-import pt.tecnico.bubbledocs.domain.Add;
-import pt.tecnico.bubbledocs.domain.Avg;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
-import pt.tecnico.bubbledocs.domain.Cell;
-import pt.tecnico.bubbledocs.domain.Div;
-import pt.tecnico.bubbledocs.domain.Literal;
-import pt.tecnico.bubbledocs.domain.Range;
-import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
@@ -23,6 +16,7 @@ import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.service.AssignBinaryCellService;
 import pt.tecnico.bubbledocs.service.AssignLiteralCellService;
 import pt.tecnico.bubbledocs.service.AssignReferenceCellService;
+import pt.tecnico.bubbledocs.service.AssignUnaryCellService;
 import pt.tecnico.bubbledocs.service.CreateSpreadSheetService;
 import pt.tecnico.bubbledocs.service.CreateUserService;
 import pt.tecnico.bubbledocs.service.integration.ExportDocumentIntegrator;
@@ -188,8 +182,6 @@ public class BubbleDocsApplication {
 		service_spreadsheet.execute();
 		
 		int docId = bd.getSpreadsheetByName("Notas ES").getId();
-		Spreadsheet notas = bd.getSpreadsheetByName("Notas ES");
-		User pf = bd.getUserByUsername("pff");
 		
 		//Literal 5 on position (3,4).
 		AssignLiteralCellService service_literal1 = new AssignLiteralCellService(pfToken, docId, "3;4", "5");
@@ -218,8 +210,8 @@ public class BubbleDocsApplication {
 		service_literal5.execute();
 		
 		//Avg between (10,10) and (11,11) on (12,12)
-		Avg avg = new Avg(new Range(notas.getCellByCoords(10, 10), notas.getCellByCoords(11, 11)));
-		pf.addFunctiontoCell(avg, notas, 12, 12);	
+		AssignUnaryCellService service_unary1 = new AssignUnaryCellService(pfToken, docId, "12;12", "=AVG(10;10:11;11)");
+		service_unary1.execute();
 		
 		//Literal 5 on position (15,15), (15,16)
 		//Reference to literal 5 on position (16,15)
@@ -234,8 +226,8 @@ public class BubbleDocsApplication {
 		service_reference3.execute();
 		
 		//Avg between (15,15) and (16,16) on (17,17)
-		Avg avg2 = new Avg(new Range(notas.getCellByCoords(15, 15), notas.getCellByCoords(16, 16)));
-		pf.addFunctiontoCell(avg2, notas, 17, 17);	
+		AssignUnaryCellService service_unary2 = new AssignUnaryCellService(pfToken, docId, "17;17", "=AVG(15;15:16;16)");
+		service_unary2.execute();
 	}
 
 	@Atomic

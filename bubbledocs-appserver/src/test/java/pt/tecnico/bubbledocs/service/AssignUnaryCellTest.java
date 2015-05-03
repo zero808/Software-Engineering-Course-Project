@@ -16,14 +16,14 @@ import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
 
-public class AssignBinaryCellTest extends BubbleDocsServiceTest {
+public class AssignUnaryCellTest extends BubbleDocsServiceTest {
 
 	private String ownerToken;
 	private String notOwnerToken;
 	private String notInSessionToken = "antonio6";
-	private String validInputRefs = "=ADD(2;1,2;2)";
-	private String validInputLits = "=SUB(4,2)";
-	private String malformedArguments = "=MUL(-1;-1,11;12)";
+	private String validInputAVG = "=AVG(2;2:3;3)";
+	private String validInputPRD = "=PRD(2;2:3;3)";
+	private String malformedArguments = "=AVT(-1;-1,11;12)";
 
 	
 	public void populate4Test() {
@@ -38,8 +38,10 @@ public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 		Spreadsheet teste = createSpreadSheet(leo, "teste", 10, 10);
 		leo.addSpreadsheets(teste);
 		
-		teste.getCellByCoords(2, 1).setContent(new Literal(2));
 		teste.getCellByCoords(2, 2).setContent(new Literal(2));
+		teste.getCellByCoords(2, 3).setContent(new Literal(2));
+		teste.getCellByCoords(3, 2).setContent(new Literal(2));
+		teste.getCellByCoords(3, 3).setContent(new Literal(2));
 
 		leo.givePermissionto(getSpreadSheet("teste"), ze, true);
 	}
@@ -48,9 +50,9 @@ public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 	public void success() {
 		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;1";
-		String expected_result = "4";
+		String expected_result = "2";
 
-		AssignBinaryCellService service = new AssignBinaryCellService(ownerToken, sucessTestSpreadsheet.getId(), cell, validInputRefs);
+		AssignUnaryCellService service = new AssignUnaryCellService(ownerToken, sucessTestSpreadsheet.getId(), cell, validInputAVG);
 		service.execute();
 		
 		String result = service.getResult();
@@ -62,9 +64,9 @@ public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 	public void successNotOwner() {
 		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;1";
-		String expected_result = "2";
+		String expected_result = "16";
 
-		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, sucessTestSpreadsheet.getId(), cell, validInputLits);
+		AssignUnaryCellService service = new AssignUnaryCellService(notOwnerToken, sucessTestSpreadsheet.getId(), cell, validInputPRD);
 		service.execute();
 
 		String result = service.getResult();
@@ -76,7 +78,7 @@ public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "11;1"; // Is an invalid position since the spreadsheet is 10x10.
 
-		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputLits);
+		AssignUnaryCellService service = new AssignUnaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputAVG);
 		service.execute();
 	}
 	
@@ -85,7 +87,7 @@ public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;11"; // Is an invalid position since the spreadsheet is 10x10.
 
-		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputLits);
+		AssignUnaryCellService service = new AssignUnaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputAVG);
 		service.execute();
 	}
 	
@@ -94,7 +96,7 @@ public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "-1;1"; // Is an invalid position since the spreadsheet is 10x10.
 
-		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputLits);
+		AssignUnaryCellService service = new AssignUnaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputAVG);
 		service.execute();
 	}
 	
@@ -103,7 +105,7 @@ public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;-1"; // Is an invalid position since the spreadsheet is 10x10.
 
-		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputLits);
+		AssignUnaryCellService service = new AssignUnaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputAVG);
 		service.execute();
 	}
 	
@@ -114,7 +116,7 @@ public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 
 		protectCell("teste", 1, 1);
 
-		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputLits);
+		AssignUnaryCellService service = new AssignUnaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputAVG);
 		service.execute();
 	}
 	
@@ -122,7 +124,7 @@ public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 	public void spreadsheetDoesNotExist() {
 		String cell = "1;1";
 
-		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, -1, cell, validInputLits); // No spreadsheet should ever have -1 Id.
+		AssignUnaryCellService service = new AssignUnaryCellService(notOwnerToken, -1, cell, validInputAVG); // No spreadsheet should ever have -1 Id.
 		service.execute();
 	}
 	
@@ -131,7 +133,7 @@ public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;1";
 
-		AssignBinaryCellService service = new AssignBinaryCellService(notInSessionToken, testSpreadsheet.getId(), cell, validInputLits);
+		AssignUnaryCellService service = new AssignUnaryCellService(notInSessionToken, testSpreadsheet.getId(), cell, validInputAVG);
 		service.execute();
 	}
 	
@@ -140,7 +142,7 @@ public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;1";
 
-		AssignBinaryCellService service = new AssignBinaryCellService("", testSpreadsheet.getId(), cell, validInputLits);
+		AssignUnaryCellService service = new AssignUnaryCellService("", testSpreadsheet.getId(), cell, validInputAVG);
 		service.execute();
 	}
 
@@ -153,7 +155,7 @@ public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 
 		leoUser.removePermissionfrom(testSpreadsheet, zeUser);
 
-		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputLits);
+		AssignUnaryCellService service = new AssignUnaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputAVG);
 		service.execute();
 	}
 	
@@ -162,8 +164,8 @@ public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;1";
 
-		AssignBinaryCellService service = new AssignBinaryCellService(ownerToken, testSpreadsheet.getId(), cell, malformedArguments);
+		AssignUnaryCellService service = new AssignUnaryCellService(ownerToken, testSpreadsheet.getId(), cell, malformedArguments); 
 		service.execute();
 	}
 	
-}// End AssignBinaryCellTest class
+}// End AssignUnaryCellTest class
