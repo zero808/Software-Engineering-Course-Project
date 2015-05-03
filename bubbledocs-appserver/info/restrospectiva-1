@@ -3,7 +3,7 @@
 | luis-github-13 |  0 |  0 |  2 |  6 |  0 |  0 |  0 |                     87,88,89                    |               121,122,123,87,88,89              |
 |    xistoso     |  3 |  3 |  5 |  0 |  0 |  2 |  4 |                   121,122,123                   |                   121,122,123                   |
 |   marcocunha   |  0 |  0 |  0 |  0 |  2 |  2 |  2 |                   116,117,118                   |                81,82,116,117,118                |
-|    LeoVal      |  2 |  0 |  2 |  2 |  0 |  0 |  0 |                91,92,94,95,105,106              |                        -                        |
+|    LeoVal      |  2 |  0 |  2 |  2 |  0 |  2 |  4 |                91,92,94,95,105,106              |                91,92,94,95,105,106              |
 |    zero808     |  0 |  0 |  0 |  0 |  0 |  0 |  0 |                      81,82                      |                        -                        |
 |   cmgalante    |  2 |  3 |  0 |  3 |  3 |  0 |  0 |                 84,85,126,127,128               |                 84,85,126,127,128               |
 
@@ -23,7 +23,9 @@ Previously on...
           Era por isso importante cumprir com os prazos planeados para que os restantes elementos começassem a trabalhar. E foi o que aconteceu
           correndo tudo conforme previsto. 
 
-[Leo] - Soon
+[Leo] - As horas estimadas não estavam correctas pelo que tive de alterar a tabela, acabei por adicionar 6 horas no fim de semana para corresponder com a 
+	estimativa das issues. Fiquei com os servicos de assign binary/unary. Não houve problemas na implementação da minha parte. O tempo acabou por ser
+	mais do que suficiente após revisão da tabela. Todas as tarefas previstas ficaram implementadas.
 
 [Duarte] - Soon
 
