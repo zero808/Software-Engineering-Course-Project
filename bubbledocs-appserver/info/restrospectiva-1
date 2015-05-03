@@ -4,7 +4,7 @@
 |    xistoso     |  3 |  3 |  5 |  0 |  0 |  2 |  4 |                   121,122,123                   |                   121,122,123                   |
 |   marcocunha   |  0 |  0 |  0 |  0 |  2 |  2 |  2 |                   116,117,118                   |                81,82,116,117,118                |
 |    LeoVal      |  2 |  0 |  2 |  2 |  0 |  2 |  4 |                91,92,94,95,105,106              |                91,92,94,95,105,106              |
-|    zero808     |  0 |  0 |  0 |  0 |  0 |  0 |  0 |                    97, 98, 107                  |                        -                        |
+|    zero808     |  0 |  0 |  0 |  0 |  0 |  0 |  0 |                    81, 82,97, 98, 107           |                        -                        |
 |   cmgalante    |  2 |  3 |  0 |  3 |  3 |  0 |  0 |                 84,85,126,127,128               |                 84,85,126,127,128               |
 
 
@@ -27,8 +27,7 @@ Previously on...
 	estimativa das issues. Fiquei com os servicos de assign binary/unary. Não houve problemas na implementação da minha parte. O tempo acabou por ser
 	mais do que suficiente após revisão da tabela. Todas as tarefas previstas ficaram implementadas.
 
-[Duarte] - Nesta semana fiquei responsável por criar o novo serviço para obtenção do conteúdo de uma spreadsheet e fi-lo durante o fim de semana uma vez
-          que durante a semana tive que estudar para um teste.
+[Duarte] - Na semana passada não fiz os serviços porque tinha testes. Entretanto o Mauro implementou as tasks que eu tinha planeado fazer pois eu precisava delas
 
 [Cláudio] - Na semana passada tinha previsto ter apenas uma hora disponível na sexta-feira e outra também no domingo, e pensei que isso fosse o
 	suficiente para poder realizar as duas tarefas que tinha planeadas, mas infelizmente não foi suficiente, visto que utilizei o tempo que tinha
