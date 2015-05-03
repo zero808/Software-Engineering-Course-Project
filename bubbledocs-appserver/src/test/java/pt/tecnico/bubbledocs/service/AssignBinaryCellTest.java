@@ -16,12 +16,16 @@ import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
 
-public class AssignLiteralCellTest extends BubbleDocsServiceTest {
+public class AssignBinaryCellTest extends BubbleDocsServiceTest {
 
 	private String ownerToken;
 	private String notOwnerToken;
 	private String notInSessionToken = "antonio6";
+	private String validInputRefs = "=ADD(2;1,2;2)";
+	private String validInputLits = "=SUB(4,2)";
+	private String malformedArguments = "=MUL(-1;-1,11;12)";
 
+	
 	public void populate4Test() {
 		getBubbleDocs();
 
@@ -33,6 +37,9 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 
 		Spreadsheet teste = createSpreadSheet(leo, "teste", 10, 10);
 		leo.addSpreadsheets(teste);
+		
+		teste.getCellByCoords(2, 1).setContent(new Literal(2));
+		teste.getCellByCoords(2, 2).setContent(new Literal(2));
 
 		leo.givePermissionto(getSpreadSheet("teste"), ze, true);
 	}
@@ -41,41 +48,35 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	public void success() {
 		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;1";
-		String literal = "3";
+		String expected_result = "4";
 
-		Literal expected_literal = new Literal(Integer.parseInt(literal));
-
-		AssignLiteralCellService service = new AssignLiteralCellService(ownerToken, sucessTestSpreadsheet.getId(), cell, literal);
+		AssignBinaryCellService service = new AssignBinaryCellService(ownerToken, sucessTestSpreadsheet.getId(), cell, validInputRefs);
 		service.execute();
-
+		
 		String result = service.getResult();
 
-		assertEquals(expected_literal.toString(), result);
+		assertEquals(expected_result, result);
 	}
 	
 	@Test
 	public void successNotOwner() {
 		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;1";
-		String literal = "3";
-		
-		Literal expected_literal = new Literal(Integer.parseInt(literal));
+		String expected_result = "2";
 
-		AssignLiteralCellService service = new AssignLiteralCellService(notOwnerToken, sucessTestSpreadsheet.getId(), cell, literal);
+		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, sucessTestSpreadsheet.getId(), cell, validInputLits);
 		service.execute();
 
 		String result = service.getResult();
-
-		assertEquals(expected_literal.toString(), result);
+		assertEquals(expected_result, result);
 	}
-
+	
 	@Test(expected = OutofBoundsException.class)
 	public void cellRowIsOutOfBonds() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "11;1"; // Is an invalid position since the spreadsheet is 10x10.
-		String literal = "3";
 
-		AssignLiteralCellService service = new AssignLiteralCellService(ownerToken, testSpreadsheet.getId(), cell, literal);
+		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputLits);
 		service.execute();
 	}
 	
@@ -83,9 +84,8 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	public void cellCollumnIsOutOfBonds() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;11"; // Is an invalid position since the spreadsheet is 10x10.
-		String literal = "3";
 
-		AssignLiteralCellService service = new AssignLiteralCellService(ownerToken, testSpreadsheet.getId(), cell, literal);
+		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputLits);
 		service.execute();
 	}
 	
@@ -93,9 +93,8 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	public void cellRowIsInvalid() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "-1;1"; // Is an invalid position since the spreadsheet is 10x10.
-		String literal = "3";
 
-		AssignLiteralCellService service = new AssignLiteralCellService(ownerToken, testSpreadsheet.getId(), cell, literal);
+		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputLits);
 		service.execute();
 	}
 	
@@ -103,50 +102,45 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	public void cellCollumnIsInvalid() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;-1"; // Is an invalid position since the spreadsheet is 10x10.
-		String literal = "3";
 
-		AssignLiteralCellService service = new AssignLiteralCellService(ownerToken, testSpreadsheet.getId(), cell, literal);
+		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputLits);
 		service.execute();
 	}
-
+	
 	@Test(expected = CellIsProtectedException.class)
 	public void cellIsProtected() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;1";
-		String literal = "3";
 
 		protectCell("teste", 1, 1);
 
-		AssignLiteralCellService service = new AssignLiteralCellService(ownerToken, testSpreadsheet.getId(), cell, literal);
+		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputLits);
 		service.execute();
 	}
-
+	
 	@Test(expected = SpreadsheetDoesNotExistException.class)
 	public void spreadsheetDoesNotExist() {
 		String cell = "1;1";
-		String literal = "3";
 
-		AssignLiteralCellService service = new AssignLiteralCellService(ownerToken, -1, cell, literal); // No spreadsheet should ever have -1 Id.
+		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, -1, cell, validInputLits); // No spreadsheet should ever have -1 Id.
 		service.execute();
 	}
-
+	
 	@Test(expected = UserNotInSessionException.class)
 	public void userNotInSession() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;1";
-		String literal = "3";
 
-		AssignLiteralCellService service = new AssignLiteralCellService(notInSessionToken, testSpreadsheet.getId(), cell, literal); 
+		AssignBinaryCellService service = new AssignBinaryCellService(notInSessionToken, testSpreadsheet.getId(), cell, validInputLits); // No spreadsheet should ever have -1 Id.
 		service.execute();
 	}
-
+	
 	@Test(expected = InvalidTokenException.class)
 	public void invalidToken() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;1";
-		String literal = "3";
 
-		AssignLiteralCellService service = new AssignLiteralCellService("", testSpreadsheet.getId(), cell, literal); 
+		AssignBinaryCellService service = new AssignBinaryCellService("", testSpreadsheet.getId(), cell, validInputLits); // No spreadsheet should ever have -1 Id.
 		service.execute();
 	}
 
@@ -154,13 +148,22 @@ public class AssignLiteralCellTest extends BubbleDocsServiceTest {
 	public void userNotOwner() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;1";
-		String literal = "3";
 		User leoUser = getUserFromUsername("leoval");
 		User zeUser = getUserFromUsername("zeze");
 
 		leoUser.removePermissionfrom(testSpreadsheet, zeUser);
 
-		AssignLiteralCellService service = new AssignLiteralCellService(notOwnerToken, testSpreadsheet.getId(), cell, literal);
+		AssignBinaryCellService service = new AssignBinaryCellService(notOwnerToken, testSpreadsheet.getId(), cell, validInputLits); // No spreadsheet should ever have -1 Id.
 		service.execute();
 	}
-}// End AssignLiteralCellTest class
+	
+	@Test(expected = InvalidArgumentsException.class)
+	public void malformedArguments() {
+		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
+		String cell = "1;1";
+
+		AssignBinaryCellService service = new AssignBinaryCellService(ownerToken, testSpreadsheet.getId(), cell, malformedArguments); // No spreadsheet should ever have -1 Id.
+		service.execute();
+	}
+	
+}// End AssignBinaryCellTest class

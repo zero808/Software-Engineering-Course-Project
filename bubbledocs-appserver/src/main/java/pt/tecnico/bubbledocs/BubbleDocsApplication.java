@@ -20,6 +20,7 @@ import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
+import pt.tecnico.bubbledocs.service.AssignBinaryCellService;
 import pt.tecnico.bubbledocs.service.AssignLiteralCellService;
 import pt.tecnico.bubbledocs.service.AssignReferenceCellService;
 import pt.tecnico.bubbledocs.service.CreateSpreadSheetService;
@@ -199,19 +200,12 @@ public class BubbleDocsApplication {
 		service_reference1.execute();
 
 		//Function Add with arguments Literal 2 and Reference to (3, 4) on (5, 6).
-		Literal l2 = new Literal(2); 
-		Cell c2 = notas.getCellByCoords(3, 4);
-		Reference r2 = new Reference(c2);
-		Add add = new Add(l2, r2); 
-		pf.addFunctiontoCell(add, notas, 5, 6);
-		
+		AssignBinaryCellService service_binary1 = new AssignBinaryCellService(pfToken, docId, "5;6" , "=ADD(2,3;4)");
+		service_binary1.execute();
+			
 		//Function Div with arguments Reference (1, 1) and Reference to (3, 4) on (2, 2)
-		Cell c3 = notas.getCellByCoords(1, 1);
-		Cell c4 = notas.getCellByCoords(3, 4);
-		Reference r3 = new Reference(c3);	
-		Reference r4 = new Reference(c4);
-		Div div = new Div(r3, r4);
-		pf.addFunctiontoCell(div, notas, 2, 2);
+		AssignBinaryCellService service_binary2 = new AssignBinaryCellService(pfToken, docId, "2;2" , "=DIV(1;1,3;4)");
+		service_binary2.execute();
 		
 		//Literal 5 on position (10,10), (10,11), (11,10), (11,11).
 		AssignLiteralCellService service_literal2 = new AssignLiteralCellService(pfToken, docId, "10;10", "5");

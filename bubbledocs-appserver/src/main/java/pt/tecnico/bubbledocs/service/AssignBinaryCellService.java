@@ -14,7 +14,7 @@ import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
-public class AssignBinaryFunctionToCell extends AccessService {
+public class AssignBinaryCellService extends AccessService {
 
 	private String result;
 	private int docId;
@@ -33,8 +33,8 @@ public class AssignBinaryFunctionToCell extends AccessService {
 			+ ARGUMENT + "," + ARGUMENT + "\\)";
 	final String PARSE_BINARY_FUNCTION = "[=(,)]";
 
-	public AssignBinaryFunctionToCell(String tokenUser, int docId,
-			String cellId, String function) {
+	public AssignBinaryCellService(String tokenUser, int docId, String cellId,
+			String function) {
 		token = tokenUser;
 		this.docId = docId;
 		this.cellId = cellId;
@@ -52,12 +52,17 @@ public class AssignBinaryFunctionToCell extends AccessService {
 
 		user.addFunctiontoCell(b, s, cellRow, cellCol);
 
-		result = Integer.toString(getCellByCoords(s, cellRow, cellCol)
-				.getContent().getValue());
+		try {
+			result = Integer.toString(getCellByCoords(s, cellRow, cellCol)
+					.getContent().getValue());
+		} catch (BubbleDocsException e) {
+			result = "#VALUE";
+		}
+
 	}
 
 	private Binary generateFunc(String func) {
-		
+
 		if (!Pattern.matches(BINARY_FUNCTION, func))
 			throw new InvalidArgumentsException();
 
