@@ -29,15 +29,6 @@ public class Root extends Root_Base {
 		
 		bd.addUsers(this);
 	}
-
-	private Spreadsheet getSpreadsheetByName(String spreadsheetName) {
-		for(Spreadsheet s :FenixFramework.getDomainRoot().getBubbledocs().getSpreadsheetsSet()) {
-			if(s.getName().equals(spreadsheetName)) {
-				return s;
-			}
-		}
-		return null;
-	}
 	
 	public void removeUser(String username) throws LoginBubbleDocsException {
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
@@ -72,10 +63,8 @@ public class Root extends Root_Base {
 
 	@Override
 	public void removeSpreadsheets(String spreadsheetName) throws SpreadsheetDoesNotExistException {
-		Spreadsheet toRemove = getSpreadsheetByName(spreadsheetName);
-
-		if (toRemove == null)
-			throw new SpreadsheetDoesNotExistException();
+		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
+		Spreadsheet toRemove = bd.getSpreadsheetByName(spreadsheetName);
 
 		super.removeSpreadsheets(toRemove);
 		toRemove.delete();
