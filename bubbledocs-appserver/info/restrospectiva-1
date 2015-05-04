@@ -4,8 +4,8 @@
 |    xistoso     |  3 |  3 |  5 |  0 |  0 |  2 |  4 |                   121,122,123                   |                   121,122,123                   |
 |   marcocunha   |  0 |  0 |  0 |  0 |  2 |  2 |  2 |                   116,117,118                   |                81,82,116,117,118                |
 |    LeoVal      |  2 |  0 |  2 |  2 |  0 |  2 |  4 |                91,92,94,95,105,106              |                91,92,94,95,105,106              |
-|    zero808     |  0 |  0 |  0 |  0 |  0 |  0 |  0 |                    81, 82, 97, 98, 107          |                     97, 98, 107                 |
-|   cmgalante    |  2 |  3 |  0 |  3 |  3 |  0 |  0 |                 84,85,126,127,128               |                 84,85,126,127,128               |
+|    zero808     |  0 |  0 |  0 |  0 |  0 |  6 |  6 |                 81,82,97,98,107                 |                     97,98,107                   |
+|   cmgalante    |  2 |  3 |  0 |  3 |  3 |  0 |  0 |                84,85,126,127,128                |                 84,85,126,127,128               |
 
 
 Previously on...
@@ -17,17 +17,17 @@ Previously on...
 	 prof na aula de dúvidas. No que correu mal acho que a única coisa é que ainda existem elementos do grupo, mesmo nesta semana, que não dão a
 	 devida atenção e rigor na gestão SCRUM do projecto, apesar dos avisos que dou, uma parte essencial para o sucesso do projecto.
 
-[Pedro] - Soon
+[Pedro] - Soon <.<
 
 [Marco] - Para esta entrega do projeto fiquei com a responsabilidade de criar a estrutura necessária para esta 4a entrega(Integrator Services). 
           Era por isso importante cumprir com os prazos planeados para que os restantes elementos começassem a trabalhar. E foi o que aconteceu
           correndo tudo conforme previsto. 
 
-[Leo] - Nada ficou implementado. Fica para a proxima semana.
+[Leo] - Nada ficou implementado, por isso ficou planeado implementar na semana seguinte.
 
-[Duarte] - Na semana passada não fiz os serviços porque tinha testes. Entretanto o Marco implementou as tasks que eu tinha planeado fazer pois eu precisava delas
+[Duarte] - Na semana passada não fiz os serviços porque tinha testes.
 
 [Cláudio] - Na semana passada tinha previsto ter apenas uma hora disponível na sexta-feira e outra também no domingo, e pensei que isso fosse o
-	suficiente para poder realizar as duas tarefas que tinha planeadas, mas infelizmente não foi suficiente, visto que utilizei o tempo que tinha
-	disponível para ler com atenção o enunciado e me colocar a par de todas as alterações necessárias nesta quarta entrega e respectivos pormenores.
-	Sendo assim, essas duas tarefas passaram para o meu planeamento desta actual semana, juntamente com outras.
+	    suficiente para poder realizar as duas tarefas que tinha planeadas, mas infelizmente não foi suficiente, visto que utilizei o tempo que tinha
+	    disponível para ler com atenção o enunciado e me colocar a par de todas as alterações necessárias nesta quarta entrega e respectivos pormenores.
+	    Sendo assim, essas duas tarefas passaram para o meu planeamento desta actual semana, juntamente com outras.

@@ -19,7 +19,7 @@ public abstract class BubbleDocsService {
 	public final void execute() throws BubbleDocsException {
 		
 		/*
-		 * There are some services that doesn't have tokens, 
+		 * There are some services that don't have tokens, 
 		 * such as GetUserInfoService
 		 *  
 		 */

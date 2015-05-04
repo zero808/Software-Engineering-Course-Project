@@ -5,9 +5,6 @@ import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
-import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
-import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
-import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 public class DeleteUserService extends BubbleDocsService {
 
