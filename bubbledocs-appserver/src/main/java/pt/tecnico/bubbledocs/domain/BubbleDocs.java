@@ -80,16 +80,10 @@ public class BubbleDocs extends BubbleDocs_Base {
 	}
 	
 	public void userExists(String username) throws LoginBubbleDocsException {
-		//java 8 is it possible??
-		//learn functionals boys and gals
-		//e by the way o == para strings estava a falhar devia ter sido equals
 		if(null == getUserByUsername(username))
 			throw new LoginBubbleDocsException(username);
 	}
 	
-	
-	//functional programing rejoice
-	//gotta love java 8
 	public User getUserByUsername(String username) {
 		return getUsersSet().stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
 	}
