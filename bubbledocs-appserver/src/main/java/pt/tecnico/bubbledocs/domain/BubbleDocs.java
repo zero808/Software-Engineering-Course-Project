@@ -1,6 +1,7 @@
 package pt.tecnico.bubbledocs.domain;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 import java.util.Random;
 
 import org.jdom2.Element;
@@ -79,26 +80,18 @@ public class BubbleDocs extends BubbleDocs_Base {
 	}
 	
 	public void userExists(String username) throws LoginBubbleDocsException {
-		boolean found = false;
-
-		for(User u : getUsersSet()) {
-			if(u.getUsername() == username) {
-				found = true;
-			}
-		}
-
-		if(!(found)) {
+		//java 8 is it possible??
+		//learn functionals boys and gals
+		//e by the way o == para strings estava a falhar devia ter sido equals
+		if(null == getUserByUsername(username))
 			throw new LoginBubbleDocsException(username);
-		}
 	}
 	
+	
+	//functional programing rejoice
+	//gotta love java 8
 	public User getUserByUsername(String username) {
-		for(User user : getUsersSet()) {
-			if(user.getUsername().equals(username)) {
-				return user;
-			}
-		}	
-		return null;
+		return getUsersSet().stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
 	}
 	
 	public String getUsernameByToken(String userToken) {
