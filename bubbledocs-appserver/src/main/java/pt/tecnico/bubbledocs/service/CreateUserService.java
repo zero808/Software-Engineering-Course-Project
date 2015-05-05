@@ -5,9 +5,6 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Root;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
-import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
-import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
-import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
 
 public class CreateUserService extends BubbleDocsService {
 	
@@ -15,9 +12,6 @@ public class CreateUserService extends BubbleDocsService {
 	private String email;
 	private String name;
 	private User user;
-	
-	private IDRemoteServices idRemoteService = new IDRemoteServices();
-	
 	
 	public CreateUserService(String userToken, String newUsername, String email, String name) {
 		this.token = userToken;
