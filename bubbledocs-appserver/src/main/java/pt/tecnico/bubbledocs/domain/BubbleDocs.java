@@ -1,7 +1,6 @@
 package pt.tecnico.bubbledocs.domain;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
 import java.util.Random;
 
 import org.jdom2.Element;

@@ -3,7 +3,6 @@ package pt.tecnico.bubbledocs.service.integration;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.service.CreateUserService;
-import pt.tecnico.bubbledocs.service.LoginUserService;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 public class CreateUserIntegrator extends BubbleDocsIntegrator {
