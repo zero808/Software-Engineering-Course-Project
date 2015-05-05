@@ -22,15 +22,13 @@ public class ImportDocumentService extends AccessService {
 	
 	private String username;
 	
-	public ImportDocumentService(String userToken, int docId, byte[] docXML) {
-		
+	public ImportDocumentService(String userToken, int docId, byte[] docXML) {		
 		this.token = userToken;
 		this.docId = docId;
 		this.docXML = docXML;
 		
-		//Needs to be changed once getUsername4Token service is implemented
 		BubbleDocs bd = getBubbleDocs();
-		username = bd.getUsernameByToken(token);
+		this.username = bd.getUsernameByToken(userToken);
 	}
 
 	@Override

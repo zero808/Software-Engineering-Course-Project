@@ -8,6 +8,7 @@ import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.ExportDocumentException;
+import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 
 public class ExportDocumentService extends AccessService {
 	
@@ -19,19 +20,21 @@ public class ExportDocumentService extends AccessService {
 	public ExportDocumentService(String userToken, int docId) {
 		this.token = userToken;
 		this.docId = docId;
+		
+		BubbleDocs bd = getBubbleDocs();
+		this.username = bd.getUsernameByToken(token);
 	}
 
 	@Override
 	protected void dispatch() throws BubbleDocsException {
-		BubbleDocs bd = getBubbleDocs();
 		
 		org.jdom2.Document jdomDoc = new org.jdom2.Document();
 		
 		Spreadsheet spreadsheet = getSpreadsheet(docId);
-
-		username = bd.getUsernameByToken(token);
 		
 		jdomDoc.setRootElement(spreadsheet.exportToXML());
+		
+		jdomDoc.getRootElement().setAttribute("owner", username);
 
 		XMLOutputter xml = new XMLOutputter();
 		
@@ -40,6 +43,15 @@ public class ExportDocumentService extends AccessService {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			throw new ExportDocumentException(username);
+		}
+	}
+
+	@Override
+	public void checkAccess() {
+		Spreadsheet s = getSpreadsheet(docId);
+		
+		if(s.getUser().getUsername() != username) {
+			throw new InvalidPermissionException(username);
 		}
 	}
 	

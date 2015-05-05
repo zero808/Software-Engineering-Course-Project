@@ -15,7 +15,6 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Test;
 
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.CannotStoreDocumentException;
@@ -115,14 +114,10 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		assertEquals(testSpreadsheet.getNCols(), serviceSpreadsheet.getNCols());
 	}
 	
-	@Test
-	public void successNotOwner() {
-		BubbleDocs bd = getBubbleDocs();
+	@Test(expected = InvalidPermissionException.class)
+	public void NotOwner() {
 		
 		Spreadsheet spreadsheetSucessTest = getSpreadSheet("teste");
-		String notOwnerUsername = bd.getUsernameByToken(notOwnerToken);
-		
-		String docId = Integer.toString(spreadsheetSucessTest.getId());
 		
 		org.jdom2.Document jdomDoc = new org.jdom2.Document();
 		
@@ -137,43 +132,7 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		}
 		
 		ExportDocumentIntegrator service = new ExportDocumentIntegrator(notOwnerToken, spreadsheetSucessTest.getId());
-		
-		new Expectations() {
-			{
-				storeRemote.storeDocument(notOwnerUsername, docId, expectationsByte);
-			}
-		};
 		service.execute();
-
-		byte[] serviceDocBytes = service.getDocXML();
-
-		org.jdom2.Document serviceDoc = new org.jdom2.Document();
-
-		SAXBuilder builder = new SAXBuilder();
-		builder.setIgnoringElementContentWhitespace(true);
-		try {
-			serviceDoc = builder.build(new ByteArrayInputStream(serviceDocBytes));
-		} catch (JDOMException | IOException e) {
-			e.printStackTrace();
-		}
-
-		Element serviceRootElement = serviceDoc.getRootElement();
-		Spreadsheet serviceSpreadsheet = new Spreadsheet();
-		serviceSpreadsheet.importFromXML(serviceRootElement);
-
-		org.jdom2.Document docTest = new org.jdom2.Document();
-
-		docTest.setRootElement(serviceSpreadsheet.exportToXML());
-
-		Element testRootElement = docTest.getRootElement();
-		Spreadsheet testSpreadsheet = new Spreadsheet();
-		testSpreadsheet.importFromXML(testRootElement);
-
-		assertEquals(testSpreadsheet.getName(), serviceSpreadsheet.getName());
-		assertEquals(testSpreadsheet.getDate(), serviceSpreadsheet.getDate());
-		assertEquals(testSpreadsheet.getUser().getUsername(), serviceSpreadsheet.getUser().getUsername());
-		assertEquals(testSpreadsheet.getNRows(), serviceSpreadsheet.getNRows());
-		assertEquals(testSpreadsheet.getNCols(), serviceSpreadsheet.getNCols());
 	}
 
 	@Test(expected = SpreadsheetDoesNotExistException.class)

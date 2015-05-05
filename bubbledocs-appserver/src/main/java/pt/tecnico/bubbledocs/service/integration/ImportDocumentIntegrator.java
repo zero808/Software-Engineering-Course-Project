@@ -4,6 +4,7 @@ import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
+import pt.tecnico.bubbledocs.service.GetUsername4TokenService;
 import pt.tecnico.bubbledocs.service.ImportDocumentService;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
@@ -30,10 +31,9 @@ public class ImportDocumentIntegrator extends BubbleDocsIntegrator {
 	@Override
 	public void dispatch() throws BubbleDocsException {
 		
-		ImportDocumentService importDocumentService = new ImportDocumentService(userToken, docId, docXML);
-		
-		//Needs to be changed once getUsername4Token service is implemented
-		username = importDocumentService.getUsername();
+		GetUsername4TokenService usernameService = new GetUsername4TokenService(userToken);
+		usernameService.execute();
+		username = usernameService.getUserUsername();
 		
 		id = Integer.toString(docId);
 	
@@ -45,6 +45,7 @@ public class ImportDocumentIntegrator extends BubbleDocsIntegrator {
 			throw new UnavailableServiceException();
 		}
 		
+		ImportDocumentService importDocumentService = new ImportDocumentService(userToken, docId, docXML);
 		importDocumentService.execute();
 		
 		spreadsheet = importDocumentService.getSpreadsheet();

@@ -4,6 +4,7 @@ import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
 import pt.tecnico.bubbledocs.service.ExportDocumentService;
+import pt.tecnico.bubbledocs.service.GetUsername4TokenService;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
 public class ExportDocumentIntegrator extends BubbleDocsIntegrator {
@@ -26,10 +27,14 @@ public class ExportDocumentIntegrator extends BubbleDocsIntegrator {
 	@Override
 	public void dispatch() throws BubbleDocsException {
 		
+		GetUsername4TokenService usernameService = new GetUsername4TokenService(userToken);
+		usernameService.execute();
+		
+		username = usernameService.getUserUsername();
+		
 		ExportDocumentService exportDocumentService = new ExportDocumentService(userToken, docId);
 		exportDocumentService.execute();
 		
-		username = exportDocumentService.getUsername();
 		id = Integer.toString(exportDocumentService.getDocId());
 		docXML = exportDocumentService.getDocXML();
 		
