@@ -84,7 +84,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	}
 	
 	public User getUserByUsername(String username) {
-		return getUsersSet().stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
+		return getUsersSet().stream().filter(u -> u.getUsername().equals(username)).findAny().orElse(null);
 	}
 	
 	public String getUsernameByToken(String userToken) {

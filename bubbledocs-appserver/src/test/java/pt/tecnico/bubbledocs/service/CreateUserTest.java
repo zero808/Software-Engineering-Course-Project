@@ -14,6 +14,7 @@ import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
+import pt.tecnico.bubbledocs.service.integration.CreateUserIntegrator;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
 public class CreateUserTest extends BubbleDocsServiceTest {
@@ -38,14 +39,13 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 
 	@Test
 	public void success() {
-		CreateUserService service = new CreateUserService(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
+		CreateUserIntegrator service = new CreateUserIntegrator(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
 		
 		new Expectations() {
 			{
 				idRemoteService.createUser(anyString, anyString, anyString);
 			}
 		};
-		service.setIDRemoteService(idRemoteService);
 		service.execute();
 
 		User user = getUserFromUsername(USERNAME_DOES_NOT_EXIST);
@@ -58,30 +58,20 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 
 	@Test(expected = UserAlreadyExistsException.class)
 	public void usernameExists() {
-		CreateUserService service = new CreateUserService(root, USERNAME, EMAIL, "José Ferreira");
-		
-		service.setIDRemoteService(idRemoteService);
+		CreateUserIntegrator service = new CreateUserIntegrator(root, USERNAME, EMAIL, "José Ferreira");
 		service.execute();
 	}
 
 	@Test(expected = InvalidUsernameException.class)
 	public void emptyUsername() {
-		CreateUserService service = new CreateUserService(root, "", EMAIL, "José Ferreira");
-		
-		new Expectations() {
-			{
-				idRemoteService.createUser(anyString, anyString, anyString);
-			}
-		};
-		service.setIDRemoteService(idRemoteService);
+		CreateUserIntegrator service = new CreateUserIntegrator(root, "", EMAIL, "José Ferreira");
 		service.execute();
 	}
 
 	@Test(expected = InvalidPermissionException.class)
 	public void unauthorizedUserCreation() {
-		CreateUserService service = new CreateUserService(ars, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
+		CreateUserIntegrator service = new CreateUserIntegrator(ars, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
 		
-		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}
 
@@ -89,14 +79,13 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 	public void accessUsernameNotExist() {
 		removeUserFromSession(root);
 		
-		CreateUserService service = new CreateUserService(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
-		service.setIDRemoteService(idRemoteService);
+		CreateUserIntegrator service = new CreateUserIntegrator(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
 		service.execute();
 	}
 	
 	@Test(expected = UnavailableServiceException.class)
 	public void idServiceUnavailable() {
-		CreateUserService service = new CreateUserService(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
+		CreateUserIntegrator service = new CreateUserIntegrator(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
 		
 		new Expectations() {
 			{
@@ -104,7 +93,6 @@ public class CreateUserTest extends BubbleDocsServiceTest {
 				result = new RemoteInvocationException();
 			}
 		};
-		service.setIDRemoteService(idRemoteService);
 		service.execute();
 	}	
 }// End CreateUserTest class

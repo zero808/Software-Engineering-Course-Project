@@ -17,7 +17,8 @@ public class CreateUserService extends BubbleDocsService {
 	private User user;
 	
 	private IDRemoteServices idRemoteService = new IDRemoteServices();
-
+	
+	
 	public CreateUserService(String userToken, String newUsername, String email, String name) {
 		this.token = userToken;
 		this.newUsername = newUsername;
@@ -28,20 +29,10 @@ public class CreateUserService extends BubbleDocsService {
 	@Override
 	protected void dispatch() throws BubbleDocsException {
 		
-		try {
-			idRemoteService.createUser(this.newUsername, this.email, this.name);
-		} catch (RemoteInvocationException e) {
-			throw new UnavailableServiceException();
-		}
-		
 		user = new User(this.newUsername, this.name, this.email);
 		
 		Root r = Root.getInstance();
 		r.addUser(user);		
-	}
-	
-	public void setIDRemoteService(IDRemoteServices idRemote) {
-		this.idRemoteService = idRemote;
 	}
 
 	@Override
@@ -50,7 +41,7 @@ public class CreateUserService extends BubbleDocsService {
 
 		User user = bd.getUserByUsername(bd.getUsernameByToken(token));
 
-		if(!(user.isRoot())) {
+		if(!user.isRoot()) {
 			throw new InvalidPermissionException(user.getUsername());
 		}		
 	}
