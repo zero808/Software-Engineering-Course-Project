@@ -40,4 +40,9 @@ public class Prd extends Prd_Base {
 
 		return f;
 	}
+	
+	@Override
+	public String toString() {
+		return "PRD(" + getRange().toString() + ")";
+	}
 }// End Prd class

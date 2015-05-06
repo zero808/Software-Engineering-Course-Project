@@ -1,10 +1,11 @@
-package pt.tecnico.bubbledocs.service;
+package pt.tecnico.bubbledocs.integration.component;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
+import pt.tecnico.bubbledocs.service.GetUserInfoService;
 
 public class GetUserInfoServiceTest extends BubbleDocsServiceTest {
 

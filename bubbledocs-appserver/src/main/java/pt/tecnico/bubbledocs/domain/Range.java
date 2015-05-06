@@ -54,4 +54,21 @@ public class Range extends Range_Base {
 		}
 		deleteDomainObject();
 	}
+	
+	@Override
+	public String toString() {
+		String returnRange = "";
+		int count = 1;
+
+		for (Cell cell : getCellsSet()) {
+			if (count == 1) 
+				returnRange = returnRange + cell.toString();
+			if (count == 2) 
+				returnRange = returnRange + cell.toString();
+			count++;
+		}
+
+		return returnRange;
+	}
 }// End Range class
+	

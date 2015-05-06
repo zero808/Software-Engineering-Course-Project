@@ -1,4 +1,4 @@
-package pt.tecnico.bubbledocs.service;
+package pt.tecnico.bubbledocs.integration.component;
 
 import javax.transaction.NotSupportedException;
 import javax.transaction.SystemException;

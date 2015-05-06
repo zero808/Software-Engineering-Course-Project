@@ -16,8 +16,7 @@ public class CreateUserIntegrator extends BubbleDocsIntegrator {
 
 	private IDRemoteServices idRemoteService;
 
-	public CreateUserIntegrator(String userToken, String newUsername,
-			String email, String name) {
+	public CreateUserIntegrator(String userToken, String newUsername, String email, String name) {
 		this.userToken = userToken;
 		this.newUsername = newUsername;
 		this.email = email;

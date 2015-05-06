@@ -1,27 +1,28 @@
 package pt.tecnico.bubbledocs.service.integration;
 
-import pt.tecnico.bubbledocs.exception.CellIsProtectedException;
-import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
-import pt.tecnico.bubbledocs.exception.InvalidTokenException;
-import pt.tecnico.bubbledocs.exception.OutofBoundsException;
-import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
-import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
+import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.service.GetSpreadSheetContentService;
 
 public class GetSpreadSheetContentIntegrator extends BubbleDocsIntegrator {
 	
 	private String tokenUser;
-	private String ssName;
-	private GetSpreadSheetContentService getSpreadSheetContentService;
+	private int ssId;
+	private String[][] matrix;
 	
-	public GetSpreadSheetContentIntegrator(String tokenUser, String spreadSheetName) {
+	public GetSpreadSheetContentIntegrator(String tokenUser, int spreadSheetId) {
 		this.tokenUser = tokenUser;
-		this.ssName = spreadSheetName;	
+		this.ssId = spreadSheetId;	
 	}
 
 	@Override
-	protected void dispatch() throws OutofBoundsException, CellIsProtectedException, SpreadsheetDoesNotExistException, UserNotInSessionException, InvalidTokenException, InvalidPermissionException {
-		getSpreadSheetContentService = new GetSpreadSheetContentService(tokenUser, ssName);
+	protected void dispatch() throws BubbleDocsException {
+		GetSpreadSheetContentService getSpreadSheetContentService = new GetSpreadSheetContentService(tokenUser, ssId);
 		getSpreadSheetContentService.execute();
+		
+		matrix = getSpreadSheetContentService.getMatrix();
+	}
+	
+	public String[][] getMatrix() {
+		return matrix;
 	}
 }// End GetSpreadSheetContentIntegrator class

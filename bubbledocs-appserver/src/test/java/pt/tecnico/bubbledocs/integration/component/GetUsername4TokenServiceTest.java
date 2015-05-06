@@ -1,9 +1,11 @@
-package pt.tecnico.bubbledocs.service;
+package pt.tecnico.bubbledocs.integration.component;
 
 import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
+import pt.tecnico.bubbledocs.service.GetUsername4TokenService;
 
 import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 
 

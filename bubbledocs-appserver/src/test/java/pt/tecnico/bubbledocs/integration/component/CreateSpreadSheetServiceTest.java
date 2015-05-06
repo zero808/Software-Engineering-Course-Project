@@ -1,4 +1,4 @@
-package pt.tecnico.bubbledocs.service;
+package pt.tecnico.bubbledocs.integration.component;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,8 +9,9 @@ import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidBoundsException;
 import pt.tecnico.bubbledocs.exception.InvalidSpreadsheetNameException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
+import pt.tecnico.bubbledocs.service.CreateSpreadSheetService;
 
-public class CreateSpreadSheetTest extends BubbleDocsServiceTest {
+public class CreateSpreadSheetServiceTest extends BubbleDocsServiceTest {
 	
 	private String userNoSpredToken;
 	private String userWithSpredToken;

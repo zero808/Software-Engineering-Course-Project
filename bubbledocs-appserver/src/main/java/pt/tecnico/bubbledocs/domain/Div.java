@@ -78,4 +78,9 @@ public class Div extends Div_Base {
 		setArg1(a1);
 		setArg2(a2);	
 	}
+	
+	@Override
+	public String toString() {
+		return "DIV(" + getArg1().toString() + "," + getArg2().toString() + ")";
+	}
 }// End Div class

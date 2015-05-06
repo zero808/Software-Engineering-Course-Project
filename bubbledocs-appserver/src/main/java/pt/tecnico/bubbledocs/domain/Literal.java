@@ -15,7 +15,7 @@ public class Literal extends Literal_Base implements Argument{
 
 	@Override
 	public String toString() {
-		return "Literal value: " + super.getVal();
+		return Integer.toString(super.getVal());
 	}
 
 	@Override

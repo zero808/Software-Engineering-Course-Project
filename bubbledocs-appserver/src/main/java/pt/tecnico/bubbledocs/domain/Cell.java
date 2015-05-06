@@ -130,4 +130,9 @@ public class Cell extends Cell_Base {
 		
 		deleteDomainObject();
 	}
+	
+	@Override
+	public String toString() {
+		return "(" + getRow() + "," + getCollumn() + ")";
+	}
 }// End Cell class

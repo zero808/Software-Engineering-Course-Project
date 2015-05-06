@@ -40,4 +40,9 @@ public class Avg extends Avg_Base {
 
 		return f;
 	}
+	
+	@Override
+	public String toString() {
+		return "AVG(" + getRange().toString() + ")";
+	}
 }//End Avg class

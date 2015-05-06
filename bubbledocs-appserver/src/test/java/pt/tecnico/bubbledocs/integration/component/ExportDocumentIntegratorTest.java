@@ -1,4 +1,4 @@
-package pt.tecnico.bubbledocs.service;
+package pt.tecnico.bubbledocs.integration.component;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,7 +25,7 @@ import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
-import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
+import pt.tecnico.bubbledocs.integration.component.BubbleDocsServiceTest;
 import pt.tecnico.bubbledocs.service.integration.ExportDocumentIntegrator;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 

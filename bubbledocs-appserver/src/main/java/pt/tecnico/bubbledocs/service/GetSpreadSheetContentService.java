@@ -1,54 +1,47 @@
 package pt.tecnico.bubbledocs.service;
 
-import pt.ist.fenixframework.FenixFramework;
-import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 
-//import pt.tecnico.bubbledocs.exception.BubbleDocsException;
-
 public class GetSpreadSheetContentService extends AccessService {
 	
-	private String ssName;
+	private int ssId;
 	private String[][] matrix;
 
-	public GetSpreadSheetContentService(String userToken, String spreadSheetName) {
+	public GetSpreadSheetContentService(String userToken, int spreadSheetId) {
 		this.token = userToken;
-		this.ssName = spreadSheetName;
+		this.ssId = spreadSheetId;
 	}
 
 	@Override
 	protected void dispatch() throws BubbleDocsException {
-		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
-		Spreadsheet s = bd.getSpreadsheetByName(ssName);
+		Spreadsheet s = getSpreadsheet(ssId);
 		final int cols = s.getNCols();
 		final int rows = s.getNRows();
 		matrix = new String[rows][cols];
 		
 		for(int rowsIterator = 0; rowsIterator < rows; ++rowsIterator) {
 			for(int colsIterator = 0; colsIterator < cols; ++colsIterator) {
-				int ret;
+				String ret;
 				if(s.getCellByCoords(rowsIterator, colsIterator) != null) {
 					if(s.getCellByCoords(rowsIterator, colsIterator).getContent() != null) {
-						ret = s.getCellByCoords(rowsIterator, colsIterator).getContent().getValue();
+						ret = s.getCellByCoords(rowsIterator, colsIterator).getContent().toString();
 						matrix[rowsIterator][colsIterator] = "" + ret;
 					}
 					else
-						matrix[rowsIterator][colsIterator] = "";
+						matrix[rowsIterator][colsIterator] = "#VALUE";
 				}
 				else
-					matrix[rowsIterator][colsIterator] = "";
+					matrix[rowsIterator][colsIterator] = "#VALUE";
 			}
 		}
-
 	}
 	
-	public String getSpreadSheetName() {
-		return ssName;
+	public int getSpreadSheetId() {
+		return ssId;
 	}
 	
 	public String[][] getMatrix() {
 		return matrix;
 	}
-
-}
+}// End GetSpreadSheetContentService class

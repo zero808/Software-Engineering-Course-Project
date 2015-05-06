@@ -213,4 +213,13 @@ public class BubbleDocs extends BubbleDocs_Base {
 		super.removeUsers(userToRemove);
 		userToRemove.delete();
 	}
+	
+	public void delete() {
+		for(User u : getUsersSet()) {
+			u.delete();
+		}
+		
+		FenixFramework.getDomainRoot().setBubbledocs(null);
+		deleteDomainObject();
+	}
 }// End BubbleDocs class

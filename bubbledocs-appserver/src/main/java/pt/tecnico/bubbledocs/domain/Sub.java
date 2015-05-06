@@ -74,4 +74,9 @@ public class Sub extends Sub_Base {
 		setArg1(a1);
 		setArg2(a2);	
 	}
+	
+	@Override
+	public String toString() {
+		return "SUB(" + getArg1().toString() + "," + getArg2().toString() + ")";
+	}
 }// End Sub class

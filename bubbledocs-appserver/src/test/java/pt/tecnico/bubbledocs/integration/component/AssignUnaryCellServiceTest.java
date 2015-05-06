@@ -1,4 +1,4 @@
-package pt.tecnico.bubbledocs.service;
+package pt.tecnico.bubbledocs.integration.component;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,9 +14,10 @@ import pt.tecnico.bubbledocs.exception.InvalidTokenException;
 import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
-import pt.tecnico.bubbledocs.service.BubbleDocsServiceTest;
+import pt.tecnico.bubbledocs.integration.component.BubbleDocsServiceTest;
+import pt.tecnico.bubbledocs.service.AssignUnaryCellService;
 
-public class AssignUnaryCellTest extends BubbleDocsServiceTest {
+public class AssignUnaryCellServiceTest extends BubbleDocsServiceTest {
 
 	private String ownerToken;
 	private String notOwnerToken;

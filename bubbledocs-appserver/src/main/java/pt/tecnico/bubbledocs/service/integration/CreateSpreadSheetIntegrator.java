@@ -12,6 +12,7 @@ public class CreateSpreadSheetIntegrator extends BubbleDocsIntegrator {
 	private String name;
 	private int rows;
 	private int columns;
+	private int docId;
 	
 	public CreateSpreadSheetIntegrator(String userToken, String name, int rows, int columns) {
 		this.userToken = userToken;
@@ -24,5 +25,11 @@ public class CreateSpreadSheetIntegrator extends BubbleDocsIntegrator {
 	protected void dispatch() throws InvalidTokenException, UserNotInSessionException, InvalidBoundsException, InvalidSpreadsheetNameException {
 		CreateSpreadSheetService createSpreadSheetService = new CreateSpreadSheetService(userToken, name, rows, columns);
 		createSpreadSheetService.execute();
+		
+		docId = createSpreadSheetService.getSheetId();
+	}
+	
+	public int getDocId() {
+		return docId;
 	}
 }// End CreateSpreadSheetIntegrator class
