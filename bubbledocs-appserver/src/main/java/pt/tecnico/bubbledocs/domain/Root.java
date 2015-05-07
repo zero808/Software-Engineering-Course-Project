@@ -24,7 +24,7 @@ public class Root extends Root_Base {
 		setBubbledocs(bd);
 		setUsername("root");
 		setName("Super User");
-		setPassword("rootroot"); // So that it doesn't have null.
+		setPassword("rootroot"); //So that it doesn't have null.
 		setEmail("root@root.pt");
 		
 		bd.addUsers(this);
@@ -39,7 +39,6 @@ public class Root extends Root_Base {
 
 		bd.removeUsers(toRemove);
 	}
-
 
 	@Override
 	public void addUser(User u) throws UserAlreadyExistsException, InvalidArgumentsException {

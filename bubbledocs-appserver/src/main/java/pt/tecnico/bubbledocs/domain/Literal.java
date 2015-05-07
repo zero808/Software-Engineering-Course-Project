@@ -2,7 +2,7 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
 
-public class Literal extends Literal_Base implements Argument{
+public class Literal extends Literal_Base implements Argument {
 
 	public Literal() {
 		super();

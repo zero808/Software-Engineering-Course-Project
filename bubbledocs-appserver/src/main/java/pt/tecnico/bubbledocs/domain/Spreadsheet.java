@@ -138,8 +138,8 @@ public class Spreadsheet extends Spreadsheet_Base {
 		}
 	}
 	
-	public void delete() { //When the user that created the spreadsheet is deleted then all the spreadsheets he had are also.
-		
+	public void delete() {
+		//When the user that created the spreadsheet is deleted then all the spreadsheets he had are also.
 		setUser(null);
 		
 		setBubbledocs(null);

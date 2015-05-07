@@ -24,12 +24,10 @@ public class DeleteUserIntegrator extends BubbleDocsIntegrator {
 	@Override
 	protected void dispatch() throws BubbleDocsException {
 		
-		
 		GetUserInfoService getUserInfoService = new GetUserInfoService(toDeleteUsername);
 		getUserInfoService.execute();
 		
 		String [] backupUser = {toDeleteUsername, getUserInfoService.getUserEmail(), getUserInfoService.getUserName()};
-		
 		
 		//Local execution
 		DeleteUserService deleteUserService = new DeleteUserService(userToken,toDeleteUsername);
@@ -44,9 +42,5 @@ public class DeleteUserIntegrator extends BubbleDocsIntegrator {
 			throw new UnavailableServiceException();
 		}
 
-	}
-
-	public void setIDRemoteService(IDRemoteServices idRemote) {
-		this.idRemoteService = idRemote;
 	}
 }// End DeleteUserIntegrator Class

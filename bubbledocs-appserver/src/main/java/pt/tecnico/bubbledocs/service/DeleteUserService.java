@@ -19,10 +19,10 @@ public class DeleteUserService extends BubbleDocsService {
 	protected void dispatch() throws BubbleDocsException {
 		BubbleDocs bd = getBubbleDocs();
 				
-		Root r = Root.getInstance(); //After checking that it is root that is calling the service.
-		
-		r.removeUser(toDeleteUsername); //Root checks if user exists and then tells BubbleDocs to remove it.
-
+		//After checking that it is root that is calling the service.
+		Root r = Root.getInstance();
+		//Root checks if user exists and then tells BubbleDocs to remove it.
+		r.removeUser(toDeleteUsername); 
 		// If the user that was removed was in a session then we remove that as well.
 		String tok = bd.getTokenByUsername(toDeleteUsername);
 		if (tok != null) {
