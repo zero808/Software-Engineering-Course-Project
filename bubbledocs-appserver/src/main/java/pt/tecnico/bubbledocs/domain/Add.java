@@ -95,7 +95,7 @@ public class Add extends Add_Base {
 	/**
 	 * Import this function from a XML document.
 	 * 
-	 * @param {XML Element} The element that has the function's data.
+	 * @param {XML Element} AddElement The element that has the function's data.
 	 */
 	
 	@Override

@@ -4,22 +4,59 @@ import org.jdom2.Element;
 
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
+/**
+ * Class that describes a Cell.
+ * 
+ * Spreadsheets are made of many cells. Each of them
+ * can contain a particular type of content.
+ */
+
 public class Cell extends Cell_Base {
 
+	/**
+	 * The default constructor provided by
+	 * the FenixFramework.
+	 * 
+	 * @constructor
+	 * @this {Cell}
+	 */
+	
 	public Cell() {
 		super();
 	}
+	
+	/**
+	 * The specific constructor needed for this
+	 * application in particular.
+	 * 
+	 * @constructor
+	 * @this {Cell}
+	 * 
+	 * @param {number} row The row of the cell.
+	 * @param {number} col The column of the cell.
+	 * @param {Boolean} wProtected If the cell is protected or not.
+	 * @throws InvalidArgumentsException
+	 */
 
-	public Cell(int _row, int _col, boolean _wProtected) throws InvalidArgumentsException {
+	public Cell(int row, int col, boolean wProtected) throws InvalidArgumentsException {
 		super();
-		if (_row > 0 && _col > 0) {
-			super.setRow(_row);
-			super.setCollumn(_col);
+		if (row > 0 && col > 0) {
+			/** @private */ 
+			super.setRow(row);
+			/** @private */ 
+			super.setCollumn(col);
 		} else
 			throw new InvalidArgumentsException();
 		
-		super.setWProtected(_wProtected);
+		/** @private */ 
+		super.setWProtected(wProtected);
 	}
+	
+	/**
+	 * Export this cell to a XML document.
+	 * 
+	 * @return {XML Element} The element describing the cell.
+	 */
 
 	public Element exportToXML() {
 		Element element = new Element("cell");
@@ -36,6 +73,12 @@ public class Cell extends Cell_Base {
 
 		return element;
 	}
+	
+	/**
+	 * Import this cell from a XML document.
+	 * 
+	 * @param {XML Element} cellElement The element that has the cell's data.
+	 */
 
 	public void importFromXML(Element cellElement) {
 		setRow(Integer.parseInt(cellElement.getAttribute("row").getValue()));
@@ -106,6 +149,13 @@ public class Cell extends Cell_Base {
 			}
 		}
 	}
+	
+	/**
+	 * Method that checks if a cell has a valid value.
+	 * 
+	 * @throws InvalidArgumentsException
+	 * @return {Boolean} True if yes, false otherwise.
+	 */
 
 	public boolean hasValidResult() throws InvalidArgumentsException {
 		if (getContent() == null) 
@@ -115,6 +165,19 @@ public class Cell extends Cell_Base {
 		
 		return true;
 	}
+	
+	/**
+	 * Method that deletes a cell.
+	 * 
+	 * To delete a cell, given the architecture of
+	 * the application, first its required to sever all the
+	 * connections this cell has.
+	 * More specifically, to its content,the spreadsheet
+	 * it belongs to and any references that might point
+	 * to it.
+	 * 
+	 * After doing that, then the object is deleted.
+	 */
 	
 	public void delete() {
 		if(super.getContent() != null) {
@@ -130,6 +193,12 @@ public class Cell extends Cell_Base {
 		
 		deleteDomainObject();
 	}
+	
+	/**
+	 * The string representation of a cell.
+	 * 
+	 * @return {String} The string that represents the cell.
+	 */
 	
 	@Override
 	public String toString() {

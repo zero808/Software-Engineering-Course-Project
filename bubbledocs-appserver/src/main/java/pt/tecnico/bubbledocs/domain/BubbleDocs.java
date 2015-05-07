@@ -33,7 +33,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	 * Since this is a singleton, this method
 	 * is used to return the only instance of BubbleDocs.
 	 * 
-	 * @return {BubbleDocs} The single instance of BubbleDocs
+	 * @return {BubbleDocs} The single instance of BubbleDocs.
 	 */
 	
 	public static BubbleDocs getInstance() {
@@ -57,6 +57,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	
 	private BubbleDocs() {
 		FenixFramework.getDomainRoot().setBubbledocs(this);
+		/** @private */
 		setIdGlobal(0);
 	}
 	
@@ -91,7 +92,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	/**
 	 * Import BubbleDocs from a XML document.
 	 * 
-	 * @param {XML Element} The element that has BubbleDocs' data.
+	 * @param {XML Element} bubbledocsElement The element that has BubbleDocs' data.
 	 */
 	
 	public void importFromXML(Element bubbledocsElement) {

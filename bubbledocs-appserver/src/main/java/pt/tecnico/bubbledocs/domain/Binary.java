@@ -39,8 +39,10 @@ public abstract class Binary extends Binary_Base {
 		a1.setBinary1(this);
 		a2.setBinary1(this);
 		
-		/** @private */ setArg1((Content)arg1);
-		/** @private */ setArg2((Content)arg2);
+		/** @private */ 
+		setArg1((Content)arg1);
+		/** @private */ 
+		setArg2((Content)arg2);
 	}
 	
 	/**
@@ -79,17 +81,20 @@ public abstract class Binary extends Binary_Base {
 	public abstract int getValue();
 	
 	/**
-	 * Abstract method that exports a specific function
+	 * Abstract method that exports a specific binary function
 	 * to a XML document.
 	 * 
-	 * @return {XML Element} The element describing the function.
+	 * @return {XML Element} The element describing the binary function.
 	 */
 
 	public abstract Element exportToXML();
 	
 	/**
-	 * Abstract method that imports a specific function
+	 * Abstract method that imports a specific binary function
 	 * from a XML document.
+	 * 
+	 * @param {XML Element} cellElement The element that has the binary
+	 * functions data.
 	 */
 
 	public abstract void importFromXML(Element cellElement);

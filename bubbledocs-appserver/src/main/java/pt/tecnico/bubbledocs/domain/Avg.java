@@ -9,7 +9,7 @@ import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
  * 
  * It's a unary function, therefore it only has 1 argument.
  * 
- * Returns the average of its arguments.
+ * Returns the average of the values of the cells in its range.
  * 
  * It's one of the many operations that can be made on a
  * spreadsheet.

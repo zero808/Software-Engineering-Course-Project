@@ -2,17 +2,51 @@ package pt.tecnico.bubbledocs.domain;
 
 import org.jdom2.Element;
 
-public class Range extends Range_Base {
+/**
+ * Class that describes the concept of a range
+ * within a spreadsheet.
+ * 
+ * It has two arguments, the cell where the range
+ * starts, and the cell where it ends.
+ */
 
+public class Range extends Range_Base {
+	
+	/**
+	 * The default constructor provided by
+	 * the FenixFramework.
+	 * 
+	 * @constructor
+	 * @this {Range}
+	 */
 	public Range() {
 		super();
 	}
 	
+	/**
+	 * The specific constructor needed for this
+	 * application in particular.
+	 * 
+	 * @constructor
+	 * @this {Range}
+	 * 
+	 * @param {Cell} startCell Where the range starts.
+	 * @param {Cell} endCell Where the range ends.
+	 */
+	
 	public Range(Cell startCell, Cell endCell) {
 		super();
+		/** @private */
 		addCells(startCell);
+		/** @private */
 		addCells(endCell);
 	}
+	
+	/**
+	 * Export this range to a XML document.
+	 * 
+	 * @return {XML Element} The element describing the range.
+	 */
 
 	public Element exportToXML() {
 		Element element = new Element("range");
@@ -33,6 +67,12 @@ public class Range extends Range_Base {
 		}
 		return element;
 	}
+	
+	/**
+	 * Import this range from a XML document.
+	 * 
+	 * @param {XML Element} cellElement The element that has the range's data.
+	 */
 
 	public void importFromXML(Element cellElement) {
 		for (Element element : cellElement.getChildren()) {
@@ -47,6 +87,17 @@ public class Range extends Range_Base {
 			}
 		}
 	}
+	
+	/**
+	 * Method that deletes a particular range.
+	 * 
+	 * To delete a particular range, given the architecture of
+	 * the application, first its required to sever all the
+	 * connections the range has. 
+	 * More specifically, to the cell where it starts and to
+	 * the cell where it ends.
+	 * After doing that, then the object is deleted.
+	 */
 
 	public void delete() {
 		for (Cell cell : super.getCellsSet()) {
@@ -54,6 +105,12 @@ public class Range extends Range_Base {
 		}
 		deleteDomainObject();
 	}
+	
+	/**
+	 * The string representation of a range.
+	 * 
+	 * @return {String} The string that represents the range.
+	 */
 	
 	@Override
 	public String toString() {

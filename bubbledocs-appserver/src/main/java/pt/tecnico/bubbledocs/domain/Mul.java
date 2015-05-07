@@ -4,11 +4,41 @@ import org.jdom2.Element;
 
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
+/**
+ * Class that describes a MUL function.
+ * 
+ * It's a binary function, therefore it has 2 arguments.
+ * 
+ * Returns the product of its arguments.
+ * 
+ * It's one of the many operations that can be made on a
+ * spreadsheet.
+ */
+
 public class Mul extends Mul_Base {
 
+	/**
+	 * The default constructor provided by
+	 * the FenixFramework.
+	 * 
+	 * @constructor
+	 * @this {Mul}
+	 */
+	
 	public Mul() {
 		super();
 	}
+	
+	/**
+	 * The specific constructor needed for this
+	 * application in particular.
+	 * 
+	 * @constructor
+	 * @this {Mul}
+	 * 
+	 * @param {Argument} arg1 The function's first argument.
+	 * @param {Argument} arg2 The function's second argument.
+	 */
 	
 	public Mul(Argument arg1, Argument arg2) {
 		Content a1 = arg1.retrieveContent();
@@ -16,9 +46,18 @@ public class Mul extends Mul_Base {
 		a1.setBinary1(this);
 		a2.setBinary1(this);
 		
+		/** @private */
 		setArg1((Content)arg1);
+		/** @private */
 		setArg2((Content)arg2);
 	}
+	
+	/**
+	 * Returns the product of the arguments given.
+	 * 
+	 * @throws InvalidArgumentsException
+	 * @return {number} The product of the arguments.
+	 */
 
 	@Override
 	public int getValue() throws InvalidArgumentsException {
@@ -31,6 +70,12 @@ public class Mul extends Mul_Base {
 		
 		return super.getArg1().getValue()*super.getArg2().getValue();
 	}
+	
+	/**
+	 * Export this function to a XML document.
+	 * 
+	 * @return {XML Element} The element describing the function.
+	 */
 
 	@Override
 	public Element exportToXML() {
@@ -46,6 +91,12 @@ public class Mul extends Mul_Base {
 
 		return f;
 	}
+	
+	/**
+	 * Import this function from a XML document.
+	 * 
+	 * @param {XML Element} MulElement The element that has the function's data.
+	 */
 
 	@Override
 	public void importFromXML(Element MulElement) {
@@ -74,6 +125,12 @@ public class Mul extends Mul_Base {
 		setArg1(a1);
 		setArg2(a2);	
 	}
+	
+	/**
+	 * The string representation of an MUL function.
+	 * 
+	 * @return {String} The string that represents the function.
+	 */
 	
 	@Override
 	public String toString() {

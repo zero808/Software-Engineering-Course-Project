@@ -4,11 +4,41 @@ import org.jdom2.Element;
 
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
+/**
+ * Class that describes a SUB function.
+ * 
+ * It's a binary function, therefore it has 2 arguments.
+ * 
+ * Returns the difference of its arguments.
+ * 
+ * It's one of the many operations that can be made on a
+ * spreadsheet.
+ */
+
 public class Sub extends Sub_Base {
+	
+	/**
+	 * The default constructor provided by
+	 * the FenixFramework.
+	 * 
+	 * @constructor
+	 * @this {Sub}
+	 */
 
 	public Sub() {
 		super();
 	}
+	
+	/**
+	 * The specific constructor needed for this
+	 * application in particular.
+	 * 
+	 * @constructor
+	 * @this {Sub}
+	 * 
+	 * @param {Argument} arg1 The function's first argument.
+	 * @param {Argument} arg2 The function's second argument.
+	 */
 
 	public Sub(Argument arg1, Argument arg2) {
 		Content a1 = arg1.retrieveContent();
@@ -16,9 +46,18 @@ public class Sub extends Sub_Base {
 		a1.setBinary1(this);
 		a2.setBinary1(this);
 		
+		/** @private */
 		setArg1((Content)arg1);
+		/** @private */
 		setArg2((Content)arg2);
 	}
+	
+	/**
+	 * Returns the difference of the arguments given.
+	 * 
+	 * @throws InvalidArgumentsException
+	 * @return {number} The difference of the arguments.
+	 */
 
 	@Override
 	public int getValue() throws InvalidArgumentsException {
@@ -31,6 +70,12 @@ public class Sub extends Sub_Base {
 		
 		return super.getArg1().getValue()-super.getArg2().getValue();
 	}
+	
+	/**
+	 * Export this function to a XML document.
+	 * 
+	 * @return {XML Element} The element describing the function.
+	 */
 
 	@Override
 	public Element exportToXML() {
@@ -46,6 +91,12 @@ public class Sub extends Sub_Base {
 		
 		return f;
 	}
+	
+	/**
+	 * Import this function from a XML document.
+	 * 
+	 * @param {XML Element} SubElement The element that has the function's data.
+	 */
 
 	@Override
 	public void importFromXML(Element SubElement) {
@@ -74,6 +125,12 @@ public class Sub extends Sub_Base {
 		setArg1(a1);
 		setArg2(a2);	
 	}
+	
+	/**
+	 * The string representation of a SUB function.
+	 * 
+	 * @return {String} The string that represents the function.
+	 */
 	
 	@Override
 	public String toString() {
