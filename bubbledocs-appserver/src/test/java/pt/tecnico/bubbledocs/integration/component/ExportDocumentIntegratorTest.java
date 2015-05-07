@@ -157,30 +157,6 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
-	@Test(expected = InvalidPermissionException.class)
-	public void userNotOwner() {
-		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
-		User luisUser = getUserFromUsername("lff");
-		User zeUser = getUserFromUsername("zzz");
-
-		luisUser.removePermissionfrom(spreadsheetTest, zeUser);
-		
-		ExportDocumentIntegrator service = new ExportDocumentIntegrator(notOwnerToken, spreadsheetTest.getId());
-		service.execute();
-	}
-	
-	@Test(expected = InvalidPermissionException.class)
-	public void userWithoutPermission() {
-		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
-		User luisUser = getUserFromUsername("lff");
-		User zeUser = getUserFromUsername("zzz");
-
-		luisUser.removePermissionfrom(spreadsheetTest, zeUser);
-
-		ExportDocumentIntegrator service = new ExportDocumentIntegrator(notOwnerToken, spreadsheetTest.getId());
-		service.execute();
-	}
-	
 	@Test(expected = UnavailableServiceException.class)
 	public void remoteInvocationFailure() {
 		User luisUser = getUserFromUsername("lff");

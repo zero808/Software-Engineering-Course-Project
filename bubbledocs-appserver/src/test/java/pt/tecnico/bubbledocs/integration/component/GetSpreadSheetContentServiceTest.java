@@ -4,8 +4,13 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import pt.tecnico.bubbledocs.domain.Add;
+import pt.tecnico.bubbledocs.domain.Avg;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
+import pt.tecnico.bubbledocs.domain.Cell;
 import pt.tecnico.bubbledocs.domain.Literal;
+import pt.tecnico.bubbledocs.domain.Range;
+import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
@@ -22,6 +27,7 @@ public class GetSpreadSheetContentServiceTest extends BubbleDocsServiceTest {
 	private String notOwnerToken;
 	private Spreadsheet teste;
 	private int docId;
+	private String[][] matrix;
 
 	@Override
 	public void populate4Test() {
@@ -30,9 +36,18 @@ public class GetSpreadSheetContentServiceTest extends BubbleDocsServiceTest {
 		User james = createUser(USERNAME, EMAIL, NAME);
 		this.ownerToken = addUserToSession(USERNAME);
 		
-		teste = createSpreadSheet(james, "ulysses", 10, 10);
+		teste = createSpreadSheet(james, "ulysses", 5, 5);
+		
 		Literal l = new Literal(5);
-		teste.getCellByCoords(1, 1).setContent(l);
+		Cell c = teste.getCellByCoords(1, 1);
+		c.setContent(l);
+		Reference r = new Reference(c);
+		Add binaryFunction = new Add(l, r);
+		Range range = new Range(c, teste.getCellByCoords(2, 1));
+		Avg unaryFunction = new Avg(range);
+		teste.getCellByCoords(2, 1).setContent(r);
+		teste.getCellByCoords(3, 3).setContent(binaryFunction);
+		teste.getCellByCoords(1, 4).setContent(unaryFunction);
 		
 		james.addSpreadsheets(teste);
 		
@@ -43,8 +58,28 @@ public class GetSpreadSheetContentServiceTest extends BubbleDocsServiceTest {
 	public void success() {
 		GetSpreadSheetContentService service = new GetSpreadSheetContentService(ownerToken, docId);
 		service.execute();
+		matrix = service.getMatrix();
+		
+		int i = 1;
+		int j = 1;
+		
+		while(i < teste.getNRows()) {
+			System.out.print("|");
+			while(j < teste.getNCols()) {
+				System.out.printf("%16s", matrix[i][j]);
+				System.out.printf("%4s", "");
+				j++;
+			}
+			System.out.printf("%4s", "|");
+			System.out.println();
+			j = 1;
+			i++;
+		}
 
 		assertEquals("5", service.getMatrix()[1][1]);
+		assertEquals("5", service.getMatrix()[2][1]);
+		assertEquals("ADD(5,5)", service.getMatrix()[3][3]);
+		assertEquals("AVG((1,1)(2,1))", service.getMatrix()[1][4]);
 		assertEquals("#VALUE", service.getMatrix()[2][2]);
 	}
 	

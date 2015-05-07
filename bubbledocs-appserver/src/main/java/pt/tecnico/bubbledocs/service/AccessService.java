@@ -20,6 +20,11 @@ public abstract class AccessService extends BubbleDocsService {
 		try {
 			user.hasOwnerPermission(getSpreadsheet(docId));
 		} catch (InvalidPermissionException e) {
+			//Check for write permission
+			writePermission = true;
+			user.hasPermission(writePermission, getSpreadsheet(docId));
+			//Check for read only permission
+			writePermission = false;
 			user.hasPermission(writePermission, getSpreadsheet(docId));
 		}	
 	}

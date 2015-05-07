@@ -1,9 +1,8 @@
 package pt.tecnico.bubbledocs.integration.system;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
+import mockit.Expectations;
 import mockit.Mocked;
 import pt.tecnico.bubbledocs.domain.BubbleDocs;
 import pt.tecnico.bubbledocs.domain.Root;
@@ -13,6 +12,8 @@ import pt.tecnico.bubbledocs.service.integration.AssignReferenceCellIntegrator;
 import pt.tecnico.bubbledocs.service.integration.AssignUnaryCellIntegrator;
 import pt.tecnico.bubbledocs.service.integration.CreateSpreadSheetIntegrator;
 import pt.tecnico.bubbledocs.service.integration.CreateUserIntegrator;
+import pt.tecnico.bubbledocs.service.integration.ExportDocumentIntegrator;
+import pt.tecnico.bubbledocs.service.integration.ImportDocumentIntegrator;
 import pt.tecnico.bubbledocs.service.integration.LoginUserIntegrator;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
@@ -25,14 +26,14 @@ public class LocalSystemTest extends SystemTest {
 	@Mocked
 	private IDRemoteServices idRemote;
 	
-	private BubbleDocs bd;
 	private String rootToken;
 	private String userToken;
 	private int docId;
+	private byte[] docBytes;
 	
 	@Override
 	public void populate4Test() {
-		bd = BubbleDocs.getInstance();
+		BubbleDocs.getInstance();
 		Root.getInstance();
 	}
 	
@@ -40,16 +41,28 @@ public class LocalSystemTest extends SystemTest {
 	public void systemExecutionSuccess() {
 
 		LoginUserIntegrator rootLoginService = new LoginUserIntegrator("root", "rootroot");
+		new Expectations() {
+			{
+				idRemote.loginUser("root", "rootroot");
+			}
+		};
 		rootLoginService.execute();
 		rootToken = rootLoginService.getUserToken();
 
 		CreateUserIntegrator createUserService = new CreateUserIntegrator(rootToken, "lff", "lff@tecnico.pt", "Luís");
-		createUserService.execute();
-
-		createUserService = new CreateUserIntegrator(rootToken, "xis", "xis@tecnico.pt", "Pedro");
+		new Expectations() {
+			{
+				idRemote.createUser("lff", "lff@tecnico.pt", "Luís");
+			}
+		};
 		createUserService.execute();
 
 		LoginUserIntegrator userLoginService = new LoginUserIntegrator("lff", "lffp4ss");
+		new Expectations() {
+			{
+				idRemote.loginUser("lff", "lffp4ss");
+			}
+		};
 		userLoginService.execute();
 		userToken = userLoginService.getUserToken();
 
@@ -97,10 +110,24 @@ public class LocalSystemTest extends SystemTest {
 		assignReferenceService.execute();
 
 		assignUnaryService = new AssignUnaryCellIntegrator(userToken, docId, "17;17", "=AVG(15;15:16;16)");
-		assignUnaryService.execute();	
+		assignUnaryService.execute();
 		
-		assertEquals("lff", bd.getUserByUsername("lff").getUsername());
-		assertEquals("xis", bd.getUserByUsername("xis").getUsername());
-		assertEquals(0, bd.getSpreadsheetById(0).getId());
+		ExportDocumentIntegrator exportService = new ExportDocumentIntegrator(userToken, docId);
+		new Expectations() {
+			{
+				storeRemote.storeDocument("lff", Integer.toString(docId), withNotNull());
+			}
+		};
+		exportService.execute();
+		docBytes = exportService.getDocXML();
+		
+		ImportDocumentIntegrator importService = new ImportDocumentIntegrator(userToken, docId, docBytes);
+		new Expectations() {
+			{
+				storeRemote.loadDocument("lff", Integer.toString(docId));
+				result = docBytes;
+			}
+		};
+		importService.execute();
 	}
 }// End LocalSystemTest class
