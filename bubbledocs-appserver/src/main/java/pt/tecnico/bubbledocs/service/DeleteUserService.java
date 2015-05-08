@@ -73,4 +73,4 @@ public class DeleteUserService extends BubbleDocsService {
 			throw new InvalidPermissionException(user.getUsername());
 		}	
 	}
-}// End DeleteUserService Class
+}// End DeleteUserService class

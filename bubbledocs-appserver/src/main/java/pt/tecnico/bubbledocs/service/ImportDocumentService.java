@@ -124,4 +124,4 @@ public class ImportDocumentService extends AccessService {
 			throw new InvalidPermissionException(username);
 		}
 	}
-}// End of ImportDocumentService class
+}// End ImportDocumentService class
