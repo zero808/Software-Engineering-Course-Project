@@ -18,6 +18,15 @@ import pt.tecnico.bubbledocs.service.integration.LoginUserIntegrator;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
+/**
+ * Class that contains the test suite for the
+ * LocalSystem.
+ * This simple system test replaces the functionality
+ * of BubbleDocsApplication.
+ * Its a test where a user logs in and does some stuff
+ * with a spreadsheet. Typical usage of the system.
+ */
+
 public class LocalSystemTest extends SystemTest {
 
 	@Mocked
@@ -31,11 +40,24 @@ public class LocalSystemTest extends SystemTest {
 	private int docId;
 	private byte[] docBytes;
 	
+	/**
+	 * Method that populates the DB with all
+	 * the objects the test suite needs to execute.
+	 */
+	
 	@Override
 	public void populate4Test() {
 		BubbleDocs.getInstance();
 		Root.getInstance();
 	}
+	
+	/**
+	 * Test Case #1 - SystemExecutionSuccess
+	 * 
+	 * Tests a normal usage scenario of the application.
+	 * 
+	 * Result - SUCCESS
+	 */
 	
 	@Test
 	public void systemExecutionSuccess() {

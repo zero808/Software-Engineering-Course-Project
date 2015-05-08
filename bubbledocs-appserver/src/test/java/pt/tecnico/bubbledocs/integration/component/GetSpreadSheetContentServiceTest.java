@@ -18,6 +18,11 @@ import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.GetSpreadSheetContentService;
 
+/**
+ * Class that contains the test suite for the
+ * GetSpreadSheetContentService.
+ */
+
 public class GetSpreadSheetContentServiceTest extends BubbleDocsServiceTest {
 	
 	private static final String USERNAME = "james";
@@ -28,6 +33,11 @@ public class GetSpreadSheetContentServiceTest extends BubbleDocsServiceTest {
 	private Spreadsheet teste;
 	private int docId;
 	private String[][] matrix;
+	
+	/**
+	 * Method that populates the DB with all
+	 * the objects the test suite needs to execute.
+	 */
 
 	@Override
 	public void populate4Test() {
@@ -53,6 +63,15 @@ public class GetSpreadSheetContentServiceTest extends BubbleDocsServiceTest {
 		
 		docId = bd.getSpreadsheetByName("ulysses").getId();
 	}
+	
+	/**
+	 * Test Case #1 - Success
+	 * 
+	 * Tests a normal invocation of the service
+	 * where nothing goes wrong.
+	 * 
+	 * Result - SUCCESS
+	 */
 	
 	@Test
 	public void success() {
@@ -83,11 +102,27 @@ public class GetSpreadSheetContentServiceTest extends BubbleDocsServiceTest {
 		assertEquals("#VALUE", service.getMatrix()[2][2]);
 	}
 	
+	/**
+	 * Test Case #2 - SpreadsheetDoesNotExist
+	 * 
+	 * Tests what happens when the spreadsheet doesn't exist.
+	 * 
+	 * Result - FAILURE - SpreadsheetDoesNotExistException
+	 */
+	
 	@Test(expected = SpreadsheetDoesNotExistException.class)
 	public void spreadsheetDoesNotExist() {
 		GetSpreadSheetContentService service = new GetSpreadSheetContentService(ownerToken, -1);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #3 - UserNotInSession
+	 * 
+	 * Tests what happens when the user doesn't have an active session.
+	 * 
+	 * Result - FAILURE - UserNotInSessionException
+	 */
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void userNotInSession() {
@@ -96,8 +131,17 @@ public class GetSpreadSheetContentServiceTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
+	/**
+	 * Test Case #4 - UserWithoutPermission
+	 * 
+	 * Tests what happens when the user doesn't have
+	 * the necessary permissions to perform this action.
+	 * 
+	 * Result - FAILURE - InvalidPermissionException
+	 */
+	
 	@Test(expected = InvalidPermissionException.class)
-	public void userNotOwner() {
+	public void userWithoutPermission() {
 		createUser("oscar", "oscarwilde@bagneux.fr", "Oscar Wilde");
 		notOwnerToken = addUserToSession("oscar");
 		GetSpreadSheetContentService service = new GetSpreadSheetContentService(notOwnerToken, docId);

@@ -19,6 +19,11 @@ import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
 import pt.tecnico.bubbledocs.service.integration.LoginUserIntegrator;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
+/**
+ * Class that contains the test suite for the
+ * LoginUserIntegrator.
+ */
+
 public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 	
 	@Mocked
@@ -32,6 +37,11 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 	private static final String PASSWORD2 = "xpppass";
 	private static final String USERNAME_NONEXISTENT = "ABC";
 	private static final String INCORRECT_PASSWORD = "ABC#";
+	
+	/**
+	 * Method that populates the DB with all
+	 * the objects the test suite needs to execute.
+	 */
 
 	@Override
 	public void populate4Test() {
@@ -43,23 +53,53 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 		bd.getUserByUsername(USERNAME).setPassword(PASSWORD);
 		bd.getUserByUsername(USERNAME2).setPassword(PASSWORD2);
 	}
+	
+	/**
+	 * Auxiliary method that returns the last access time of the user with the
+	 * token given.
+	 * 
+	 * @param {String} userToken The user's token.
+	 * @return {LocalTime} The last time the token was used.
+	 */
 
-	// returns the time of the last access for the user with token userToken.
-	// It must get this data from the session object of the application
 	private LocalTime getLastAccessTimeInSession(String userToken) {
 		BubbleDocs bd = getBubbleDocs();
 		return bd.getLastAccessTimeInSession(userToken);
 	}
+	
+	/**
+	 * Auxiliary method that changed the expiration time of the 
+	 * given token.
+	 * 
+	 * @param {String} userToken The user's token.
+	 * @param {LocalTime} newExpirationDate The new expiration time.
+	 */
 	
 	private void changeUserTokenExpirationDate(String userToken, LocalTime newExpirationDate) {
 		BubbleDocs bd = getBubbleDocs();
 		bd.changeUserTokenExpirationDate(userToken, newExpirationDate);
 	}
 	
+	/**
+	 * Auxiliary method that checks if a user is currently in session.
+	 * 
+	 * @param {String} userToken The user's token.
+	 * @return {Boolean} True if yes, false otherwise.
+	 */
+	
 	private boolean isInSession(String userToken) {
 		BubbleDocs bd = getBubbleDocs();
 		return bd.isInSession(userToken);
 	}
+	
+	/**
+	 * Test Case #1 - Success
+	 * 
+	 * Tests a normal invocation of the service
+	 * where nothing goes wrong.
+	 * 
+	 * Result - SUCCESS
+	 */
 
 	@Test
 	public void success() {
@@ -83,6 +123,15 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 		assertTrue("Access time in session not correctly set", difference >= 0);
 		assertTrue("diference in seconds greater than expected", difference < 2);
 	}
+	
+	/**
+	 * Test Case #2 - SuccessCorrectPassword
+	 * 
+	 * Tests what happens when the remote service is down.
+	 * If the password is correct the login proceeds.
+	 * 
+	 * Result - SUCCESS
+	 */
 	
 	@Test
 	public void successCorrectPassword() {
@@ -108,6 +157,15 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 		assertTrue("diference in seconds greater than expected", difference < 2);
 	}
 	
+	/**
+	 * Test Case #3 - SuccessIncorrectPassword
+	 * 
+	 * Tests what happens when the remote service updates the password remotely,
+	 * the local copy is then updated as well and the login proceeds.
+	 * 
+	 * Result - SUCCESS
+	 */
+	
 	@Test
 	public void successIncorrectPassword() {	
 		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME, INCORRECT_PASSWORD);
@@ -130,6 +188,14 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 		assertTrue("Access time in session not correctly set", difference >= 0);
 		assertTrue("diference in seconds greater than expected", difference < 2);
 	}
+	
+	/**
+	 * Test Case #4 - SuccessLoginTwice
+	 * 
+	 * Tests what happens when the same user logs in twice.
+	 * 
+	 * Result - SUCCESS
+	 */
 
 	@Test
 	public void successLoginTwice() {
@@ -159,6 +225,14 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 		assertEquals(USERNAME, user.getUsername());
 	}
 	
+	/**
+	 * Test Case #5 - SuccessExpiredDateUserRemoved
+	 * 
+	 * Tests what happens when the user that just logged in has his session terminated.
+	 * 
+	 * Result - SUCCESS
+	 */
+	
 	@Test
 	public void successExpiredDateUserRemoved() {
 		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME, PASSWORD);
@@ -179,6 +253,14 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 		User user = getUserFromSession(token);
 		assertNull(user);
 	}
+	
+	/**
+	 * Test Case #6 - SuccessOtherExpiredDateUserRemoved
+	 *
+	 * Tests what happens when a user's session terminates.
+	 * 
+	 * Result - SUCCESS
+	 */
 	
 	@Test
 	public void successOtherExpiredDateUserRemoved() {
@@ -210,12 +292,28 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 		assertTrue("User not in session", isInSession(token2));
 		assertEquals(USERNAME2, user2.getUsername());
 	}
+	
+	/**
+	 * Test Case #7 - LoginUnknownUser
+	 *
+	 * Tests what happens when the user trying to login doesn't exist.
+	 * 
+	 * Result - FAILURE - LoginBubbleDocsException
+	 */
 
 	@Test(expected = LoginBubbleDocsException.class)
 	public void loginUnknownUser() {
 		LoginUserIntegrator service = new LoginUserIntegrator(USERNAME_NONEXISTENT, PASSWORD);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #8 - LoginUserWithWrongPassword
+	 *
+	 * Tests what happens when the user trying to login gives the wrong password.
+	 * 
+	 * Result - FAILURE - LoginBubbleDocsException
+	 */
 
 	@Test(expected = LoginBubbleDocsException.class)
 	public void loginUserWithWrongPassword() {
@@ -229,6 +327,15 @@ public class LoginUserIntegratorTest extends BubbleDocsServiceTest {
 		};
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #9 - RemoteIDServerFailure
+	 *
+	 * Tests what happens when the remote service is down and
+	 * the user gives the wrong password.
+	 * 
+	 * Result - FAILURE - UnavailableServiceException
+	 */
 	
 	@Test(expected = UnavailableServiceException.class)
 	public void remoteIDServerFailure(){

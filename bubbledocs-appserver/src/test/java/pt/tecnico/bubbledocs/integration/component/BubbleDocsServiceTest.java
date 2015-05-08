@@ -16,12 +16,26 @@ import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.DuplicateUsernameException;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
+import pt.tecnico.bubbledocs.exception.InvalidBoundsException;
+import pt.tecnico.bubbledocs.exception.InvalidSpreadsheetNameException;
 import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
 import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 import pt.tecnico.bubbledocs.exception.OutofBoundsException;
 import pt.tecnico.bubbledocs.exception.SpreadsheetDoesNotExistException;
 
+/**
+ * Class that abstracts all of the test suites for
+ * each of the services of this application.
+ */
+
 public abstract class BubbleDocsServiceTest {
+	
+	/**
+	 * Set up method that is executed before each test.
+	 * It populates the DB with what the test requires.
+	 * 
+	 * @throws Exception
+	 */
 
 	@Before
 	public void setUp() throws Exception {
@@ -33,24 +47,49 @@ public abstract class BubbleDocsServiceTest {
 			e1.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Tear down method that is executed after each test.
+	 * It rollbacks the transaction of the service so that the 
+	 * DB is clean for the next test.
+	 */
 
 	@After
 	public void tearDown() {
 		try {
 			FenixFramework.getTransactionManager().rollback();
-		} catch (IllegalStateException | SecurityException | SystemException e) {
-			e.printStackTrace();
+		} catch (IllegalStateException | SecurityException | SystemException e2) {
+			e2.printStackTrace();
 		}
 	}
 	
-	//Each test suite overrides this depending on what it needs.
+	/**
+	 * Abstract method that each test suite implements,
+	 * depending on what it needs to perform the tests.
+	 */
+	
 	public abstract void populate4Test();
 	
-	// Auxiliary methods that access the domain layer and are needed in the test classes.
-	// For defining the initial state and checking that the service has the expected behavior.
+	/**
+	 * Auxiliary method used in the test suites to get the single instance
+	 * of BubbleDocs.
+	 * 
+	 * @return {BubbleDocs} The single instance of BubbleDocs.
+	 */
+	
 	protected static BubbleDocs getBubbleDocs() {
 		return BubbleDocs.getInstance();
 	}
+	
+	/**
+	 * Auxiliary method used in the test suites to create a user.
+	 * 
+	 * @param {String} username The user's username. 
+	 * @param {String} email The user's email.
+	 * @param {String} name The user's name.
+	 * @throws DuplicateUsernameException, InvalidArgumentsException, InvalidUsernameException
+	 * @return {User} The user that was created with the given arguments.
+	 */
 	
 	protected User createUser(String username, String email, String name) throws DuplicateUsernameException, InvalidArgumentsException, InvalidUsernameException {
 		Root r = Root.getInstance();
@@ -60,8 +99,19 @@ public abstract class BubbleDocsServiceTest {
 		
 		return user;
 	}
+	
+	/**
+	 * Auxiliary method used in the test suites to create a spreadsheet.
+	 * 
+	 * @param {User} user The owner of the spreadsheet.
+	 * @param {String} name The spreadsheet's name.
+	 * @param {number} row The spreadsheet's max rows.
+	 * @param {number} column The spreadsheet's max columns.
+	 * @throws InvalidSpreadsheetNameException, InvalidBoundsException
+	 * @return {Spreadsheet} The spreadsheet that was created with the given arguments.
+	 */
 
-	protected Spreadsheet createSpreadSheet(User user, String name, int row, int column) {
+	protected Spreadsheet createSpreadSheet(User user, String name, int row, int column) throws InvalidSpreadsheetNameException, InvalidBoundsException {
 		Spreadsheet spreadsheet = new Spreadsheet(name, new DateTime(), row, column);
 		
 		user.addSpreadsheets(spreadsheet);
@@ -69,7 +119,14 @@ public abstract class BubbleDocsServiceTest {
 		return spreadsheet;
 	}
 
-	// returns a spreadsheet whose name is equal to name
+	/**
+	 * Auxiliary method that returns a spreadsheet with the given name.
+	 * 
+	 * @param {String} name The spreadsheet's name.
+	 * @throws SpreadsheetDoesNotExistException
+	 * @return {Spreadsheet} The spreadsheet whose name is equal to the name given.
+	 */
+	
 	protected Spreadsheet getSpreadSheet(String name) throws SpreadsheetDoesNotExistException {
 		BubbleDocs bd = getBubbleDocs();
 		Spreadsheet s = bd.getSpreadsheetByName(name);
@@ -81,7 +138,17 @@ public abstract class BubbleDocsServiceTest {
 		return s;
 	}
 	
-	// returns a cell from the spreadsheet with the given coordinates.
+	/**
+	 * Auxiliary method that returns the cell from the spreadsheet given
+	 * with the given coordinates.
+	 * 
+	 * @param {String} spreadsheetName The spreadsheet's name.
+	 * @param {number} row The cell's row value.
+	 * @param {number} collumn The cell's column value.
+	 * @throws SpreadsheetDoesNotExistException, OutofBoundsException 
+	 * @return {Cell} The cell in the given coordinates.
+	 */
+	
 	protected Cell getCellByCoords(String spreadsheetName, int row, int collumn) throws SpreadsheetDoesNotExistException, OutofBoundsException {
 		BubbleDocs bd = getBubbleDocs();
 		Spreadsheet s = bd.getSpreadsheetByName(spreadsheetName);
@@ -99,7 +166,15 @@ public abstract class BubbleDocsServiceTest {
 		return c;
 	}
 	
-	// protects a cell from being overwritten.
+	/**
+	 * Auxiliary method that protects a cell from having its content overwritten.
+	 * 
+	 * @param {String} spreadsheetName The name of the spreadsheet which has the cell.
+	 * @param {number} row The cell's row value.
+	 * @param {number} collumn The cell's column value.
+	 * @throws SpreadsheetDoesNotExistException
+	 */
+	
 	protected void protectCell(String spreadsheetName, int row, int collumn) throws SpreadsheetDoesNotExistException {
 		BubbleDocs bd = getBubbleDocs();
 		Spreadsheet s = bd.getSpreadsheetByName(spreadsheetName);
@@ -110,8 +185,15 @@ public abstract class BubbleDocsServiceTest {
 
 		s.getCellByCoords(row, collumn).setWProtected(true);
 	}
-
-	// returns the user registered in the application whose username is equal to username
+	
+	/**
+	 * Auxiliary method that returns the user with the given username.
+	 * 
+	 * @param {String} username The user's username.
+	 * @throws LoginBubbleDocsException
+	 * @return {User} The user with the given username.
+	 */
+	
 	protected User getUserFromUsername(String username) throws LoginBubbleDocsException {
 		BubbleDocs bd = getBubbleDocs();
 		User u = bd.getUserByUsername(username);
@@ -122,20 +204,37 @@ public abstract class BubbleDocsServiceTest {
 		
 		return u;
 	}
+	
+	/**
+	 * Auxiliary method that puts a user in session and returns his token.
+	 * 
+	 * @param {String} username The user's username.
+	 * @return {String} The user's token.
+	 */
 
-	// put a user into session and returns the token associated to it
 	protected String addUserToSession(String username) {
 		BubbleDocs bd = getBubbleDocs();
 		return bd.login(username, bd.getUserByUsername(username).getPassword());
 	}
-
-	// remove a user from session given its token
+	
+	/**
+	 * Auxiliary method that removes a user from session.
+	 * 
+	 * @param {String} token The user's token.
+	 */
+	
 	protected void removeUserFromSession(String token) {
 		BubbleDocs bd = getBubbleDocs();
 		bd.removeUserFromSession(token);
 	}
+	
+	/**
+	 * Auxiliary method that returns the user who has the given token.
+	 * 
+	 * @param {String} token The user's token.
+	 * @return {User} The user to which the token given belongs to.
+	 */
 
-	// return the user registered in session whose token is equal to token
 	protected User getUserFromSession(String token) {
 		BubbleDocs bd = getBubbleDocs();
 		return bd.getUserByUsername(bd.getUsernameByToken(token));

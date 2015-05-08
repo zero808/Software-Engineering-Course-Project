@@ -2,6 +2,7 @@ package pt.tecnico.bubbledocs.integration.component;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
 import mockit.Expectations;
 import mockit.Mocked;
 
@@ -17,6 +18,11 @@ import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.integration.DeleteUserIntegrator;
 import pt.tecnico.bubbledocs.service.remote.IDRemoteServices;
 
+/**
+ * Class that contains the test suite for the
+ * DeleteUserIntegrator.
+ */
+
 public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 
 	private static final String USERNAME_TO_DELETE = "smf";
@@ -30,6 +36,11 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 
 	@Mocked
 	private IDRemoteServices idRemoteService;
+	
+	/**
+	 * Method that populates the DB with all
+	 * the objects the test suite needs to execute.
+	 */
 
 	@Override
 	public void populate4Test() {
@@ -40,6 +51,15 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 
 		root = addUserToSession(ROOT_USERNAME);
 	}
+	
+	/**
+	 * Test Case #1 - Success
+	 * 
+	 * Tests a normal invocation of the service
+	 * where nothing goes wrong.
+	 * 
+	 * Result - SUCCESS
+	 */
 
 	@Test
 	public void success() {
@@ -70,11 +90,17 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 		assertTrue("User was not deleted", deleted);
 		assertTrue("Spreadsheet was not deleted", deletedSpreadsheet);
 	}
-
-	/*
-	 * accessUsername exists, is in session and is root 
-	 * toDeleteUsername exists and is not in session
+	
+	/**
+	 * Test Case #2 - SuccessToDeleteIsNotInSession
+	 * 
+	 * Tests a normal invocation of the service
+	 * where nothing goes wrong and the user to remove doesn't have
+	 * an active session.
+	 * 
+	 * Result - SUCCESS
 	 */
+
 	@Test
 	public void successToDeleteIsNotInSession() {
 		DeleteUserIntegrator service = new DeleteUserIntegrator(root, USERNAME_TO_DELETE);
@@ -104,12 +130,17 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 		assertTrue("User was not deleted", deleted);
 		assertTrue("Spreadsheet was not deleted", deletedSpreadsheet);
 	}
-
-	/*
-	 * accessUsername exists, is in session and is root toDeleteUsername exists
-	 * and is in session 
-	 * Test if user and session are both deleted
+	
+	/**
+	 * Test Case #3 - SuccessToDeleteIsInSession
+	 * 
+	 * Tests a normal invocation of the service
+	 * where nothing goes wrong and the user to remove has
+	 * an active session.
+	 * 
+	 * Result - SUCCESS
 	 */
+
 	@Test
 	public void successToDeleteIsInSession() {
 		String token = addUserToSession(USERNAME_TO_DELETE);
@@ -142,12 +173,29 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 		assertTrue("Spreadsheet was not deleted", deletedSpreadsheet);
 		assertNull("Removed user but not removed from session", getUserFromSession(token));
 	}
+	
+	/**
+	 * Test Case #4 - UserToDeleteDoesNotExist
+	 * 
+	 * Tests what happens when the user to delete doesn't exist
+	 * in the first place.
+	 * 
+	 * Result - FAILURE - LoginBubbleDocsException
+	 */
 
 	@Test(expected = LoginBubbleDocsException.class)
 	public void userToDeleteDoesNotExist() {
 		DeleteUserIntegrator service = new DeleteUserIntegrator(root, USERNAME_DOES_NOT_EXIST);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #5 - NotRootUser
+	 * 
+	 * Tests what happens when the user calling the service isn't root.
+	 * 
+	 * Result - FAILURE - InvalidPermissionException
+	 */
 
 	@Test(expected = InvalidPermissionException.class)
 	public void notRootUser() {
@@ -155,6 +203,14 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 		DeleteUserIntegrator service = new DeleteUserIntegrator(ars, USERNAME_TO_DELETE);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #6 - RootNotInSession
+	 * 
+	 * Tests what happens when root doesn't have an active session.
+	 * 
+	 * Result - FAILURE - UserNotInSessionException
+	 */
 
 	@Test(expected = UserNotInSessionException.class)
 	public void rootNotInSession() {
@@ -162,6 +218,15 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 		DeleteUserIntegrator service = new DeleteUserIntegrator(root, USERNAME_TO_DELETE);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #7 - NotInSessionAndNotRoot
+	 * 
+	 * Tests what happens when the user calling the service isn't root
+	 * and the user to delete doesn't have an active session.
+	 * 
+	 * Result - FAILURE - UserNotInSessionException
+	 */
 
 	@Test(expected = UserNotInSessionException.class)
 	public void notInSessionAndNotRoot() {
@@ -171,12 +236,28 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 		DeleteUserIntegrator service = new DeleteUserIntegrator(ars, USERNAME_TO_DELETE);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #8 - AccessUserDoesNotExist
+	 * 
+	 * Tests what happens when the user calling the service doesn't exist.
+	 * 
+	 * Result - FAILURE - UserNotInSessionException
+	 */
 
 	@Test(expected = UserNotInSessionException.class)
 	public void accessUserDoesNotExist() {
 		DeleteUserIntegrator service = new DeleteUserIntegrator(USERNAME_DOES_NOT_EXIST, USERNAME_TO_DELETE);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #9 - InvalidPairUserPassword
+	 * 
+	 * Tests what happens when root has an invalid pair username/password.
+	 * 
+	 * Result - FAILURE - LoginBubbleDocsException
+	 */
 
 	@Test(expected = LoginBubbleDocsException.class)
 	public void invalidPairUserPassword() {
@@ -191,6 +272,14 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 		};
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #10 - IdServiceUnavailable
+	 * 
+	 * Tests what happens when the remote service is down.
+	 * 
+	 * Result - FAILURE - UnavailableServiceException
+	 */
 
 	@Test(expected = UnavailableServiceException.class)
 	public void idServiceUnavailable() {
@@ -205,6 +294,15 @@ public class DeleteUserIntegratorTest extends BubbleDocsServiceTest {
 		};
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #11 - IdServiceUnavailableCompensation
+	 * 
+	 * Tests what happens when if remote service is down
+	 * the user is created again.
+	 * 
+	 * Result - SUCCESS
+	 */
 	
 	@Test
 	public void idServiceUnavailableCompensation() {

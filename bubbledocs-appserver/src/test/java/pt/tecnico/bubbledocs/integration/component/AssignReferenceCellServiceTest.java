@@ -19,11 +19,21 @@ import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.integration.component.BubbleDocsServiceTest;
 import pt.tecnico.bubbledocs.service.AssignReferenceCellService;
 
+/**
+ * Class that contains the test suite for the
+ * AssignReferenceCellService.
+ */
+
 public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 
 	private String ownerToken;
 	private String notOwnerToken;
 	private String notInSessionToken = "antonio6";
+	
+	/**
+	 * Method that populates the DB with all
+	 * the objects the test suite needs to execute.
+	 */
 
 	public void populate4Test() {
 		getBubbleDocs();
@@ -39,6 +49,15 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		
 		luis.givePermissionto(getSpreadSheet("teste"), ze, true);
 	}
+	
+	/**
+	 * Test Case #1 - Success
+	 * 
+	 * Tests the normal invocation of the service, where
+	 * nothing goes wrong.
+	 * 
+	 * Result - SUCCESS
+	 */
 
 	@Test
 	public void success() {
@@ -57,6 +76,16 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		assertEquals(expected_reference.toString(), result);
 	}
 	
+	/**
+	 * Test Case #2 - SuccessNotOwner
+	 * 
+	 * Tests a normal invocation of the service of 
+	 * a user that doesn't have owner permission, but has 
+	 * write permissions.
+	 * 
+	 * Result - SUCCESS
+	 */
+	
 	@Test
 	public void successNotOwner() {
 		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
@@ -74,6 +103,14 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		assertEquals(expected_reference.toString(), result);
 	}
 	
+	/**
+	 * Test Case #3 - InvalidCellRowArgument
+	 * 
+	 * Tests what happens when the cell's row is invalid.
+	 * 
+	 * Result - FAILURE - InvalidArgumentsException
+	 */
+	
 	@Test(expected = InvalidArgumentsException.class)
 	public void invalidCellRowArgument() {
 		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
@@ -83,6 +120,14 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		AssignReferenceCellService service = new AssignReferenceCellService(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #4 - InvalidCellCollumnArgument
+	 * 
+	 * Tests what happens when the cell's column is invalid.
+	 * 
+	 * Result - FAILURE - InvalidArgumentsException
+	 */
 	
 	@Test(expected = InvalidArgumentsException.class)
 	public void invalidCellCollumnArgument() {
@@ -94,6 +139,14 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
+	/**
+	 * Test Case #5 - InvalidReferenceRowArgument
+	 * 
+	 * Tests what happens when the reference's row is invalid.
+	 * 
+	 * Result - FAILURE - InvalidArgumentsException
+	 */
+	
 	@Test(expected = InvalidArgumentsException.class)
 	public void invalidReferenceRowArgument() {
 		Spreadsheet sucessTestSpreadsheet = getSpreadSheet("teste");
@@ -103,6 +156,14 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		AssignReferenceCellService service = new AssignReferenceCellService(notOwnerToken, sucessTestSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #6 - InvalidReferenceCollumnArgument
+	 * 
+	 * Tests what happens when the reference's column is invalid.
+	 * 
+	 * Result - FAILURE - InvalidArgumentsException
+	 */
 	
 	@Test(expected = InvalidArgumentsException.class)
 	public void invalidReferenceCollumnArgument() {
@@ -114,6 +175,14 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
+	/**
+	 * Test Case #7 - ReferenceRowIsInvalid
+	 * 
+	 * Tests what happens when the reference's row is out of bounds.
+	 * 
+	 * Result - FAILURE - InvalidReferenceException
+	 */
+	
 	@Test(expected = InvalidReferenceException.class)
 	public void referenceRowIsInvalid() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
@@ -123,6 +192,14 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		AssignReferenceCellService service = new AssignReferenceCellService(ownerToken, testSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #8 - ReferenceCollumnIsInvalid
+	 * 
+	 * Tests what happens when the reference's column is out of bounds.
+	 * 
+	 * Result - FAILURE - InvalidReferenceException
+	 */
 	
 	@Test(expected = InvalidReferenceException.class)
 	public void referenceCollumnIsInvalid() {
@@ -134,8 +211,16 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
+	/**
+	 * Test Case #9 - CellRowIsOutOfBounds
+	 * 
+	 * Tests what happens when the cell's row is out of bounds.
+	 * 
+	 * Result - FAILURE - OutofBoundsException
+	 */
+	
 	@Test(expected = OutofBoundsException.class)
-	public void cellRowIsOutOfBonds() {
+	public void cellRowIsOutOfBounds() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "11;1"; //Is an invalid position since the spreadsheet is 10x10.
 		String reference = "1;2";
@@ -144,8 +229,16 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
+	/**
+	 * Test Case #10 - CellCollumnIsOutOfBounds
+	 * 
+	 * Tests what happens when the cell's column is out of bounds.
+	 * 
+	 * Result - FAILURE - OutofBoundsException
+	 */
+	
 	@Test(expected = OutofBoundsException.class)
-	public void cellCollumnIsOutOfBonds() {
+	public void cellCollumnIsOutOfBounds() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
 		String cell = "1;11"; //Is an invalid position since the spreadsheet is 10x10.
 		String reference = "1;2";
@@ -153,6 +246,15 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		AssignReferenceCellService service = new AssignReferenceCellService(ownerToken, testSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #11 - CellIsProtected
+	 * 
+	 * Tests what happens when a user tries to change the 
+	 * value of a protected cell.
+	 * 
+	 * Result - FAILURE - CellIsProtectedException
+	 */
 	
 	@Test(expected = CellIsProtectedException.class)
 	public void cellIsProtected() {
@@ -165,6 +267,14 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		AssignReferenceCellService service = new AssignReferenceCellService(ownerToken, testSpreadsheet.getId(), cell, reference);
 		service.execute();	
 	}
+	
+	/**
+	 * Test Case #12 - SpreadsheetDoesNotExist
+	 * 
+	 * Tests what happens when the spreadsheet doesn't exist.
+	 * 
+	 * Result - FAILURE - SpreadsheetDoesNotExistException
+	 */
 
 	@Test(expected = SpreadsheetDoesNotExistException.class)
 	public void spreadsheetDoesNotExist() {
@@ -174,6 +284,14 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		AssignReferenceCellService service = new AssignReferenceCellService(ownerToken, -1, cell, reference); //No spreadsheet should ever have -1 Id.
 		service.execute();	
 	}
+	
+	/**
+	 * Test Case #13 - UserNotInSession
+	 * 
+	 * Tests what happens when the user doesn't have an active session.
+	 * 
+	 * Result - FAILURE - UserNotInSessionException
+	 */
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void userNotInSession() {
@@ -185,6 +303,14 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
+	/**
+	 * Test Case #14 - InvalidToken
+	 * 
+	 * Tests what happens when the user gives an invalid token.
+	 * 
+	 * Result - FAILURE - InvalidTokenException
+	 */
+	
 	@Test(expected = InvalidTokenException.class)
 	public void invalidToken() {
 		Spreadsheet testSpreadsheet = getSpreadSheet("teste");
@@ -194,6 +320,15 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		AssignReferenceCellService service = new AssignReferenceCellService("", testSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #15 - UserNotOwner
+	 * 
+	 * Tests what happens when the user doesn't have
+	 * the necessary permissions to perform this action.
+	 * 
+	 * Result - FAILURE - InvalidPermissionException
+	 */
 	
 	@Test(expected = InvalidPermissionException.class)
 	public void userNotOwner() {
@@ -208,4 +343,4 @@ public class AssignReferenceCellServiceTest extends BubbleDocsServiceTest {
 		AssignReferenceCellService service = new AssignReferenceCellService(notOwnerToken, testSpreadsheet.getId(), cell, reference);
 		service.execute();
 	}
-}// End AssignReferenceCellTest class
+}// End AssignReferenceCellServiceTest class

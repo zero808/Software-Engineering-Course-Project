@@ -11,6 +11,11 @@ import pt.tecnico.bubbledocs.exception.InvalidSpreadsheetNameException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.service.CreateSpreadSheetService;
 
+/**
+ * Class that contains the test suite for the
+ * CreateSpreadSheetService.
+ */
+
 public class CreateSpreadSheetServiceTest extends BubbleDocsServiceTest {
 	
 	private String userNoSpredToken;
@@ -18,15 +23,20 @@ public class CreateSpreadSheetServiceTest extends BubbleDocsServiceTest {
 	private static final String notInSessionToken = "antonio6";
 	private static final String legalCharTestName = "Az1 9_+-";
 	
+	/**
+	 * Method that populates the DB with all
+	 * the objects the test suite needs to execute.
+	 */
+	
 	@Override
 	public void populate4Test() {
 		getBubbleDocs();
 		
-		//this user has no previous spreadsheet
+		//This user has no previous spreadsheet.
 		User luis = createUser("lff", "woot", "Luis");
 		this.userNoSpredToken = addUserToSession("lff");
 		
-		//this user already has spreadsheet and wants another
+		//This user already has spreadsheet and wants another.
 		User ze = createUser("zzz", "pass", "Jose");
 		this.userWithSpredToken = addUserToSession("zzz");
 		
@@ -35,6 +45,15 @@ public class CreateSpreadSheetServiceTest extends BubbleDocsServiceTest {
 		
 		luis.givePermissionto(getSpreadSheet("teste"), ze, true);
 	}
+	
+	/**
+	 * Test Case #1 - Success
+	 * 
+	 * Tests a normal invocation of the service
+	 * where nothing goes wrong and the user has no spreadsheets..
+	 * 
+	 * Result - SUCCESS
+	 */
 	
 	@Test
 	public void success() {
@@ -52,6 +71,15 @@ public class CreateSpreadSheetServiceTest extends BubbleDocsServiceTest {
 		assertEquals(10, s.getNCols());
 	}
 	
+	/**
+	 * Test Case #2 - SuccessNonEmptySpredlist
+	 * 
+	 * Tests a normal invocation of the service
+	 * where nothing goes wrong and the user already has spreadsheets.
+	 * 
+	 * Result - SUCCESS
+	 */
+	
 	@Test
 	public void successNonEmptySpredlist() {
 		CreateSpreadSheetService service = new CreateSpreadSheetService(userWithSpredToken,legalCharTestName,10,10);
@@ -68,12 +96,28 @@ public class CreateSpreadSheetServiceTest extends BubbleDocsServiceTest {
 		assertEquals(10, s.getNCols());
 	}
 	
+	/**
+	 * Test Case #3 - InvalidName
+	 * 
+	 * Tests what happens when an invalid name is given.
+	 * 
+	 * Result - FAILURE - InvalidSpreadsheetNameException
+	 */
+	
 	@Test(expected = InvalidSpreadsheetNameException.class)
 	public void invalidName() {
 		
 		CreateSpreadSheetService service = new CreateSpreadSheetService(userNoSpredToken,"%&/()ççç",10,10);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #4 - EmptyName
+	 * 
+	 * Tests what happens when an empty name is given.
+	 * 
+	 * Result - FAILURE - InvalidSpreadsheetNameException
+	 */
 	
 	@Test(expected = InvalidSpreadsheetNameException.class)
 	public void emptyName() {
@@ -82,6 +126,14 @@ public class CreateSpreadSheetServiceTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
+	/**
+	 * Test Case #4 - InvalidSpreadsheetRows
+	 * 
+	 * Tests what happens when the spreadsheet's rows are out of bounds.
+	 * 
+	 * Result - FAILURE - InvalidBoundsException
+	 */
+	
 	@Test(expected = InvalidBoundsException.class)
 	public void invalidSpreadsheetRows() {
 		
@@ -89,11 +141,27 @@ public class CreateSpreadSheetServiceTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
+	/**
+	 * Test Case #5 - InvalidSpreadsheetRows
+	 * 
+	 * Tests what happens when the spreadsheet's columns are out of bounds.
+	 * 
+	 * Result - FAILURE - InvalidBoundsException
+	 */
+	
 	@Test(expected = InvalidBoundsException.class)
 	public void invalidSpreadsheetCollumns() {
 		CreateSpreadSheetService service = new CreateSpreadSheetService(userWithSpredToken,"teste",10,-10);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #6 - InvalidArguments
+	 * 
+	 * Tests what happens when the spreadsheet's columns are out of bounds.
+	 * 
+	 * Result - FAILURE - InvalidBoundsException
+	 */
 	
 	@Test(expected = InvalidBoundsException.class)
 	public void invalidArguments() {
@@ -102,10 +170,18 @@ public class CreateSpreadSheetServiceTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
+	/**
+	 * Test Case #7 - UserNotInSession
+	 * 
+	 * Tests what happens when the user doesn't have a valid session.
+	 * 
+	 * Result - FAILURE - UserNotInSessionException
+	 */
+	
 	@Test(expected = UserNotInSessionException.class)
 	public void userNotInSession() {
 		
 		CreateSpreadSheetService service = new CreateSpreadSheetService(notInSessionToken,"teste",10,10);
 		service.execute();
 	}
-}// End CreateSpreadSheetTest class
+}// End CreateSpreadSheetServiceTest class

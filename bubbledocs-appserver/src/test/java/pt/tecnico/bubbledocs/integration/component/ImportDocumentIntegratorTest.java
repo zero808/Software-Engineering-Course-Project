@@ -24,6 +24,11 @@ import pt.tecnico.bubbledocs.integration.component.BubbleDocsServiceTest;
 import pt.tecnico.bubbledocs.service.integration.ImportDocumentIntegrator;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
+/**
+ * Class that contains the test suite for the
+ * ImportDocumentIntegrator.
+ */
+
 public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 
 	@Mocked
@@ -34,6 +39,11 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 	private String notInSessionToken = "antonio6";
 	
 	private byte[] docXML;
+	
+	/**
+	 * Method that populates the DB with all
+	 * the objects the test suite needs to execute.
+	 */
 
 	@Override
 	public void populate4Test() {
@@ -50,6 +60,15 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		
 		luis.givePermissionto(getSpreadSheet("teste"), ze, true);
 	}
+	
+	/**
+	 * Test Case #1 - Success
+	 * 
+	 * Tests a normal invocation of the service
+	 * where nothing goes wrong.
+	 * 
+	 * Result - SUCCESS
+	 */
 
 	@Test
 	public void success() {
@@ -96,8 +115,16 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		assertEquals(spreadsheetSucessTest.getNCols(), serviceSpreadsheet.getNCols());
 	}
 	
+	/**
+	 * Test Case #2 - NotOwner
+	 * 
+	 * Tests what happens when the user trying to import isn't the owner.
+	 * 
+	 * Result - FAILURE - InvalidPermissionException
+	 */
+	
 	@Test(expected = InvalidPermissionException.class)
-	public void NotOwner() {
+	public void notOwner() {
 		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
 	
 		org.jdom2.Document jdomDoc = new org.jdom2.Document();
@@ -115,6 +142,14 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		ImportDocumentIntegrator service = new ImportDocumentIntegrator(notOwnerToken, spreadsheetTest.getId(), docXML);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #3 - UserNotInSession
+	 * 
+	 * Tests what happens when the user calling the service isn't in session.
+	 * 
+	 * Result - FAILURE - UserNotInSessionException
+	 */
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void userNotInSession() {
@@ -137,6 +172,14 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
+	/**
+	 * Test Case #4 - InvalidToken
+	 * 
+	 * Tests what happens when the user gives an invalid token.
+	 * 
+	 * Result - FAILURE - InvalidTokenException
+	 */
+	
 	@Test(expected = InvalidTokenException.class)
 	public void invalidToken() {
 		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
@@ -157,6 +200,14 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		ImportDocumentIntegrator service = new ImportDocumentIntegrator("", spreadsheetTest.getId(), docXML);
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #5 - RemoteInvocationFailure
+	 * 
+	 * Tests what happens when the remote service is down.
+	 * 
+	 * Result - FAILURE - UnavailableServiceException
+	 */
 	
 	@Test(expected = UnavailableServiceException.class)
 	public void remoteInvocationFailure() {
@@ -187,8 +238,16 @@ public class ImportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
+	/**
+	 * Test Case #6 - LoadFailure
+	 * 
+	 * Tests what happens when the remote service can't load the spreadsheet.
+	 * 
+	 * Result - FAILURE - CannotLoadDocumentException
+	 */
+	
 	@Test(expected = CannotLoadDocumentException.class)
-	public void storeFailure() {
+	public void loadFailure() {
 		User luisUser = getUserFromUsername("lff");
 		Spreadsheet spreadsheetTest = createSpreadSheet(luisUser, "Load failure", 10, 10);
 		

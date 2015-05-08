@@ -7,6 +7,11 @@ import org.junit.Test;
 import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 import pt.tecnico.bubbledocs.service.GetUserInfoService;
 
+/**
+ * Class that contains the test suite for the
+ * GetUserInfoService.
+ */
+
 public class GetUserInfoServiceTest extends BubbleDocsServiceTest {
 
 	private static final String USERNAME = "MARCO";
@@ -14,12 +19,25 @@ public class GetUserInfoServiceTest extends BubbleDocsServiceTest {
 	private static final String EMAIL = "marcocunha@tecnico.pt";
 	private static final String NAME = "Marco Cunha";
 	
+	/**
+	 * Method that populates the DB with all
+	 * the objects the test suite needs to execute.
+	 */
 
 	@Override
 	public void populate4Test() {
 		getBubbleDocs();
 		createUser(USERNAME, EMAIL, NAME);
 	}
+	
+	/**
+	 * Test Case #1 - Success
+	 * 
+	 * Tests a normal invocation of the service
+	 * where nothing goes wrong.
+	 * 
+	 * Result - SUCCESS
+	 */
 
 	@Test
 	public void success() {
@@ -30,6 +48,14 @@ public class GetUserInfoServiceTest extends BubbleDocsServiceTest {
 		assertEquals(NAME, service.getUserName());
 		assertEquals(EMAIL, service.getUserEmail());
 	}
+	
+	/**
+	 * Test Case #2 - UsernameDoesNotExist
+	 * 
+	 * Tests what happens when the username doesn't exist.
+	 * 
+	 * Result - FAILURE - LoginBubbleDocsException
+	 */
 
 	@Test(expected = LoginBubbleDocsException.class)
 	public void usernameDoesNotExist() {

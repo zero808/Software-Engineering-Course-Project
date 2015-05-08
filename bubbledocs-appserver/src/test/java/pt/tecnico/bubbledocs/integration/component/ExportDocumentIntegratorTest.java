@@ -29,6 +29,11 @@ import pt.tecnico.bubbledocs.integration.component.BubbleDocsServiceTest;
 import pt.tecnico.bubbledocs.service.integration.ExportDocumentIntegrator;
 import pt.tecnico.bubbledocs.service.remote.StoreRemoteServices;
 
+/**
+ * Class that contains the test suite for the
+ * ExportDocumentIntegrator.
+ */
+
 public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 
 	@Mocked
@@ -38,6 +43,11 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 	private String notOwnerToken;
 	private String notInSessionToken = "antonio6";
 	private byte[] expectationsByte;
+	
+	/**
+	 * Method that populates the DB with all
+	 * the objects the test suite needs to execute.
+	 */
 
 	@Override
 	public void populate4Test() {
@@ -54,6 +64,15 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		
 		luis.givePermissionto(getSpreadSheet("teste"), ze, true);
 	}
+	
+	/**
+	 * Test Case #1 - Success
+	 * 
+	 * Tests a normal invocation of the service
+	 * where nothing goes wrong.
+	 * 
+	 * Result - SUCCESS
+	 */
 
 	@Test
 	public void success() {
@@ -114,8 +133,16 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		assertEquals(testSpreadsheet.getNCols(), serviceSpreadsheet.getNCols());
 	}
 	
+	/**
+	 * Test Case #2 - NotOwner
+	 * 
+	 * Tests what happens when the user trying to export isn't the owner.
+	 * 
+	 * Result - FAILURE - InvalidPermissionException
+	 */
+	
 	@Test(expected = InvalidPermissionException.class)
-	public void NotOwner() {
+	public void notOwner() {
 		
 		Spreadsheet spreadsheetSucessTest = getSpreadSheet("teste");
 		
@@ -134,12 +161,28 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		ExportDocumentIntegrator service = new ExportDocumentIntegrator(notOwnerToken, spreadsheetSucessTest.getId());
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #3 - SpreadsheetDoesNotExist
+	 * 
+	 * Tests what happens when the spreadsheet doesn't exist.
+	 * 
+	 * Result - FAILURE - SpreadsheetDoesNotExistException
+	 */
 
 	@Test(expected = SpreadsheetDoesNotExistException.class)
 	public void spreadsheetDoesNotExist() {
 		ExportDocumentIntegrator service = new ExportDocumentIntegrator(ownerToken, -1); //No spreadsheet should ever have -1 Id.
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #4 - UserNotInSession
+	 * 
+	 * Tests what happens when the user calling the service isn't in session.
+	 * 
+	 * Result - FAILURE - UserNotInSessionException
+	 */
 	
 	@Test(expected = UserNotInSessionException.class)
 	public void userNotInSession() {
@@ -149,6 +192,14 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		service.execute();
 	}
 	
+	/**
+	 * Test Case #5 - InvalidToken
+	 * 
+	 * Tests what happens when the user gives an invalid token.
+	 * 
+	 * Result - FAILURE - InvalidTokenException
+	 */
+	
 	@Test(expected = InvalidTokenException.class)
 	public void invalidToken() {
 		Spreadsheet spreadsheetTest = getSpreadSheet("teste");
@@ -156,6 +207,14 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		ExportDocumentIntegrator service = new ExportDocumentIntegrator("", spreadsheetTest.getId());
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #6 - RemoteInvocationFailure
+	 * 
+	 * Tests what happens when the remote service is down.
+	 * 
+	 * Result - FAILURE - UnavailableServiceException
+	 */
 	
 	@Test(expected = UnavailableServiceException.class)
 	public void remoteInvocationFailure() {
@@ -172,6 +231,14 @@ public class ExportDocumentIntegratorTest extends BubbleDocsServiceTest {
 		};
 		service.execute();
 	}
+	
+	/**
+	 * Test Case #7 - StoreFailure
+	 * 
+	 * Tests what happens when the remote service can't store the spreadsheet.
+	 * 
+	 * Result - FAILURE - CannotStoreDocumentException
+	 */
 	
 	@Test(expected = CannotStoreDocumentException.class)
 	public void storeFailure() {
