@@ -13,24 +13,53 @@ import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.ImportDocumentException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 
+/**
+ * Class that describes the service that is 
+ * responsible for importing a spreadsheet from XML.
+ */
+
 public class ImportDocumentService extends AccessService {
 	
 	private byte[] docXML;
 	private int docId;
-	
 	private Spreadsheet spreadsheet;
-	
 	private String username;
 	
-	public ImportDocumentService(String userToken, int docId, byte[] docXML) {		
+	/**
+	 * The specific constructor needed for this
+	 * application in particular.
+	 * 
+	 * @constructor
+	 * @this {ImportDocumentService}
+	 * 
+	 * @param {String} userToken The token of the user that called the service.
+	 * @param {number} docId The spreadsheet's id.
+	 * @param {Array Bytes} docXML The spreadsheet's bytes.
+	 */
+	
+	public ImportDocumentService(String userToken, int docId, byte[] docXML) {
+		/** @private */
 		this.token = userToken;
+		/** @private */
 		this.docId = docId;
+		/** @private */
 		this.docXML = docXML;
 		
 		BubbleDocs bd = getBubbleDocs();
+		/** @private */
 		this.username = bd.getUsernameByToken(userToken);
 	}
 
+	/**
+	 * This is where the service executes what it
+	 * is supposed to do.
+	 * 
+	 * It's a local service, so it only does local
+	 * invocations to the domain layer underneath.
+	 * 
+	 * @throws BubbleDocsException
+	 */
+	
 	@Override
 	protected void dispatch() throws BubbleDocsException {
 
@@ -50,17 +79,42 @@ public class ImportDocumentService extends AccessService {
 		spreadsheet.importFromXML(rootElement);
 	}
 	
+	/**
+	 * Method that returns the spreadsheet after the import.
+	 * 
+	 * @return {Spreadsheet} The spreadsheet that resulted from
+	 * the import.
+	 */
+	
 	public Spreadsheet getSpreadsheet() {
 		return spreadsheet;
 	}
+	
+	/**
+	 * Method that returns the username of the user that
+	 * called the service.
+	 * 
+	 * @return {String} The user's username.
+	 */
 	
 	public String getUsername() {
 		return username;
 	}
 	
+	/**
+	 * Method that returns the spreadsheet's id.
+	 * 
+	 * @return {number} The spreadsheet's id.
+	 */
+	
 	public int getDocId() {
 		return docId;
 	}
+	
+	/**
+	 * In order to import a spreadsheet one must be
+	 * its owner.
+	 */
 	
 	@Override
 	public void checkAccess() {

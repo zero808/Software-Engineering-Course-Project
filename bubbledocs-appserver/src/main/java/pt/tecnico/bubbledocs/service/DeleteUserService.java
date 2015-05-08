@@ -6,14 +6,42 @@ import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 
+/**
+ * Class that describes the service that is 
+ * responsible for deleting a user.
+ */
+
 public class DeleteUserService extends BubbleDocsService {
 
 	private String toDeleteUsername;
+	
+	/**
+	 * The specific constructor needed for this
+	 * application in particular.
+	 * 
+	 * @constructor
+	 * @this {DeleteUserService}
+	 * 
+	 * @param {String} userToken The token of the user that called the service.
+	 * @param {String} toDeleteUsername The user's username to delete..
+	 */
 
 	public DeleteUserService(String userToken, String toDeleteUsername) {
+		/** @private */
 		this.token = userToken;
+		/** @private */
 		this.toDeleteUsername = toDeleteUsername;
 	}
+	
+	/**
+	 * This is where the service executes what it
+	 * is supposed to do.
+	 * 
+	 * It's a local service, so it only does local
+	 * invocations to the domain layer underneath.
+	 * 
+	 * @throws BubbleDocsException
+	 */
 
 	@Override
 	protected void dispatch() throws BubbleDocsException {
@@ -29,6 +57,11 @@ public class DeleteUserService extends BubbleDocsService {
 			bd.removeUserFromSession(tok);
 		}
 	}
+	
+	/**
+	 * In order to delete a user, one must have root
+	 * privileges.
+	 */
 
 	@Override
 	protected void checkAccess() {

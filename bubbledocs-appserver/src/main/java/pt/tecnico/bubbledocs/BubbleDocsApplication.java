@@ -12,7 +12,7 @@ public class BubbleDocsApplication {
 	 * System functionality was replaced by a test case that simulates
 	 * the system.
 	 * 
-	 * @param args The program's arguments.
+	 * @param {Array of Strings} args The program's arguments.
 	 */
 
 	public static void main(String[] args) {

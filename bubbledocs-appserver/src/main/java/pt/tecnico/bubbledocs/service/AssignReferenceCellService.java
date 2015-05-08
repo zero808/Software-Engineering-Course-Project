@@ -5,6 +5,12 @@ import pt.tecnico.bubbledocs.domain.Reference;
 import pt.tecnico.bubbledocs.domain.Spreadsheet;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 
+/**
+ * Class that describes the service that is 
+ * responsible for assigning a reference to 
+ * a cell belonging to a specific spreadsheet.
+ */
+
 public class AssignReferenceCellService extends AccessService {
 	
 	private String result;
@@ -12,6 +18,19 @@ public class AssignReferenceCellService extends AccessService {
 	private int cell_collumn;
 	private int reference_row;
 	private int reference_collumn;
+	
+	/**
+	 * The specific constructor needed for this
+	 * application in particular.
+	 * 
+	 * @constructor
+	 * @this {AssignReferenceCellService}
+	 * 
+	 * @param {String} tokenUser The token of the user that called the service.
+	 * @param {number} docId The spreadsheet's id.
+	 * @param {String} cellId The cell's identifier (row;column).
+	 * @param {String} reference The string representation of a reference (row;column).
+	 */
 
 	public AssignReferenceCellService(String tokenUser, int docId, String cellId, String reference) {
 		String cell_parts[] = cellId.split(";");
@@ -26,13 +45,29 @@ public class AssignReferenceCellService extends AccessService {
 		int reference_row_int = Integer.parseInt(reference_row);
 		int reference_collumn_int = Integer.parseInt(reference_collumn);
 		
+		/** @private */
 		this.docId = docId;
+		/** @private */
 		this.token = tokenUser;
+		/** @private */
 		this.cell_row = cell_row_int;
+		/** @private */
 		this.cell_collumn = cell_collumn_int;
+		/** @private */
 		this.reference_row = reference_row_int;
+		/** @private */
 		this.reference_collumn = reference_collumn_int;
 	}
+	
+	/**
+	 * This is where the service executes what it
+	 * is supposed to do.
+	 * 
+	 * It's a local service, so it only does local
+	 * invocations to the domain layer underneath.
+	 * 
+	 * @throws BubbleDocsException 
+	 */
 
 	@Override
 	protected void dispatch() throws BubbleDocsException {
@@ -45,6 +80,12 @@ public class AssignReferenceCellService extends AccessService {
 
 		result = getCellByCoords(spreadsheet, cell_row, cell_collumn).getContent().toString();
 	}
+	
+	/**
+	 * Method that returns the result of the service execution.
+	 * 
+	 * @return {String} String representation of the reference.
+	 */
 
 	public final String getResult() {
 		return result;

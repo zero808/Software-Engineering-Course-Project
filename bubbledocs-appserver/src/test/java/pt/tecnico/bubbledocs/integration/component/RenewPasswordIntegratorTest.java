@@ -80,7 +80,7 @@ public class RenewPasswordIntegratorTest extends BubbleDocsServiceTest {
 		new Expectations() {
 			{
 				idRemote.renewPassword(withNotNull());
-				result = new LoginBubbleDocsException("invalidUser");
+				result = new LoginBubbleDocsException("username");
 			}
 		};
 		service.execute();

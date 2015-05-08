@@ -134,7 +134,7 @@ public class BubbleDocs extends BubbleDocs_Base {
 	
 	public void userExists(String username) throws LoginBubbleDocsException {
 		if(null == getUserByUsername(username))
-			throw new LoginBubbleDocsException(username);
+			throw new LoginBubbleDocsException("username");
 	}
 	
 	/**

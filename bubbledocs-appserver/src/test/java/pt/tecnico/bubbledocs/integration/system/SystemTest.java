@@ -1,6 +1,9 @@
 package pt.tecnico.bubbledocs.integration.system;
 
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 
 import org.junit.After;
@@ -25,6 +28,11 @@ public abstract class SystemTest {
 	@After
 	public void tearDown() {
 		FenixFramework.getDomainRoot().getBubbledocs().delete();
+		try {
+			FenixFramework.getTransactionManager().commit();
+		} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SystemException e2) {
+			e2.printStackTrace();
+		}
 	}
 	
 	public abstract void populate4Test();

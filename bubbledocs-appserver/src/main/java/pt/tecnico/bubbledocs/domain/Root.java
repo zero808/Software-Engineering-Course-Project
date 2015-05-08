@@ -1,11 +1,10 @@
 package pt.tecnico.bubbledocs.domain;
 
 import pt.ist.fenixframework.FenixFramework;
-
+import pt.tecnico.bubbledocs.exception.DuplicateUsernameException;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
-import pt.tecnico.bubbledocs.exception.UserAlreadyExistsException;
 
 /**
  * Class that describes the singleton Root.
@@ -78,10 +77,10 @@ public class Root extends Root_Base {
 	 * Method that adds a new user.
 	 * 
 	 * @param {User} u The new user to be added to the application.
-	 * @throws UserAlreadyExistsException, InvalidArgumentsException
+	 * @throws DuplicateUsernameException, InvalidArgumentsException
 	 */
 
-	public void addUser(User u) throws UserAlreadyExistsException, InvalidArgumentsException {
+	public void addUser(User u) throws DuplicateUsernameException, InvalidArgumentsException {
 		BubbleDocs bd = FenixFramework.getDomainRoot().getBubbledocs();
 		
 		if(bd.getUsersSet().isEmpty()) {
@@ -89,7 +88,7 @@ public class Root extends Root_Base {
 		} else {
 			
 			if(bd.getUserByUsername(u.getUsername()) != null) {
-				throw new UserAlreadyExistsException(u.getUsername());
+				throw new DuplicateUsernameException(u.getUsername());
 			}
 			
 			if(u.getName() != null && u.getEmail() != null && u.getUsername() != null) {

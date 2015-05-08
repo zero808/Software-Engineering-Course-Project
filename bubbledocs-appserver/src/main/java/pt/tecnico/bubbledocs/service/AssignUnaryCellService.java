@@ -11,6 +11,12 @@ import pt.tecnico.bubbledocs.domain.Unary;
 import pt.tecnico.bubbledocs.exception.BubbleDocsException;
 import pt.tecnico.bubbledocs.exception.InvalidArgumentsException;
 
+/**
+ * Class that describes the service that is 
+ * responsible for assigning a unary function to 
+ * a cell belonging to a specific spreadsheet.
+ */
+
 public class AssignUnaryCellService extends AccessService {
 
 	private String result;
@@ -24,14 +30,40 @@ public class AssignUnaryCellService extends AccessService {
 	final private String RANGE_OPERATOR = "(AVG|PRD)";
 	final private String RANGE_FUNCTION = "=" + RANGE_OPERATOR + "\\(" + RANGE + "\\)";
 	final private String PARSE_RANGE_FUNCTION = "[=(:)]";
+	
+	/**
+	 * The specific constructor needed for this
+	 * application in particular.
+	 * 
+	 * @constructor
+	 * @this {AssignUnaryCellService}
+	 * 
+	 * @param {String} tokenUser The token of the user that called the service.
+	 * @param {number} docId The spreadsheet's id.
+	 * @param {String} cellId The cell's identifier (row;column).
+	 * @param {String} function The function's identifier (=FunctionName(row;column:row;column)).
+	 */
 
-	public AssignUnaryCellService(String tokenUser, int docId, String cellId,
-			String function) {
+	public AssignUnaryCellService(String tokenUser, int docId, String cellId, String function) {
+		/** @private */
 		token = tokenUser;
+		/** @private */
 		this.docId = docId;
+		/** @private */
 		this.cellId = cellId;
+		/** @private */
 		this.func = function;
 	}
+	
+	/**
+	 * This is where the service executes what it
+	 * is supposed to do.
+	 * 
+	 * It's a local service, so it only does local
+	 * invocations to the domain layer underneath.
+	 * 
+	 * @throws BubbleDocsException
+	 */
 
 	@Override
 	protected void dispatch() throws BubbleDocsException {
@@ -45,25 +77,39 @@ public class AssignUnaryCellService extends AccessService {
 		user.addFunctiontoCell(b, s, cellRow, cellCol);
 
 		try {
-			result = Integer.toString(getCellByCoords(s, cellRow, cellCol)
-					.getContent().getValue());
+			result = Integer.toString(getCellByCoords(s, cellRow, cellCol).getContent().getValue());
 		} catch (BubbleDocsException e) {
 			result = "#VALUE";
 		}
-
 	}
+	
+	/**
+	 * Auxiliary method used by the service to create the right
+	 * binary function, depending on the argument given.
+	 * 
+	 * @param {String} func The function identifier.
+	 * @return {Unary Function} The unary function requested.
+	 */
 
 	private Unary generateFunc(String func) {
 
 		if (!Pattern.matches(RANGE_FUNCTION, func))
 			throw new InvalidArgumentsException();
 
-		// [0]Operator, [1]arg1, [2]arg2
-		String func_parts[] = func.replaceFirst("=", "").split(
-				PARSE_RANGE_FUNCTION);
+		//[0]Operator, [1]arg1, [2]arg2.
+		String func_parts[] = func.replaceFirst("=", "").split(PARSE_RANGE_FUNCTION);
 
 		return parseUnary(func_parts[0], parseRange(func_parts[1], func_parts[2]));
 	}
+	
+	/**
+	 * Auxiliary method used by the service to create the range of
+	 * cells that the function is supposed to use.
+	 * 
+	 * @param {String} start The range's starting cell, in string form.
+	 * @param {String} end The range's ending cell, in string form.
+	 * @return {Range} The requested range.
+	 */
 
 	private Range parseRange(String start, String end) {
 		Range a = null;
@@ -87,6 +133,15 @@ public class AssignUnaryCellService extends AccessService {
 
 		return a;
 	}
+	
+	/**
+	 * Auxiliary method that parses the various components that 
+	 * make up the function identifier.
+	 * 
+	 * @param {String} string The name of the unary function.
+	 * @param {Range} r The unary function's only argument.
+	 * @return {Unary Function} The unary function requested.
+	 */
 
 	private Unary parseUnary(String string, Range r) {
 
@@ -97,9 +152,15 @@ public class AssignUnaryCellService extends AccessService {
 
 		return null;
 	}
+	
+	/**
+	 * Method that returns the result of the service execution.
+	 * 
+	 * @return {String} String representation of the function's return value,
+	 * #VALUE if invalid arguments are passed.
+	 */
 
 	public String getResult() {
 		return result;
 	}
-
 }// End AssignUnaryCellService class
