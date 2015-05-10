@@ -1,7 +1,7 @@
 |  Group Member  | M  | T  | W  | T  | F  | S  | S  |                Planned tasks                    |                Implemented tasks                |
 |--------------  |----|----|----|----|----|----|----|-------------------------------------------------|-------------------------------------------------|
 | luis-github-13 |  1 |  1 |  2 |  4 |  4 |  0 |  0 |            136,137,138,139,140,141              |             136,137,138,139,140,141             |
-|    xistoso     |  2 |  2 |  2 |  0 |  2 |  2 |  0 |                  101,108,109                    |                        -                        |
+|    xistoso     |  2 |  2 |  2 |  0 |  2 |  2 |  0 |                  101,108,109                    |                   101,108,109                   |
 |   marcocunha   |  2 |  1 |  0 |  0 |  2 |  2 |  2 |                       -                         |                        -                        |
 |    LeoVal      |  0 |  0 |  0 |  0 |  0 |  0 |  0 |                       -                         |                        -                        |
 |    zero808     |  0 |  0 |  0 |  0 |  0 |  0 |  0 |                       -                         |                        -                        |
@@ -18,7 +18,11 @@ Previously on...
 	 seria justo dizer que esse aspecto tinha corrido mal, pois apesar de ainda não estar perfeito, acho que o grupo evoluiu e fez um bom trabalho em relação
 	 à gestão SCRUM do projecto. Talvez estejam a perceber a sua importância, ou talvez é porque estou sempre a chatear-los para a fazerem, quem sabe.
 
-[Pedro] - Soon
+[Pedro] - Não preenchi na semana passada o comentário da retrospectiva por falta de tempo (teste, vida profissional).
+		Na semana anterior dei inicio às tarefas do login, que acabou por ser finalizado pelo Luis, após revisão do código está tudo ok.
+		A Semana penso que correu bem, limamos algumas arestas relativas a ambiguidades e duvidas. 
+		Para esta Semana vou ficar com a implementação do create user. Espero a realização de 10h sendo que o cumprimento do dias vai ser pouco relevantes 
+		devido a vida profissional desde que o tempo total seja cumprido.
 
 [Marco] - Soon
 
