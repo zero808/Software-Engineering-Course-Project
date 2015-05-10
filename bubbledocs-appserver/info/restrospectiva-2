@@ -24,7 +24,8 @@ Previously on...
 		Para esta Semana vou ficar com a implementação do create user. Espero a realização de 10h sendo que o cumprimento do dias vai ser pouco relevantes 
 		devido a vida profissional desde que o tempo total seja cumprido.
 
-[Marco] - Soon
+[Marco] - Na semana passada tinha previsto fazer as alterações necessárias no serviço DeleteUser de forma a estarem de acordo com o pedido no enunciado. E correu tudo como planeado. O serviço ficou completamente funcional. Acabei por implementar também um novo serviço, o UserInfoService, ainda que inicialmente planeado para ser o Duarte a executar, mas que entretanto combinei com ele que eu implementaria, apenas porque necessitava deste serviço auxiliar e queria confirmar que todas as minhas implementações ficavam funcionais.
+
 
 [Leo] - Soon
 
