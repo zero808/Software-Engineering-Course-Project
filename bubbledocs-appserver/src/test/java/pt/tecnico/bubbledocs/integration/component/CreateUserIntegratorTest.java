@@ -2,16 +2,19 @@ package pt.tecnico.bubbledocs.integration.component;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import mockit.Expectations;
 import mockit.Mocked;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import pt.tecnico.bubbledocs.domain.User;
 import pt.tecnico.bubbledocs.exception.DuplicateUsernameException;
 import pt.tecnico.bubbledocs.exception.InvalidPermissionException;
 import pt.tecnico.bubbledocs.exception.InvalidUsernameException;
+import pt.tecnico.bubbledocs.exception.LoginBubbleDocsException;
 import pt.tecnico.bubbledocs.exception.RemoteInvocationException;
 import pt.tecnico.bubbledocs.exception.UserNotInSessionException;
 import pt.tecnico.bubbledocs.exception.UnavailableServiceException;
@@ -139,7 +142,7 @@ public class CreateUserIntegratorTest extends BubbleDocsServiceTest {
 	/**
 	 * Test Case #6 - IdServiceUnavailable
 	 * 
-	 * Tests what happens when the remove service is down.
+	 * Tests what happens when the remote service is down.
 	 * 
 	 * Result - FAILURE - UnavailableServiceException
 	 */
@@ -158,14 +161,37 @@ public class CreateUserIntegratorTest extends BubbleDocsServiceTest {
 	}
 	
 	/**
-	 * Test Case #7 - UserDeletedSuccessfuly
+	 * Test Case #7 - UserDeletedLocalSuccessfuly
 	 * 
-	 * Tests what happens when the remove service is down, the local copy of the user is deleted.
+	 * Tests what happens when the remote service is down, the local copy of the user is deleted.
 	 * 
 	 * Result - SUCCESS
 	 */
 	
-	//TODO
+	@Test
+	public void userDeletedLocalSuccessfuly() {
+		CreateUserIntegrator service = new CreateUserIntegrator(root, USERNAME_DOES_NOT_EXIST, EMAIL, "José Ferreira");
+		
+		new Expectations() {
+			{
+				idRemoteService.createUser(anyString, anyString, anyString);
+				result = new RemoteInvocationException();
+			}
+		};
+		
+		try{ 
+			service.execute();
+		}catch (UnavailableServiceException ex){
+			//because service failed, try and see if user is not created locally
+			try{
+				getUserFromUsername(USERNAME_DOES_NOT_EXIST);
+				fail("user not deleted");
+			}catch (LoginBubbleDocsException ex2){
+				assertThat(ex2.toString(), CoreMatchers.containsString("The username given is invalid."));
+			}
+		}
+	}
+	
 	
 	
 }// End CreateUserIntegratorTest class
