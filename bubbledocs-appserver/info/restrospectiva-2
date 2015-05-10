@@ -5,7 +5,7 @@
 |   marcocunha   |  2 |  1 |  0 |  0 |  2 |  2 |  2 |                       -                         |                        -                        |
 |    LeoVal      |  0 |  0 |  0 |  0 |  0 |  0 |  0 |                       -                         |                        -                        |
 |    zero808     |  0 |  0 |  0 |  0 |  0 |  0 |  0 |                       -                         |                        -                        |
-|   cmgalante    |  0 |  0 |  0 |  0 |  0 |  0 |  0 |                       -                         |                        -                        |
+|   cmgalante    |  0 |  0 |  0 |  0 |  0 |  0 |  1 |                       -                         |                        -                        |
 
 
 Previously on...
@@ -24,12 +24,18 @@ Previously on...
 		Para esta Semana vou ficar com a implementação do create user. Espero a realização de 10h sendo que o cumprimento do dias vai ser pouco relevantes 
 		devido a vida profissional desde que o tempo total seja cumprido.
 
-[Marco] - Na semana passada tinha previsto fazer as alterações necessárias no serviço DeleteUser de forma a estarem de acordo com o pedido no enunciado. E correu tudo como planeado. O serviço ficou completamente funcional. Acabei por implementar também um novo serviço, o UserInfoService, ainda que inicialmente planeado para ser o Duarte a executar, mas que entretanto combinei com ele que eu implementaria, apenas porque necessitava deste serviço auxiliar e queria confirmar que todas as minhas implementações ficavam funcionais.
+[Marco] - Na semana passada tinha previsto fazer as alterações necessárias no serviço DeleteUser de forma a estarem de acordo com o pedido no enunciado.
+	E correu tudo como planeado. O serviço ficou completamente funcional. Acabei por implementar também um novo serviço, o UserInfoService, ainda que
+	inicialmente planeado para ser o Duarte a executar, mas que entretanto combinei com ele que eu implementaria, apenas porque necessitava deste serviço
+	auxiliar e queria confirmar que todas as minhas implementações ficavam funcionais.
 
 
 [Leo] - Soon
 
-[Duarte] - Na semana passada fiz as três tarefas relativas ao serviço da quarta entrega para obter o conteúdo de uma spreadsheet. Não houve qualquer problema que
-           atrasasse o projecto.
+[Duarte] - Na semana passada fiz as três tarefas relativas ao serviço da quarta entrega para obter o conteúdo de uma spreadsheet. Não houve qualquer problema
+	que atrasasse o projecto.
 
-[Cláudio] - Soon
+[Cláudio] - Na semana passada fiz as duas tarefas que tinha agendado fazer logo na primeira semana de trabalho, relacionadas com o novo serviço auxiliar
+	GetUsername4TokenService, e ainda outras três tarefas relacionadas com a actualização do serviço RenewPassword, para que este ficasse de acordo com o
+	pedido para a quarta entrega. Tudo correu como planeado, sem problemas de maior, ficando os serviços funcionais e de acordo com o novo "esquema" pedido
+	para a quarta entrega.
