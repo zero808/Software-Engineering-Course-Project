@@ -47,19 +47,19 @@ public class GetSpreadSheetContentService extends AccessService {
 		final int rows = s.getNRows();
 		matrix = new String[rows][cols];
 		
-		for(int rowsIterator = 1; rowsIterator < rows; rowsIterator++) {
-			for(int colsIterator = 1; colsIterator < cols; colsIterator++) {
-				String ret;
+		for(int rowsIterator = 1, ri = 0; rowsIterator <= rows; ++rowsIterator, ++ri) {
+			for(int colsIterator = 1, ci = 0; colsIterator <= cols; ++colsIterator, ++ci) {
+				String ret = "";
 				if(s.getCellByCoords(rowsIterator, colsIterator) != null) {
 					if(s.getCellByCoords(rowsIterator, colsIterator).getContent() != null) {
 						ret = s.getCellByCoords(rowsIterator, colsIterator).getContent().toString();
-						matrix[rowsIterator][colsIterator] = ret;
+						matrix[ri][ci] = ret;
 					}
 					else
-						matrix[rowsIterator][colsIterator] = "#VALUE";
+						matrix[ri][ci] = ret;
 				}
 				else
-					matrix[rowsIterator][colsIterator] = "#VALUE";
+					matrix[ri][ci] = ret;
 			}
 		}
 	}

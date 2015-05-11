@@ -95,11 +95,11 @@ public class GetSpreadSheetContentServiceTest extends BubbleDocsServiceTest {
 			i++;
 		}
 
-		assertEquals("5", service.getMatrix()[1][1]);
-		assertEquals("5", service.getMatrix()[2][1]);
-		assertEquals("ADD(5,5)", service.getMatrix()[3][3]);
-		assertEquals("AVG((1,1)(2,1))", service.getMatrix()[1][4]);
-		assertEquals("#VALUE", service.getMatrix()[2][2]);
+		assertEquals("5", service.getMatrix()[0][0]);
+		assertEquals("5", service.getMatrix()[1][0]);
+		assertEquals("ADD(5,5)", service.getMatrix()[2][2]);
+		assertEquals("AVG((1,1)(2,1))", service.getMatrix()[0][3]);
+		assertEquals("", service.getMatrix()[1][1]);
 	}
 	
 	/**
