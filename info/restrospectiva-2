@@ -2,7 +2,7 @@
 |--------------  |----|----|----|----|----|----|----|-------------------------------------------------|-------------------------------------------------|
 | luis-github-13 |  1 |  1 |  2 |  4 |  4 |  0 |  0 |            136,137,138,139,140,141              |             136,137,138,139,140,141             |
 |    xistoso     |  2 |  2 |  2 |  0 |  2 |  2 |  0 |                  101,108,109                    |                   101,108,109                   |
-|   marcocunha   |  2 |  1 |  0 |  0 |  2 |  2 |  2 |                       -                         |                        -                        |
+|   marcocunha   |  0 |  0 |  0 |  1 |  0 |  0 |  1 |                       -                         |                        -                        |
 |    LeoVal      |  0 |  0 |  0 |  0 |  0 |  0 |  0 |                       -                         |                        -                        |
 |    zero808     |  0 |  0 |  0 |  0 |  0 |  0 |  0 |                       -                         |                        -                        |
 |   cmgalante    |  0 |  0 |  0 |  0 |  0 |  0 |  1 |                       -                         |                        -                        |
@@ -19,25 +19,24 @@ Previously on...
 	 à gestão SCRUM do projecto. Talvez estejam a perceber a sua importância, ou talvez é porque estou sempre a chatear-los para a fazerem, quem sabe.
 
 [Pedro] - Não preenchi na semana passada o comentário da retrospectiva por falta de tempo (teste, vida profissional).
-		Na semana anterior dei inicio às tarefas do login, que acabou por ser finalizado pelo Luis, após revisão do código está tudo ok.
-		A Semana penso que correu bem, limamos algumas arestas relativas a ambiguidades e duvidas. 
-		Para esta Semana vou ficar com a implementação do create user. Espero a realização de 10h sendo que o cumprimento do dias vai ser pouco relevantes 
-		devido a vida profissional desde que o tempo total seja cumprido.
+	  Na semana anterior dei início às tarefas do login, que acabou por ser finalizado pelo Luís, após revisão do código está tudo ok.
+	  A semana penso que correu bem, limamos algumas arestas relativas a ambiguidades e dúvidas. 
+	  Para esta semana vou ficar com a implementação do create user. Espero a realização de 10h, apesar que o cumprimento dos dias vai ser pouco relevante, 
+	  devido a vida profissional, o que não importa muito desde que o tempo total seja cumprido.
 
 [Marco] - Na semana passada tinha previsto fazer as alterações necessárias no serviço DeleteUser de forma a estarem de acordo com o pedido no enunciado.
-	E correu tudo como planeado. O serviço ficou completamente funcional. Acabei por implementar também um novo serviço, o UserInfoService, ainda que
-	inicialmente planeado para ser o Duarte a executar, mas que entretanto combinei com ele que eu implementaria, apenas porque necessitava deste serviço
-	auxiliar e queria confirmar que todas as minhas implementações ficavam funcionais.
-
+	  E correu tudo como planeado. O serviço ficou completamente funcional. Acabei por implementar também um novo serviço, o UserInfoService, ainda que
+	  inicialmente planeado para ser o Duarte a executar, mas que entretanto combinei com ele que eu implementaria, apenas porque necessitava deste serviço
+	  auxiliar e queria confirmar que todas as minhas implementações ficavam funcionais.
 
 [Leo] - As horas estimadas não estavam correctas pelo que tive de alterar a tabela, acabei por adicionar 6 horas no fim de semana para corresponder com a 
 	estimativa das issues. Fiquei com os servicos de assign binary/unary. Não houve problemas na implementação da minha parte. O tempo acabou por ser
 	mais do que suficiente após revisão da tabela. Todas as tarefas previstas ficaram implementadas.
 
 [Duarte] - Na semana passada fiz as três tarefas relativas ao serviço da quarta entrega para obter o conteúdo de uma spreadsheet. Não houve qualquer problema
-	que atrasasse o projecto.
+	   que atrasasse o projecto.
 
 [Cláudio] - Na semana passada fiz as duas tarefas que tinha agendado fazer logo na primeira semana de trabalho, relacionadas com o novo serviço auxiliar
-	GetUsername4TokenService, e ainda outras três tarefas relacionadas com a actualização do serviço RenewPassword, para que este ficasse de acordo com o
-	pedido para a quarta entrega. Tudo correu como planeado, sem problemas de maior, ficando os serviços funcionais e de acordo com o novo "esquema" pedido
-	para a quarta entrega.
+	    GetUsername4TokenService, e ainda outras três tarefas relacionadas com a actualização do serviço RenewPassword, para que este ficasse de acordo com o
+	    pedido para a quarta entrega. Tudo correu como planeado, sem problemas de maior, ficando os serviços funcionais e de acordo com o novo "esquema" pedido
+	    para a quarta entrega.

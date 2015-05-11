@@ -178,11 +178,10 @@ public class CreateUserIntegratorTest extends BubbleDocsServiceTest {
 				result = new RemoteInvocationException();
 			}
 		};
-		
 		try{ 
 			service.execute();
 		}catch (UnavailableServiceException ex){
-			//because service failed, try and see if user is not created locally
+			//Because service failed, try and see if user is not created locally.
 			try{
 				getUserFromUsername(USERNAME_DOES_NOT_EXIST);
 				fail("user not deleted");
@@ -190,8 +189,5 @@ public class CreateUserIntegratorTest extends BubbleDocsServiceTest {
 				assertThat(ex2.toString(), CoreMatchers.containsString("The username given is invalid."));
 			}
 		}
-	}
-	
-	
-	
+	}	
 }// End CreateUserIntegratorTest class
