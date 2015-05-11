@@ -79,8 +79,8 @@ public class GetSpreadSheetContentServiceTest extends BubbleDocsServiceTest {
 		service.execute();
 		matrix = service.getMatrix();
 		
-		int i = 1;
-		int j = 1;
+		int i = 0;
+		int j = 0;
 		
 		while(i < teste.getNRows()) {
 			System.out.print("|");
@@ -91,7 +91,7 @@ public class GetSpreadSheetContentServiceTest extends BubbleDocsServiceTest {
 			}
 			System.out.printf("%4s", "|");
 			System.out.println();
-			j = 1;
+			j = 0;
 			i++;
 		}
 
