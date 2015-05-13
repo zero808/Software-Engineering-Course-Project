@@ -4,7 +4,7 @@
 |    xistoso     |  0 |  0 |  0 |  - |  - |  - |  - |                       -                         |                        -                        |
 |   marcocunha   |  0 |  0 |  0 |  - |  - |  - |  - |                       -                         |                        -                        |
 |    LeoVal      |  0 |  0 |  0 |  - |  - |  - |  - |                       -                         |                        -                        |
-|    zero808     |  0 |  0 |  0 |  - |  - |  - |  - |                       -                         |                        -                        |
+|    zero808     |  2 |  0 |  0 |  - |  - |  - |  - |                       -                         |                        -                        |
 |   cmgalante    |  1 |  2 |  0 |  - |  - |  - |  - |                       -                         |                        -                        | 
 
 
@@ -26,7 +26,8 @@ Previously on...
 
 [Leo] - Soon
 
-[Duarte] - Soon
+[Duarte] - Nesta semana as funcionalidades já estavam todas implementadas, por isso o único trabalho que tive foi a corrigir um bug com o GetSpreadSheetContentService
+	 e umas pequenas alterações no teste do respectivo serviço.
 
 [Cláudio] - Como sabia que iria ter muito pouco tempo disponível na semana passada (terceira semana), agendei as tarefas que me estavam destinadas
 	de maneira a que as conseguisse realizar todas nas duas primeiras semanas, e portanto na semana passada não alterei nada no código do projecto,
